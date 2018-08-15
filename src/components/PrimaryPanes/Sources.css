@@ -110,6 +110,11 @@
   display: inline-block;
 }
 
+.sources-list .tree .label .suffix {
+  font-style: italic;
+  font-size: 0.7em;
+}
+
 .sources-list .tree .node .no-arrow {
   width: 10px;
   display: inline-block;
