@@ -5,7 +5,7 @@
 // @flow
 
 import SourceEditor from "./source-editor";
-import { features } from "../prefs";
+import { features, prefs } from "../prefs";
 
 export function createEditor() {
   const gutters = ["breakpoints", "hit-markers", "CodeMirror-linenumbers"];
@@ -22,7 +22,7 @@ export function createEditor() {
     lineNumbers: true,
     theme: "mozilla",
     styleActiveLine: false,
-    lineWrapping: false,
+    lineWrapping: prefs.editorWrapping,
     matchBrackets: true,
     showAnnotationRuler: true,
     gutters,
@@ -36,4 +36,10 @@ export function createEditor() {
       "Ctrl-G": false
     }
   });
+}
+
+export function createHeadlessEditor() {
+  const editor = createEditor();
+  editor.appendToLocalElement(document.createElement("div"));
+  return editor;
 }

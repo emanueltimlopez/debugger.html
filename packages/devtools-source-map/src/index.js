@@ -8,11 +8,32 @@ const {
   workerUtils: { WorkerDispatcher }
 } = require("devtools-utils");
 
-import type { SourceLocation, Source, SourceId } from "debugger-html";
+import type {
+  OriginalFrame,
+  Range,
+  SourceLocation,
+  Source,
+  SourceId
+} from "../../../src/types";
 import type { SourceMapConsumer } from "source-map";
-import type { locationOptions } from "./source-map";
+import type { LocationOptions } from "./source-map";
 
 export const dispatcher = new WorkerDispatcher();
+
+const _getGeneratedRanges = dispatcher.task("getGeneratedRanges", {
+  queue: true
+});
+
+const _getGeneratedLocation = dispatcher.task("getGeneratedLocation", {
+  queue: true
+});
+const _getAllGeneratedLocations = dispatcher.task("getAllGeneratedLocations", {
+  queue: true
+});
+
+const _getOriginalLocation = dispatcher.task("getOriginalLocation", {
+  queue: true
+});
 
 export const setAssetRootURL = async (assetRoot: string): Promise<void> =>
   dispatcher.invoke("setAssetRootURL", assetRoot);
@@ -35,7 +56,6 @@ export const getOriginalRanges = async (
     columnEnd: number
   }>
 > => dispatcher.invoke("getOriginalRanges", sourceId, url);
-
 export const getGeneratedRanges = async (
   location: SourceLocation,
   originalSource: Source
@@ -45,39 +65,46 @@ export const getGeneratedRanges = async (
     columnStart: number,
     columnEnd: number
   }>
-> =>
-  dispatcher.task("getGeneratedRanges", {
-    queue: true
-  })(location, originalSource);
+> => _getGeneratedRanges(location, originalSource);
 
 export const getGeneratedLocation = async (
   location: SourceLocation,
   originalSource: Source
-): Promise<SourceLocation> =>
-  dispatcher.task("getGeneratedLocation", { queue: true })(
-    location,
-    originalSource
-  );
+): Promise<SourceLocation> => _getGeneratedLocation(location, originalSource);
 
 export const getAllGeneratedLocations = async (
   location: SourceLocation,
   originalSource: Source
 ): Promise<Array<SourceLocation>> =>
-  dispatcher.task("getAllGeneratedLocations", { queue: true })(
-    location,
-    originalSource
-  );
+  _getAllGeneratedLocations(location, originalSource);
 
 export const getOriginalLocation = async (
   location: SourceLocation,
-  options: locationOptions = {}
-): Promise<SourceLocation> =>
-  dispatcher.invoke("getOriginalLocation", location, options);
+  options: LocationOptions = {}
+): Promise<SourceLocation> => _getOriginalLocation(location, options);
+
+export const getOriginalLocations = async (
+  sourceId: SourceId,
+  locations: SourceLocation[],
+  options: LocationOptions = {}
+): Promise<SourceLocation[]> =>
+  dispatcher.invoke("getOriginalLocations", sourceId, locations, options);
+
+export const getGeneratedRangesForOriginal = async (
+  sourceId: SourceId,
+  url: string,
+  mergeUnmappedRegions?: boolean
+): Promise<Range[]> =>
+  dispatcher.invoke(
+    "getGeneratedRangesForOriginal",
+    sourceId,
+    url,
+    mergeUnmappedRegions
+  );
 
 export const getFileGeneratedRange = async (
   originalSource: Source
-): Promise<?{ start: any, end: any }> =>
-  dispatcher.invoke("getFileGeneratedRange", originalSource);
+): Promise<Range> => dispatcher.invoke("getFileGeneratedRange", originalSource);
 
 export const getLocationScopes = dispatcher.task("getLocationScopes");
 
@@ -105,10 +132,8 @@ export const hasMappedSource = async (
 
 export const getOriginalStackFrames = async (
   generatedLocation: SourceLocation
-): Promise<?Array<{
-  displayName: string,
-  location?: SourceLocation
-}>> => dispatcher.invoke("getOriginalStackFrames", generatedLocation);
+): Promise<?Array<OriginalFrame>> =>
+  dispatcher.invoke("getOriginalStackFrames", generatedLocation);
 
 export {
   originalToGeneratedId,

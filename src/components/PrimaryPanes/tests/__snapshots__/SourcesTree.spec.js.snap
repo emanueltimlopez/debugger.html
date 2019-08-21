@@ -8,11 +8,10 @@ exports[`SourcesTree After changing expanded nodes Shows the tree with four.js, 
   <div
     className="sources-list"
     key="tree"
-    onKeyDown={[Function]}
   >
     <ManagedTree
       autoExpandAll={false}
-      autoExpandDepth={0}
+      autoExpandDepth={1}
       expanded={
         Array [
           "four.js",
@@ -26,12 +25,27 @@ exports[`SourcesTree After changing expanded nodes Shows the tree with four.js, 
       getRoots={[Function]}
       itemHeight={21}
       key="full"
+      onActivate={[Function]}
       onCollapse={[Function]}
       onExpand={[Function]}
       onFocus={[Function]}
       preventBlur={true}
       renderItem={[Function]}
     />
+  </div>
+</div>
+`;
+
+exports[`SourcesTree Should show a 'No Sources' message if there are no sources 1`] = `
+<div
+  className="sources-pane"
+  key="pane"
+>
+  <div
+    className="no-sources-message"
+    key="empty"
+  >
+    This page has no sources.
   </div>
 </div>
 `;
@@ -44,7 +58,6 @@ exports[`SourcesTree Should show the tree with nothing expanded 1`] = `
   <div
     className="sources-list"
     key="tree"
-    onKeyDown={[Function]}
   >
     <ManagedTree
       autoExpandAll={false}
@@ -55,6 +68,7 @@ exports[`SourcesTree Should show the tree with nothing expanded 1`] = `
       getRoots={[Function]}
       itemHeight={21}
       key="full"
+      onActivate={[Function]}
       onCollapse={[Function]}
       onExpand={[Function]}
       onFocus={[Function]}
@@ -73,11 +87,10 @@ exports[`SourcesTree When loading initial source Shows the tree with one.js, two
   <div
     className="sources-list"
     key="tree"
-    onKeyDown={[Function]}
   >
     <ManagedTree
       autoExpandAll={false}
-      autoExpandDepth={0}
+      autoExpandDepth={1}
       expanded={
         Array [
           "one.js",
@@ -91,6 +104,7 @@ exports[`SourcesTree When loading initial source Shows the tree with one.js, two
       getRoots={[Function]}
       itemHeight={21}
       key="full"
+      onActivate={[Function]}
       onCollapse={[Function]}
       onExpand={[Function]}
       onFocus={[Function]}
@@ -109,7 +123,6 @@ exports[`SourcesTree on receiving new props updates highlighted items updates hi
   <div
     className="sources-list"
     key="tree"
-    onKeyDown={[Function]}
   >
     <ManagedTree
       autoExpandAll={false}
@@ -122,129 +135,217 @@ exports[`SourcesTree on receiving new props updates highlighted items updates hi
         Array [
           Object {
             "contents": Object {
-              "contentType": "",
-              "error": undefined,
               "id": "server1.conn13.child1/41",
+              "introductionType": undefined,
+              "introductionUrl": null,
               "isBlackBoxed": false,
               "isExtension": false,
               "isPrettyPrinted": false,
               "isWasm": false,
-              "loadedState": "unloaded",
+              "relativeUrl": "http://mdn.com/three.js",
               "sourceMapURL": null,
-              "text": undefined,
-              "thread": "",
               "url": "http://mdn.com/three.js",
             },
             "name": "three.js",
-            "path": "mdn.com/three.js",
+            "path": "FakeThread/mdn.com/three.js",
             "type": "source",
           },
           Object {
             "contents": Array [
               Object {
                 "contents": Object {
-                  "contentType": "",
-                  "error": undefined,
                   "id": "server1.conn13.child1/42",
+                  "introductionType": undefined,
+                  "introductionUrl": null,
                   "isBlackBoxed": false,
                   "isExtension": false,
                   "isPrettyPrinted": false,
                   "isWasm": false,
-                  "loadedState": "unloaded",
+                  "relativeUrl": "http://mdn.com/four.js",
                   "sourceMapURL": "data:application/json?charset=utf?dsffewrsf",
-                  "text": undefined,
-                  "thread": "",
                   "url": "http://mdn.com/four.js",
                 },
                 "name": "four.js",
-                "path": "mdn.com/four.js",
+                "path": "FakeThread/mdn.com/four.js",
                 "type": "source",
               },
               Object {
                 "contents": Object {
-                  "contentType": "",
-                  "error": undefined,
                   "id": "server1.conn13.child1/42/originalSource-sha",
+                  "introductionType": undefined,
+                  "introductionUrl": null,
                   "isBlackBoxed": false,
                   "isExtension": false,
                   "isPrettyPrinted": false,
                   "isWasm": false,
-                  "loadedState": "unloaded",
+                  "relativeUrl": "http://mdn.com/four.js",
                   "sourceMapURL": null,
-                  "text": undefined,
-                  "thread": "",
                   "url": "http://mdn.com/four.js",
                 },
                 "name": "four.js",
-                "path": "mdn.com/four.js",
+                "path": "FakeThread/mdn.com/four.js",
                 "type": "source",
               },
               Object {
                 "contents": Object {
-                  "contentType": "",
-                  "error": undefined,
                   "id": "server1.conn13.child1/39",
+                  "introductionType": undefined,
+                  "introductionUrl": null,
                   "isBlackBoxed": false,
                   "isExtension": false,
                   "isPrettyPrinted": false,
                   "isWasm": false,
-                  "loadedState": "unloaded",
+                  "relativeUrl": "http://mdn.com/one.js",
                   "sourceMapURL": null,
-                  "text": undefined,
-                  "thread": "",
                   "url": "http://mdn.com/one.js",
                 },
                 "name": "one.js",
-                "path": "mdn.com/one.js",
+                "path": "FakeThread/mdn.com/one.js",
                 "type": "source",
               },
               Object {
                 "contents": Object {
-                  "contentType": "",
-                  "error": undefined,
                   "id": "server1.conn13.child1/41",
+                  "introductionType": undefined,
+                  "introductionUrl": null,
                   "isBlackBoxed": false,
                   "isExtension": false,
                   "isPrettyPrinted": false,
                   "isWasm": false,
-                  "loadedState": "unloaded",
+                  "relativeUrl": "http://mdn.com/three.js",
                   "sourceMapURL": null,
-                  "text": undefined,
-                  "thread": "",
                   "url": "http://mdn.com/three.js",
                 },
                 "name": "three.js",
-                "path": "mdn.com/three.js",
+                "path": "FakeThread/mdn.com/three.js",
                 "type": "source",
               },
               Object {
                 "contents": Object {
-                  "contentType": "",
-                  "error": undefined,
                   "id": "server1.conn13.child1/40",
+                  "introductionType": undefined,
+                  "introductionUrl": null,
                   "isBlackBoxed": false,
                   "isExtension": false,
                   "isPrettyPrinted": false,
                   "isWasm": false,
-                  "loadedState": "unloaded",
+                  "relativeUrl": "http://mdn.com/two.js",
                   "sourceMapURL": null,
-                  "text": undefined,
-                  "thread": "",
                   "url": "http://mdn.com/two.js",
                 },
                 "name": "two.js",
-                "path": "mdn.com/two.js",
+                "path": "FakeThread/mdn.com/two.js",
                 "type": "source",
               },
             ],
             "name": "mdn.com",
-            "path": "mdn.com",
+            "path": "FakeThread/mdn.com",
+            "type": "directory",
+          },
+          Object {
+            "contents": Array [
+              Object {
+                "contents": Array [
+                  Object {
+                    "contents": Object {
+                      "id": "server1.conn13.child1/42",
+                      "introductionType": undefined,
+                      "introductionUrl": null,
+                      "isBlackBoxed": false,
+                      "isExtension": false,
+                      "isPrettyPrinted": false,
+                      "isWasm": false,
+                      "relativeUrl": "http://mdn.com/four.js",
+                      "sourceMapURL": "data:application/json?charset=utf?dsffewrsf",
+                      "url": "http://mdn.com/four.js",
+                    },
+                    "name": "four.js",
+                    "path": "FakeThread/mdn.com/four.js",
+                    "type": "source",
+                  },
+                  Object {
+                    "contents": Object {
+                      "id": "server1.conn13.child1/42/originalSource-sha",
+                      "introductionType": undefined,
+                      "introductionUrl": null,
+                      "isBlackBoxed": false,
+                      "isExtension": false,
+                      "isPrettyPrinted": false,
+                      "isWasm": false,
+                      "relativeUrl": "http://mdn.com/four.js",
+                      "sourceMapURL": null,
+                      "url": "http://mdn.com/four.js",
+                    },
+                    "name": "four.js",
+                    "path": "FakeThread/mdn.com/four.js",
+                    "type": "source",
+                  },
+                  Object {
+                    "contents": Object {
+                      "id": "server1.conn13.child1/39",
+                      "introductionType": undefined,
+                      "introductionUrl": null,
+                      "isBlackBoxed": false,
+                      "isExtension": false,
+                      "isPrettyPrinted": false,
+                      "isWasm": false,
+                      "relativeUrl": "http://mdn.com/one.js",
+                      "sourceMapURL": null,
+                      "url": "http://mdn.com/one.js",
+                    },
+                    "name": "one.js",
+                    "path": "FakeThread/mdn.com/one.js",
+                    "type": "source",
+                  },
+                  Object {
+                    "contents": Object {
+                      "id": "server1.conn13.child1/41",
+                      "introductionType": undefined,
+                      "introductionUrl": null,
+                      "isBlackBoxed": false,
+                      "isExtension": false,
+                      "isPrettyPrinted": false,
+                      "isWasm": false,
+                      "relativeUrl": "http://mdn.com/three.js",
+                      "sourceMapURL": null,
+                      "url": "http://mdn.com/three.js",
+                    },
+                    "name": "three.js",
+                    "path": "FakeThread/mdn.com/three.js",
+                    "type": "source",
+                  },
+                  Object {
+                    "contents": Object {
+                      "id": "server1.conn13.child1/40",
+                      "introductionType": undefined,
+                      "introductionUrl": null,
+                      "isBlackBoxed": false,
+                      "isExtension": false,
+                      "isPrettyPrinted": false,
+                      "isWasm": false,
+                      "relativeUrl": "http://mdn.com/two.js",
+                      "sourceMapURL": null,
+                      "url": "http://mdn.com/two.js",
+                    },
+                    "name": "two.js",
+                    "path": "FakeThread/mdn.com/two.js",
+                    "type": "source",
+                  },
+                ],
+                "name": "mdn.com",
+                "path": "FakeThread/mdn.com",
+                "type": "directory",
+              },
+            ],
+            "name": "FakeThread",
+            "path": "FakeThread",
             "type": "directory",
           },
         ]
       }
       itemHeight={21}
       key="full"
+      onActivate={[Function]}
       onCollapse={[Function]}
       onExpand={[Function]}
       onFocus={[Function]}

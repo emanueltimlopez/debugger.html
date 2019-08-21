@@ -15,7 +15,8 @@ export async function updateWorkerClients({
   tabTarget,
   debuggerClient,
   threadClient,
-  workerClients
+  workerClients,
+  options
 }: Object) {
   if (!supportsWorkers(tabTarget)) {
     return {};
@@ -23,30 +24,31 @@ export async function updateWorkerClients({
 
   const newWorkerClients = {};
 
-  const { workers } = await tabTarget.activeTab.listWorkers();
+  const { workers } = await tabTarget.listWorkers();
   for (const workerTargetFront of workers) {
-    await workerTargetFront.attach();
-    const [, workerThread] = await workerTargetFront.attachThread();
+    try {
+      await workerTargetFront.attach();
+      const threadActorID = workerTargetFront._threadActor;
+      if (workerClients[threadActorID]) {
+        newWorkerClients[threadActorID] = workerClients[threadActorID];
+      } else {
+        const [, workerThread] = await workerTargetFront.attachThread(options);
+        workerThread.resume();
 
-    if (workerClients[workerThread.actor]) {
-      if (workerClients[workerThread.actor].thread != workerThread) {
-        throw new Error(`Multiple clients for actor ID: ${workerThread.actor}`);
+        addThreadEventListeners(workerThread);
+
+        const consoleFront = await workerTargetFront.getFront("console");
+        await consoleFront.startListeners([]);
+
+        newWorkerClients[workerThread.actor] = {
+          url: workerTargetFront.url,
+          thread: workerThread,
+          console: consoleFront
+        };
       }
-      newWorkerClients[workerThread.actor] = workerClients[workerThread.actor];
-    } else {
-      addThreadEventListeners(workerThread);
-      workerThread.resume();
-
-      const [, consoleClient] = await debuggerClient.attachConsole(
-        workerTargetFront.targetForm.consoleActor,
-        []
-      );
-
-      newWorkerClients[workerThread.actor] = {
-        url: workerTargetFront.url,
-        thread: workerThread,
-        console: consoleClient
-      };
+    } catch (e) {
+      // If any of the workers have terminated since the list command initiated
+      // then we will get errors. Ignore these.
     }
   }
 

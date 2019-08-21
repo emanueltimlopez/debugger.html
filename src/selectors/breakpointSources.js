@@ -8,14 +8,16 @@ import { sortBy, uniq } from "lodash";
 import { createSelector } from "reselect";
 import {
   getSources,
+  getSourceInSources,
   getBreakpointsList,
   getSelectedSource
 } from "../selectors";
 import { getFilename } from "../utils/source";
-import { getSelectedLocation } from "../utils/source-maps";
+import { getSelectedLocation } from "../utils/selected-location";
+import { sortSelectedBreakpoints } from "../utils/breakpoint";
 
 import type { Source, Breakpoint } from "../types";
-import type { Selector, SourcesMap } from "../reducers/types";
+import type { Selector, SourceResourceState } from "../reducers/types";
 
 export type BreakpointSources = Array<{
   source: Source,
@@ -27,12 +29,10 @@ function getBreakpointsForSource(
   selectedSource: ?Source,
   breakpoints: Breakpoint[]
 ) {
-  return breakpoints
-    .sort((a, b) => a.location.line - b.location.line)
+  return sortSelectedBreakpoints(breakpoints, selectedSource)
     .filter(
       bp =>
         !bp.options.hidden &&
-        !bp.loading &&
         (bp.text || bp.originalText || bp.options.condition || bp.disabled)
     )
     .filter(
@@ -41,14 +41,21 @@ function getBreakpointsForSource(
 }
 
 function findBreakpointSources(
-  sources: SourcesMap,
-  breakpoints: Breakpoint[]
+  sources: SourceResourceState,
+  breakpoints: Breakpoint[],
+  selectedSource: ?Source
 ): Source[] {
-  const sourceIds: string[] = uniq(breakpoints.map(bp => bp.location.sourceId));
+  const sourceIds: string[] = uniq(
+    breakpoints.map(bp => getSelectedLocation(bp, selectedSource).sourceId)
+  );
 
-  const breakpointSources = sourceIds
-    .map(id => sources[id])
-    .filter(source => source && !source.isBlackBoxed);
+  const breakpointSources = sourceIds.reduce((acc, id) => {
+    const source = getSourceInSources(sources, id);
+    if (source && !source.isBlackBoxed) {
+      acc.push(source);
+    }
+    return acc;
+  }, []);
 
   return sortBy(breakpointSources, (source: Source) => getFilename(source));
 }
@@ -57,8 +64,12 @@ export const getBreakpointSources: Selector<BreakpointSources> = createSelector(
   getBreakpointsList,
   getSources,
   getSelectedSource,
-  (breakpoints: Breakpoint[], sources: SourcesMap, selectedSource: ?Source) =>
-    findBreakpointSources(sources, breakpoints)
+  (
+    breakpoints: Breakpoint[],
+    sources: SourceResourceState,
+    selectedSource: ?Source
+  ) =>
+    findBreakpointSources(sources, breakpoints, selectedSource)
       .map(source => ({
         source,
         breakpoints: getBreakpointsForSource(

@@ -4,88 +4,31 @@
 
 // @flow
 
-import {
-  getSource,
-  getSourceFromId,
-  getSymbols,
-  getSelectedLocation,
-  isPaused
-} from "../selectors";
-
-import { mapFrames } from "./pause";
-import { updateTab } from "./tabs";
-
-import { PROMISE } from "./utils/middleware/promise";
+import { getSourceWithContent, getSelectedLocation } from "../selectors";
 
 import { setInScopeLines } from "./ast/setInScopeLines";
-import { setPausePoints } from "./ast/setPausePoints";
-export { setPausePoints };
 
-import * as parser from "../workers/parser";
-
-import { isLoaded } from "../utils/source";
-
-import type { SourceId } from "../types";
+import type { Context } from "../types";
 import type { ThunkArgs, Action } from "./types";
 
-export function setSourceMetaData(sourceId: SourceId) {
-  return async ({ dispatch, getState }: ThunkArgs) => {
-    const source = getSource(getState(), sourceId);
-    if (!source || !isLoaded(source) || source.isWasm) {
-      return;
-    }
-
-    const framework = await parser.getFramework(source.id);
-    if (framework) {
-      dispatch(updateTab(source, framework));
-    }
-
-    dispatch(
-      ({
-        type: "SET_SOURCE_METADATA",
-        sourceId: source.id,
-        sourceMetaData: {
-          framework
-        }
-      }: Action)
-    );
-  };
-}
-
-export function setSymbols(sourceId: SourceId) {
-  return async ({ dispatch, getState, sourceMaps }: ThunkArgs) => {
-    const source = getSourceFromId(getState(), sourceId);
-
-    if (source.isWasm || getSymbols(getState(), source) || !isLoaded(source)) {
-      return;
-    }
-
-    await dispatch({
-      type: "SET_SYMBOLS",
-      sourceId,
-      [PROMISE]: parser.getSymbols(sourceId)
-    });
-
-    if (isPaused(getState())) {
-      await dispatch(mapFrames());
-    }
-
-    await dispatch(setPausePoints(sourceId));
-    await dispatch(setSourceMetaData(sourceId));
-  };
-}
-
-export function setOutOfScopeLocations() {
-  return async ({ dispatch, getState }: ThunkArgs) => {
+export function setOutOfScopeLocations(cx: Context) {
+  return async ({ dispatch, getState, parser }: ThunkArgs) => {
     const location = getSelectedLocation(getState());
     if (!location) {
       return;
     }
 
-    const source = getSourceFromId(getState(), location.sourceId);
+    const { source, content } = getSourceWithContent(
+      getState(),
+      location.sourceId
+    );
+
+    if (!content) {
+      return;
+    }
 
     let locations = null;
-    if (location.line && source && !source.isWasm && isPaused(getState())) {
+    if (location.line && source && !source.isWasm) {
       locations = await parser.findOutOfScopeLocations(
         source.id,
         ((location: any): parser.AstPosition)
@@ -95,9 +38,10 @@ export function setOutOfScopeLocations() {
     dispatch(
       ({
         type: "OUT_OF_SCOPE_LOCATIONS",
+        cx,
         locations
       }: Action)
     );
-    dispatch(setInScopeLines());
+    dispatch(setInScopeLines(cx));
   };
 }

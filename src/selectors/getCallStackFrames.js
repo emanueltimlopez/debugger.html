@@ -9,13 +9,12 @@ import {
   getSelectedSource,
   getSourceInSources
 } from "../reducers/sources";
-import { getFrames } from "../reducers/pause";
+import { getCurrentThreadFrames } from "../reducers/pause";
 import { annotateFrames } from "../utils/pause/frames";
 import { isOriginal } from "../utils/source";
 import { get } from "lodash";
-import type { State } from "../reducers/types";
+import type { State, SourceResourceState } from "../reducers/types";
 import type { Frame, Source } from "../types";
-import type { SourcesMap } from "../reducers/sources";
 import { createSelector } from "reselect";
 
 function getLocation(frame, isGeneratedSource) {
@@ -25,7 +24,7 @@ function getLocation(frame, isGeneratedSource) {
 }
 
 function getSourceForFrame(
-  sources: SourcesMap,
+  sources: SourceResourceState,
   frame: Frame,
   isGeneratedSource
 ) {
@@ -34,7 +33,7 @@ function getSourceForFrame(
 }
 
 function appendSource(
-  sources: SourcesMap,
+  sources: SourceResourceState,
   frame: Frame,
   selectedSource: ?Source
 ): Frame {
@@ -48,7 +47,7 @@ function appendSource(
 
 export function formatCallStackFrames(
   frames: Frame[],
-  sources: SourcesMap,
+  sources: SourceResourceState,
   selectedSource: Source
 ) {
   if (!frames) {
@@ -63,8 +62,9 @@ export function formatCallStackFrames(
   return annotateFrames(formattedFrames);
 }
 
+// eslint-disable-next-line
 export const getCallStackFrames: State => Frame[] = (createSelector: any)(
-  getFrames,
+  getCurrentThreadFrames,
   getSources,
   getSelectedSource,
   formatCallStackFrames

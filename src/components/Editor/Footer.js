@@ -8,26 +8,26 @@ import { connect } from "../../utils/connect";
 import classnames from "classnames";
 import actions from "../../actions";
 import {
-  getSelectedSource,
+  getSelectedSourceWithContent,
   getPrettySource,
-  getPaneCollapse
+  getPaneCollapse,
+  getContext
 } from "../../selectors";
 
+import { isFulfilled } from "../../utils/async-value";
 import {
   isPretty,
-  isLoaded,
   getFilename,
   isOriginal,
-  isLoading,
   shouldBlackbox
 } from "../../utils/source";
 import { getGeneratedSource } from "../../reducers/sources";
-import { shouldShowFooter, shouldShowPrettyPrint } from "../../utils/editor";
+import { shouldShowPrettyPrint } from "../../utils/editor";
 
 import { PaneToggleButton } from "../shared/Button";
 import AccessibleImage from "../shared/AccessibleImage";
 
-import type { Source } from "../../types";
+import type { SourceWithContent, Source, Context } from "../../types";
 
 import "./Footer.css";
 
@@ -37,10 +37,10 @@ type CursorPosition = {
 };
 
 type Props = {
-  selectedSource: Source,
+  cx: Context,
+  selectedSourceWithContent: ?SourceWithContent,
   mappedSource: Source,
   endPanelCollapsed: boolean,
-  editor: Object,
   horizontal: boolean,
   togglePrettyPrint: typeof actions.togglePrettyPrint,
   toggleBlackBox: typeof actions.toggleBlackBox,
@@ -56,23 +56,44 @@ class SourceFooter extends PureComponent<Props, State> {
   constructor() {
     super();
 
-    this.state = { cursorPosition: { line: 1, column: 1 } };
+    this.state = { cursorPosition: { line: 0, column: 0 } };
   }
 
-  componentDidMount() {
-    const { editor } = this.props;
-    editor.codeMirror.on("cursorActivity", this.onCursorChange);
+  componentDidUpdate() {
+    const eventDoc = document.querySelector(".editor-mount .CodeMirror");
+    // querySelector can return null
+    if (eventDoc) {
+      this.toggleCodeMirror(eventDoc, true);
+    }
   }
 
   componentWillUnmount() {
-    const { editor } = this.props;
-    editor.codeMirror.off("cursorActivity", this.onCursorChange);
+    const eventDoc = document.querySelector(".editor-mount .CodeMirror");
+
+    if (eventDoc) {
+      this.toggleCodeMirror(eventDoc, false);
+    }
+  }
+
+  toggleCodeMirror(eventDoc: Object, toggle: boolean) {
+    if (toggle === true) {
+      eventDoc.CodeMirror.on("cursorActivity", this.onCursorChange);
+    } else {
+      eventDoc.CodeMirror.off("cursorActivity", this.onCursorChange);
+    }
   }
 
   prettyPrintButton() {
-    const { selectedSource, togglePrettyPrint } = this.props;
+    const { cx, selectedSourceWithContent, togglePrettyPrint } = this.props;
 
-    if (isLoading(selectedSource) && selectedSource.isPrettyPrinted) {
+    if (!selectedSourceWithContent) {
+      return;
+    }
+
+    if (
+      !selectedSourceWithContent.content &&
+      selectedSourceWithContent.source.isPrettyPrinted
+    ) {
       return (
         <div className="loader" key="pretty-loader">
           <AccessibleImage className="loader" />
@@ -80,20 +101,32 @@ class SourceFooter extends PureComponent<Props, State> {
       );
     }
 
-    if (!shouldShowPrettyPrint(selectedSource)) {
+    const sourceContent =
+      selectedSourceWithContent.content &&
+      isFulfilled(selectedSourceWithContent.content)
+        ? selectedSourceWithContent.content.value
+        : null;
+    if (
+      !shouldShowPrettyPrint(
+        selectedSourceWithContent.source,
+        sourceContent || { type: "text", value: "", contentType: undefined }
+      )
+    ) {
       return;
     }
 
     const tooltip = L10N.getStr("sourceTabs.prettyPrint");
-    const sourceLoaded = selectedSource && isLoaded(selectedSource);
+    const sourceLoaded = !!selectedSourceWithContent.content;
 
     const type = "prettyPrint";
     return (
       <button
-        onClick={() => togglePrettyPrint(selectedSource.id)}
+        onClick={() =>
+          togglePrettyPrint(cx, selectedSourceWithContent.source.id)
+        }
         className={classnames("action", type, {
           active: sourceLoaded,
-          pretty: isPretty(selectedSource)
+          pretty: isPretty(selectedSourceWithContent.source)
         })}
         key={type}
         title={tooltip}
@@ -105,21 +138,29 @@ class SourceFooter extends PureComponent<Props, State> {
   }
 
   blackBoxButton() {
-    const { selectedSource, toggleBlackBox } = this.props;
-    const sourceLoaded = selectedSource && isLoaded(selectedSource);
+    const { cx, selectedSourceWithContent, toggleBlackBox } = this.props;
+    const sourceLoaded =
+      selectedSourceWithContent && selectedSourceWithContent.content;
 
-    if (!shouldBlackbox(selectedSource)) {
+    if (!selectedSourceWithContent) {
       return;
     }
 
-    const blackboxed = selectedSource.isBlackBoxed;
+    if (!shouldBlackbox(selectedSourceWithContent.source)) {
+      return;
+    }
 
-    const tooltip = L10N.getStr("sourceFooter.blackbox");
+    const blackboxed = selectedSourceWithContent.source.isBlackBoxed;
+
+    const tooltip = blackboxed
+      ? L10N.getStr("sourceFooter.unblackbox")
+      : L10N.getStr("sourceFooter.blackbox");
+
     const type = "black-box";
 
     return (
       <button
-        onClick={() => toggleBlackBox(selectedSource)}
+        onClick={() => toggleBlackBox(cx, selectedSourceWithContent.source)}
         className={classnames("action", type, {
           active: sourceLoaded,
           blackboxed: blackboxed
@@ -133,20 +174,6 @@ class SourceFooter extends PureComponent<Props, State> {
     );
   }
 
-  blackBoxSummary() {
-    const { selectedSource } = this.props;
-
-    if (!selectedSource || !selectedSource.isBlackBoxed) {
-      return;
-    }
-
-    return (
-      <span className="blackbox-summary" key="blackbox-summary">
-        {L10N.getStr("sourceFooter.blackboxed")}
-      </span>
-    );
-  }
-
   renderToggleButton() {
     if (this.props.horizontal) {
       return;
@@ -154,29 +181,36 @@ class SourceFooter extends PureComponent<Props, State> {
 
     return (
       <PaneToggleButton
-        position="end"
         key="toggle"
-        collapsed={!this.props.endPanelCollapsed}
+        collapsed={this.props.endPanelCollapsed}
         horizontal={this.props.horizontal}
         handleClick={(this.props.togglePaneCollapse: any)}
+        position="end"
       />
     );
   }
 
   renderCommands() {
-    const commands = [
-      this.prettyPrintButton(),
-      this.blackBoxButton(),
-      this.blackBoxSummary()
-    ].filter(Boolean);
+    const commands = [this.blackBoxButton(), this.prettyPrintButton()].filter(
+      Boolean
+    );
 
     return commands.length ? <div className="commands">{commands}</div> : null;
   }
 
   renderSourceSummary() {
-    const { mappedSource, jumpToMappedLocation, selectedSource } = this.props;
+    const {
+      cx,
+      mappedSource,
+      jumpToMappedLocation,
+      selectedSourceWithContent
+    } = this.props;
 
-    if (!mappedSource || !isOriginal(selectedSource)) {
+    if (
+      !mappedSource ||
+      !selectedSourceWithContent ||
+      !isOriginal(selectedSourceWithContent.source)
+    ) {
       return null;
     }
 
@@ -187,14 +221,14 @@ class SourceFooter extends PureComponent<Props, State> {
     );
     const title = L10N.getFormatStr("sourceFooter.mappedSource", filename);
     const mappedSourceLocation = {
-      sourceId: selectedSource.id,
+      sourceId: selectedSourceWithContent.source.id,
       line: 1,
       column: 1
     };
     return (
       <button
         className="mapped-source"
-        onClick={() => jumpToMappedLocation(mappedSourceLocation)}
+        onClick={() => jumpToMappedLocation(cx, mappedSourceLocation)}
         title={tooltip}
       >
         <span>{title}</span>
@@ -208,52 +242,56 @@ class SourceFooter extends PureComponent<Props, State> {
   };
 
   renderCursorPosition() {
-    const { cursorPosition } = this.state;
+    if (!this.props.selectedSourceWithContent) {
+      return null;
+    }
+
+    const { line, column } = this.state.cursorPosition;
 
     const text = L10N.getFormatStr(
       "sourceFooter.currentCursorPosition",
-      cursorPosition.line + 1,
-      cursorPosition.column + 1
+      line + 1,
+      column + 1
     );
     const title = L10N.getFormatStr(
       "sourceFooter.currentCursorPosition.tooltip",
-      cursorPosition.line + 1,
-      cursorPosition.column + 1
+      line + 1,
+      column + 1
     );
     return (
-      <span className="cursor-position" title={title}>
+      <div className="cursor-position" title={title}>
         {text}
-      </span>
+      </div>
     );
   }
 
   render() {
-    const { selectedSource, horizontal } = this.props;
-
-    if (!shouldShowFooter(selectedSource, horizontal)) {
-      return null;
-    }
-
     return (
       <div className="source-footer">
-        {this.renderCommands()}
-        {this.renderSourceSummary()}
-        {this.renderCursorPosition()}
-        {this.renderToggleButton()}
+        <div className="source-footer-start">{this.renderCommands()}</div>
+        <div className="source-footer-end">
+          {this.renderSourceSummary()}
+          {this.renderCursorPosition()}
+          {this.renderToggleButton()}
+        </div>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
-  const selectedSource = getSelectedSource(state);
+  const selectedSourceWithContent = getSelectedSourceWithContent(state);
 
   return {
-    selectedSource,
-    mappedSource: getGeneratedSource(state, selectedSource),
+    cx: getContext(state),
+    selectedSourceWithContent,
+    mappedSource: getGeneratedSource(
+      state,
+      selectedSourceWithContent && selectedSourceWithContent.source
+    ),
     prettySource: getPrettySource(
       state,
-      selectedSource ? selectedSource.id : null
+      selectedSourceWithContent ? selectedSourceWithContent.source.id : null
     ),
     endPanelCollapsed: getPaneCollapse(state, "end")
   };

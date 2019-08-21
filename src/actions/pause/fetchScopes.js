@@ -4,29 +4,27 @@
 
 // @flow
 
-import {
-  getCurrentThread,
-  getSelectedFrame,
-  getGeneratedFrameScope
-} from "../../selectors";
+import { getSelectedFrame, getGeneratedFrameScope } from "../../selectors";
 import { mapScopes } from "./mapScopes";
 import { PROMISE } from "../utils/middleware/promise";
+import type { ThreadContext } from "../../types";
 import type { ThunkArgs } from "../types";
 
-export function fetchScopes() {
+export function fetchScopes(cx: ThreadContext) {
   return async function({ dispatch, getState, client, sourceMaps }: ThunkArgs) {
-    const frame = getSelectedFrame(getState());
+    const frame = getSelectedFrame(getState(), cx.thread);
     if (!frame || getGeneratedFrameScope(getState(), frame.id)) {
       return;
     }
 
     const scopes = dispatch({
       type: "ADD_SCOPES",
-      thread: getCurrentThread(getState()),
+      cx,
+      thread: cx.thread,
       frame,
       [PROMISE]: client.getFrameScopes(frame)
     });
 
-    await dispatch(mapScopes(scopes, frame));
+    await dispatch(mapScopes(cx, scopes, frame));
   };
 }

@@ -4,17 +4,16 @@
 
 // @flow
 
-import { isOriginalId } from "devtools-source-map";
+import SourceMaps, { isOriginalId } from "devtools-source-map";
 import { getSource } from "../selectors";
 
 import type { SourceLocation, MappedLocation, Source } from "../types";
-import { isGenerated } from "../utils/source";
 
 export async function getGeneratedLocation(
   state: Object,
   source: Source,
   location: SourceLocation,
-  sourceMaps: Object
+  sourceMaps: typeof SourceMaps
 ): Promise<SourceLocation> {
   if (!isOriginalId(location.sourceId)) {
     return location;
@@ -27,7 +26,7 @@ export async function getGeneratedLocation(
 
   const generatedSource = getSource(state, sourceId);
   if (!generatedSource) {
-    return location;
+    throw new Error(`Could not find generated source ${sourceId}`);
   }
 
   return {
@@ -38,9 +37,49 @@ export async function getGeneratedLocation(
   };
 }
 
+export async function getOriginalLocation(
+  generatedLocation: SourceLocation,
+  sourceMaps: typeof SourceMaps
+) {
+  if (isOriginalId(generatedLocation.sourceId)) {
+    return location;
+  }
+
+  return sourceMaps.getOriginalLocation(generatedLocation);
+}
+
 export async function getMappedLocation(
   state: Object,
-  sourceMaps: Object,
+  sourceMaps: typeof SourceMaps,
+  location: SourceLocation
+): Promise<MappedLocation> {
+  const source = getSource(state, location.sourceId);
+
+  if (!source) {
+    throw new Error(`no source ${location.sourceId}`);
+  }
+
+  if (isOriginalId(location.sourceId)) {
+    const generatedLocation = await getGeneratedLocation(
+      state,
+      source,
+      location,
+      sourceMaps
+    );
+    return { location, generatedLocation };
+  }
+
+  const generatedLocation = location;
+  const originalLocation = await sourceMaps.getOriginalLocation(
+    generatedLocation
+  );
+
+  return { location: originalLocation, generatedLocation };
+}
+
+export async function mapLocation(
+  state: Object,
+  sourceMaps: typeof SourceMaps,
   location: SourceLocation
 ): Promise<SourceLocation> {
   const source = getSource(state, location.sourceId);
@@ -53,14 +92,9 @@ export async function getMappedLocation(
     return getGeneratedLocation(state, source, location, sourceMaps);
   }
 
-  return sourceMaps.getOriginalLocation(location, source);
+  return sourceMaps.getOriginalLocation(location);
 }
 
-export function getSelectedLocation(
-  mappedLocation: MappedLocation,
-  selectedSource: ?Source
-) {
-  return selectedSource && isGenerated(selectedSource)
-    ? mappedLocation.generatedLocation
-    : mappedLocation.location;
+export function isOriginalSource(source: ?Source) {
+  return source && isOriginalId(source.id);
 }

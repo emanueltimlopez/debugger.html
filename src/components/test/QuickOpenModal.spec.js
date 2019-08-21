@@ -6,19 +6,27 @@
 // @flow
 
 import React from "react";
+import lodash from "lodash";
+
 import { shallow, mount } from "enzyme";
 import { QuickOpenModal } from "../QuickOpenModal";
+import { mockcx } from "../../utils/test-mockup";
 
 jest.mock("fuzzaldrin-plus");
+jest.unmock("lodash");
 
 import { filter } from "fuzzaldrin-plus";
 
+// $FlowIgnore
+lodash.throttle = jest.fn(fn => fn);
+
 function generateModal(propOverrides, renderType = "shallow") {
   const props = {
+    cx: mockcx,
     enabled: false,
     query: "",
     searchType: "sources",
-    sources: [],
+    displayedSources: [],
     tabs: [],
     selectSpecificLocation: jest.fn(),
     setQuickOpenQuery: jest.fn(),
@@ -111,12 +119,24 @@ describe("QuickOpenModal", () => {
       {
         enabled: true,
         query: "",
-        sources: [{ url: "mozilla.com" }],
+        displayedSources: [
+          // $FlowIgnore
+          { url: "mozilla.com", relativeUrl: true }
+        ],
         tabs: [generateTab("mozilla.com")]
       },
       "shallow"
     );
-    expect(wrapper.state("results")).toEqual([{ url: "mozilla.com" }]);
+    expect(wrapper.state("results")).toEqual([
+      {
+        id: undefined,
+        icon: "tab result-item-icon",
+        subtitle: "true",
+        title: "mozilla.com",
+        url: "mozilla.com",
+        value: "true"
+      }
+    ]);
   });
 
   describe("shows loading", () => {
@@ -209,7 +229,7 @@ describe("QuickOpenModal", () => {
     wrapper.find("input").simulate("change", { target: { value: "somefil" } });
     expect(filter).toHaveBeenCalledWith([], "somefil", {
       key: "value",
-      maxResults: 1000
+      maxResults: 100
     });
   });
 
@@ -230,7 +250,7 @@ describe("QuickOpenModal", () => {
       .simulate("change", { target: { value: "somefil:33" } });
     expect(filter).toHaveBeenCalledWith([], "somefil", {
       key: "value",
-      maxResults: 1000
+      maxResults: 100
     });
   });
 
@@ -246,7 +266,8 @@ describe("QuickOpenModal", () => {
           },
           // symbol searching relies on a source being selected.
           // So we dummy out the source and the API.
-          selectedSource: { id: "foo", text: "yo" }
+          selectedSource: { id: "foo", text: "yo" },
+          selectedContentLoaded: true
         },
         "mount"
       );
@@ -257,7 +278,7 @@ describe("QuickOpenModal", () => {
 
       expect(filter).toHaveBeenCalledWith([], "someFunc", {
         key: "value",
-        maxResults: 1000
+        maxResults: 100
       });
     });
 
@@ -272,7 +293,8 @@ describe("QuickOpenModal", () => {
           },
           // symbol searching relies on a source being selected.
           // So we dummy out the source and the API.
-          selectedSource: null
+          selectedSource: null,
+          selectedContentLoaded: false
         },
         "mount"
       );
@@ -314,7 +336,7 @@ describe("QuickOpenModal", () => {
         key: "Enter"
       };
       wrapper.find("SearchInput").simulate("keydown", event);
-      expect(props.selectSpecificLocation).toHaveBeenCalledWith({
+      expect(props.selectSpecificLocation).toHaveBeenCalledWith(mockcx, {
         column: 12,
         line: 34,
         sourceId: ""
@@ -328,7 +350,8 @@ describe("QuickOpenModal", () => {
           enabled: true,
           query: ":34:12",
           searchType: "goto",
-          selectedSource: { id: sourceId }
+          selectedSource: { id: sourceId },
+          selectedContentLoaded: true
         },
         "shallow"
       );
@@ -336,7 +359,7 @@ describe("QuickOpenModal", () => {
         key: "Enter"
       };
       wrapper.find("SearchInput").simulate("keydown", event);
-      expect(props.selectSpecificLocation).toHaveBeenCalledWith({
+      expect(props.selectSpecificLocation).toHaveBeenCalledWith(mockcx, {
         column: 12,
         line: 34,
         sourceId: sourceId
@@ -447,7 +470,7 @@ describe("QuickOpenModal", () => {
         key: "Enter"
       };
       wrapper.find("SearchInput").simulate("keydown", event);
-      expect(props.selectSpecificLocation).toHaveBeenCalledWith({
+      expect(props.selectSpecificLocation).toHaveBeenCalledWith(mockcx, {
         column: undefined,
         sourceId: id,
         line: 0
@@ -477,7 +500,7 @@ describe("QuickOpenModal", () => {
         key: "Enter"
       };
       wrapper.find("SearchInput").simulate("keydown", event);
-      expect(props.selectSpecificLocation).toHaveBeenCalledWith({
+      expect(props.selectSpecificLocation).toHaveBeenCalledWith(mockcx, {
         column: undefined,
         line: 0,
         sourceId: ""
@@ -507,7 +530,7 @@ describe("QuickOpenModal", () => {
         key: "Enter"
       };
       wrapper.find("SearchInput").simulate("keydown", event);
-      expect(props.selectSpecificLocation).toHaveBeenCalledWith({
+      expect(props.selectSpecificLocation).toHaveBeenCalledWith(mockcx, {
         column: 4,
         line: 3,
         sourceId: id
@@ -584,6 +607,7 @@ describe("QuickOpenModal", () => {
           query: "test",
           searchType: "functions",
           selectedSource: { id: sourceId },
+          selectedContentLoaded: true,
           symbols: {
             functions: [],
             variables: {}
@@ -636,7 +660,7 @@ describe("QuickOpenModal", () => {
       }));
       wrapper.find("SearchInput").simulate("keydown", event);
       expect(event.preventDefault).toHaveBeenCalled();
-      expect(wrapper.state().selectedIndex).toEqual(NaN);
+      expect(wrapper.state().selectedIndex).toEqual(0);
       expect(props.selectSpecificLocation).not.toHaveBeenCalledWith();
       expect(props.highlightLineRange).not.toHaveBeenCalled();
     });
@@ -649,6 +673,7 @@ describe("QuickOpenModal", () => {
           query: "test",
           searchType: "functions",
           selectedSource: { id: sourceId },
+          selectedContentLoaded: true,
           symbols: {
             functions: [],
             variables: {}
@@ -682,6 +707,7 @@ describe("QuickOpenModal", () => {
             query: "test",
             searchType: "variables",
             selectedSource: null,
+            selectedContentLoaded: true,
             symbols: {
               functions: [],
               variables: {}
@@ -721,6 +747,7 @@ describe("QuickOpenModal", () => {
             query: "test",
             searchType: "other",
             selectedSource: { id: sourceId },
+            selectedContentLoaded: true,
             symbols: {
               functions: [],
               variables: {}

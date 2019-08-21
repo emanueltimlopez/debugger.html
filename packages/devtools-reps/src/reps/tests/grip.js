@@ -124,7 +124,8 @@ describe("Grip - Proxy", () => {
 
   it("renders as expected", () => {
     const renderRep = props => shallowRenderRep(object, props);
-    const handlerLength = getGripLengthBubbleText(object.proxyHandler, {
+    const handler = object.preview.ownProperties["<handler>"].value;
+    const handlerLength = getGripLengthBubbleText(handler, {
       mode: MODE.TINY
     });
     const out = `Proxy { <target>: {…}, <handler>: ${handlerLength} […] }`;
@@ -261,27 +262,6 @@ describe("Grip - Object with more than long mode max props", () => {
     );
     const longOutput = `Object { ${props.join(", ")}, … }`;
     expect(renderRep({ mode: MODE.LONG }).text()).toBe(longOutput);
-  });
-});
-
-describe("Grip - Object with uninteresting properties", () => {
-  // Test object: `{a: undefined, b: undefined, c: "c", d: 1}`
-  const object = stubs.get("testUninterestingProps");
-
-  it("correctly selects Grip Rep", () => {
-    expect(getRep(object)).toBe(Grip.rep);
-  });
-
-  it.skip("renders as expected", () => {
-    // @TODO This is broken at the moment.
-    // See https://bugzilla.mozilla.org/show_bug.cgi?id=1276376
-    const renderRep = props => shallowRenderRep(object, props);
-    const defaultOutput = 'Object {c: "c", d: 1, a: undefined, more...}';
-
-    expect(renderRep({ mode: undefined }).text()).toBe(defaultOutput);
-    expect(renderRep({ mode: MODE.TINY }).text()).toBe("{…}");
-    expect(renderRep({ mode: MODE.SHORT }).text()).toBe(defaultOutput);
-    expect(renderRep({ mode: MODE.LONG }).text()).toBe(defaultOutput);
   });
 });
 

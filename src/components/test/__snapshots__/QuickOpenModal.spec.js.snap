@@ -4,6 +4,12 @@ exports[`QuickOpenModal Basic render with mount & searchType = functions 1`] = `
 <QuickOpenModal
   clearHighlightLineRange={[MockFunction]}
   closeQuickOpen={[MockFunction]}
+  cx={
+    Object {
+      "navigateCounter": 0,
+    }
+  }
+  displayedSources={Array []}
   enabled={true}
   highlightLineRange={[MockFunction]}
   isOriginal={false}
@@ -12,7 +18,6 @@ exports[`QuickOpenModal Basic render with mount & searchType = functions 1`] = `
   selectSpecificLocation={[MockFunction]}
   setQuickOpenQuery={[MockFunction]}
   shortcutsModalEnabled={false}
-  sources={Array []}
   symbols={
     Object {
       "functions": Array [],
@@ -72,7 +77,7 @@ exports[`QuickOpenModal Basic render with mount & searchType = functions 1`] = `
               summaryMsg=""
             >
               <div
-                className="search-shadow"
+                className="search-outline"
               >
                 <div
                   aria-expanded={false}
@@ -81,34 +86,19 @@ exports[`QuickOpenModal Basic render with mount & searchType = functions 1`] = `
                   className="search-field"
                   role="combobox"
                 >
-                  <Svg
-                    name="magnifying-glass"
+                  <AccessibleImage
+                    className="search"
                   >
-                    <InlineSVG
-                      className="magnifying-glass "
-                      element="i"
-                      raw={false}
-                      src="<svg></svg>"
-                    >
-                      <i
-                        className="magnifying-glass "
-                        dangerouslySetInnerHTML={
-                          Object {
-                            "__html": "<svg></svg>",
-                          }
-                        }
-                        src={null}
-                      />
-                    </InlineSVG>
-                  </Svg>
+                    <span
+                      className="img search"
+                    />
+                  </AccessibleImage>
                   <input
                     aria-activedescendant=""
                     aria-autocomplete="list"
                     aria-controls="result-list"
                     className="empty"
-                    onBlur={[Function]}
                     onChange={[Function]}
-                    onFocus={[Function]}
                     onKeyDown={[Function]}
                     placeholder="Go to file…"
                     spellCheck={false}
@@ -145,6 +135,12 @@ exports[`QuickOpenModal Basic render with mount & searchType = variables 1`] = `
 <QuickOpenModal
   clearHighlightLineRange={[MockFunction]}
   closeQuickOpen={[MockFunction]}
+  cx={
+    Object {
+      "navigateCounter": 0,
+    }
+  }
+  displayedSources={Array []}
   enabled={true}
   highlightLineRange={[MockFunction]}
   isOriginal={false}
@@ -153,7 +149,6 @@ exports[`QuickOpenModal Basic render with mount & searchType = variables 1`] = `
   selectSpecificLocation={[MockFunction]}
   setQuickOpenQuery={[MockFunction]}
   shortcutsModalEnabled={false}
-  sources={Array []}
   symbols={
     Object {
       "functions": Array [],
@@ -213,7 +208,7 @@ exports[`QuickOpenModal Basic render with mount & searchType = variables 1`] = `
               summaryMsg=""
             >
               <div
-                className="search-shadow"
+                className="search-outline"
               >
                 <div
                   aria-expanded={false}
@@ -222,34 +217,19 @@ exports[`QuickOpenModal Basic render with mount & searchType = variables 1`] = `
                   className="search-field"
                   role="combobox"
                 >
-                  <Svg
-                    name="magnifying-glass"
+                  <AccessibleImage
+                    className="search"
                   >
-                    <InlineSVG
-                      className="magnifying-glass "
-                      element="i"
-                      raw={false}
-                      src="<svg></svg>"
-                    >
-                      <i
-                        className="magnifying-glass "
-                        dangerouslySetInnerHTML={
-                          Object {
-                            "__html": "<svg></svg>",
-                          }
-                        }
-                        src={null}
-                      />
-                    </InlineSVG>
-                  </Svg>
+                    <span
+                      className="img search"
+                    />
+                  </AccessibleImage>
                   <input
                     aria-activedescendant=""
                     aria-autocomplete="list"
                     aria-controls="result-list"
                     className="empty"
-                    onBlur={[Function]}
                     onChange={[Function]}
-                    onFocus={[Function]}
                     onKeyDown={[Function]}
                     placeholder="Go to file…"
                     spellCheck={false}
@@ -270,6 +250,12 @@ exports[`QuickOpenModal Basic render with mount 1`] = `
 <QuickOpenModal
   clearHighlightLineRange={[MockFunction]}
   closeQuickOpen={[MockFunction]}
+  cx={
+    Object {
+      "navigateCounter": 0,
+    }
+  }
+  displayedSources={Array []}
   enabled={true}
   highlightLineRange={[MockFunction]}
   isOriginal={false}
@@ -278,7 +264,6 @@ exports[`QuickOpenModal Basic render with mount 1`] = `
   selectSpecificLocation={[MockFunction]}
   setQuickOpenQuery={[MockFunction]}
   shortcutsModalEnabled={false}
-  sources={Array []}
   symbols={
     Object {
       "functions": Array [],
@@ -337,7 +322,7 @@ exports[`QuickOpenModal Basic render with mount 1`] = `
               summaryMsg=""
             >
               <div
-                className="search-shadow"
+                className="search-outline"
               >
                 <div
                   aria-expanded={false}
@@ -346,34 +331,19 @@ exports[`QuickOpenModal Basic render with mount 1`] = `
                   className="search-field big"
                   role="combobox"
                 >
-                  <Svg
-                    name="magnifying-glass"
+                  <AccessibleImage
+                    className="search"
                   >
-                    <InlineSVG
-                      className="magnifying-glass "
-                      element="i"
-                      raw={false}
-                      src="<svg></svg>"
-                    >
-                      <i
-                        className="magnifying-glass "
-                        dangerouslySetInnerHTML={
-                          Object {
-                            "__html": "<svg></svg>",
-                          }
-                        }
-                        src={null}
-                      />
-                    </InlineSVG>
-                  </Svg>
+                    <span
+                      className="img search"
+                    />
+                  </AccessibleImage>
                   <input
                     aria-activedescendant=""
                     aria-autocomplete="list"
                     aria-controls="result-list"
                     className=""
-                    onBlur={[Function]}
                     onChange={[Function]}
-                    onFocus={[Function]}
                     onKeyDown={[Function]}
                     placeholder="Go to file…"
                     spellCheck={false}
@@ -445,6 +415,12 @@ exports[`QuickOpenModal Simple goto search query = :abc & searchType = goto 1`] 
 <QuickOpenModal
   clearHighlightLineRange={[MockFunction]}
   closeQuickOpen={[MockFunction]}
+  cx={
+    Object {
+      "navigateCounter": 0,
+    }
+  }
+  displayedSources={Array []}
   enabled={true}
   highlightLineRange={[MockFunction]}
   isOriginal={false}
@@ -453,7 +429,6 @@ exports[`QuickOpenModal Simple goto search query = :abc & searchType = goto 1`] 
   selectSpecificLocation={[MockFunction]}
   setQuickOpenQuery={[MockFunction]}
   shortcutsModalEnabled={false}
-  sources={Array []}
   symbols={
     Object {
       "functions": Array [],
@@ -513,7 +488,7 @@ exports[`QuickOpenModal Simple goto search query = :abc & searchType = goto 1`] 
               summaryMsg="Go to line"
             >
               <div
-                className="search-shadow"
+                className="search-outline"
               >
                 <div
                   aria-expanded={false}
@@ -522,41 +497,26 @@ exports[`QuickOpenModal Simple goto search query = :abc & searchType = goto 1`] 
                   className="search-field"
                   role="combobox"
                 >
-                  <Svg
-                    name="magnifying-glass"
+                  <AccessibleImage
+                    className="search"
                   >
-                    <InlineSVG
-                      className="magnifying-glass "
-                      element="i"
-                      raw={false}
-                      src="<svg></svg>"
-                    >
-                      <i
-                        className="magnifying-glass "
-                        dangerouslySetInnerHTML={
-                          Object {
-                            "__html": "<svg></svg>",
-                          }
-                        }
-                        src={null}
-                      />
-                    </InlineSVG>
-                  </Svg>
+                    <span
+                      className="img search"
+                    />
+                  </AccessibleImage>
                   <input
                     aria-activedescendant=""
                     aria-autocomplete="list"
                     aria-controls="result-list"
                     className="empty"
-                    onBlur={[Function]}
                     onChange={[Function]}
-                    onFocus={[Function]}
                     onKeyDown={[Function]}
                     placeholder="Go to file…"
                     spellCheck={false}
                     value=":abc"
                   />
                   <div
-                    className="summary"
+                    className="search-field-summary"
                   >
                     Go to line
                   </div>
@@ -575,6 +535,12 @@ exports[`QuickOpenModal showErrorEmoji false when count + query 1`] = `
 <QuickOpenModal
   clearHighlightLineRange={[MockFunction]}
   closeQuickOpen={[MockFunction]}
+  cx={
+    Object {
+      "navigateCounter": 0,
+    }
+  }
+  displayedSources={Array []}
   enabled={true}
   highlightLineRange={[MockFunction]}
   isOriginal={false}
@@ -583,7 +549,6 @@ exports[`QuickOpenModal showErrorEmoji false when count + query 1`] = `
   selectSpecificLocation={[MockFunction]}
   setQuickOpenQuery={[MockFunction]}
   shortcutsModalEnabled={false}
-  sources={Array []}
   symbols={
     Object {
       "functions": Array [],
@@ -642,7 +607,7 @@ exports[`QuickOpenModal showErrorEmoji false when count + query 1`] = `
               summaryMsg=""
             >
               <div
-                className="search-shadow"
+                className="search-outline"
               >
                 <div
                   aria-expanded={true}
@@ -651,34 +616,19 @@ exports[`QuickOpenModal showErrorEmoji false when count + query 1`] = `
                   className="search-field big"
                   role="combobox"
                 >
-                  <Svg
-                    name="magnifying-glass"
+                  <AccessibleImage
+                    className="search"
                   >
-                    <InlineSVG
-                      className="magnifying-glass "
-                      element="i"
-                      raw={false}
-                      src="<svg></svg>"
-                    >
-                      <i
-                        className="magnifying-glass "
-                        dangerouslySetInnerHTML={
-                          Object {
-                            "__html": "<svg></svg>",
-                          }
-                        }
-                        src={null}
-                      />
-                    </InlineSVG>
-                  </Svg>
+                    <span
+                      className="img search"
+                    />
+                  </AccessibleImage>
                   <input
                     aria-activedescendant=""
                     aria-autocomplete="list"
                     aria-controls="result-list"
                     className=""
-                    onBlur={[Function]}
                     onChange={[Function]}
-                    onFocus={[Function]}
                     onKeyDown={[Function]}
                     placeholder="Go to file…"
                     spellCheck={false}
@@ -747,6 +697,12 @@ exports[`QuickOpenModal showErrorEmoji false when goto numeric ':2222' 1`] = `
 <QuickOpenModal
   clearHighlightLineRange={[MockFunction]}
   closeQuickOpen={[MockFunction]}
+  cx={
+    Object {
+      "navigateCounter": 0,
+    }
+  }
+  displayedSources={Array []}
   enabled={true}
   highlightLineRange={[MockFunction]}
   isOriginal={false}
@@ -755,7 +711,6 @@ exports[`QuickOpenModal showErrorEmoji false when goto numeric ':2222' 1`] = `
   selectSpecificLocation={[MockFunction]}
   setQuickOpenQuery={[MockFunction]}
   shortcutsModalEnabled={false}
-  sources={Array []}
   symbols={
     Object {
       "functions": Array [],
@@ -814,7 +769,7 @@ exports[`QuickOpenModal showErrorEmoji false when goto numeric ':2222' 1`] = `
               summaryMsg="Go to line"
             >
               <div
-                className="search-shadow"
+                className="search-outline"
               >
                 <div
                   aria-expanded={false}
@@ -823,41 +778,26 @@ exports[`QuickOpenModal showErrorEmoji false when goto numeric ':2222' 1`] = `
                   className="search-field"
                   role="combobox"
                 >
-                  <Svg
-                    name="magnifying-glass"
+                  <AccessibleImage
+                    className="search"
                   >
-                    <InlineSVG
-                      className="magnifying-glass "
-                      element="i"
-                      raw={false}
-                      src="<svg></svg>"
-                    >
-                      <i
-                        className="magnifying-glass "
-                        dangerouslySetInnerHTML={
-                          Object {
-                            "__html": "<svg></svg>",
-                          }
-                        }
-                        src={null}
-                      />
-                    </InlineSVG>
-                  </Svg>
+                    <span
+                      className="img search"
+                    />
+                  </AccessibleImage>
                   <input
                     aria-activedescendant=""
                     aria-autocomplete="list"
                     aria-controls="result-list"
                     className=""
-                    onBlur={[Function]}
                     onChange={[Function]}
-                    onFocus={[Function]}
                     onKeyDown={[Function]}
                     placeholder="Go to file…"
                     spellCheck={false}
                     value=":2222"
                   />
                   <div
-                    className="summary"
+                    className="search-field-summary"
                   >
                     Go to line
                   </div>
@@ -876,6 +816,12 @@ exports[`QuickOpenModal showErrorEmoji false when no query 1`] = `
 <QuickOpenModal
   clearHighlightLineRange={[MockFunction]}
   closeQuickOpen={[MockFunction]}
+  cx={
+    Object {
+      "navigateCounter": 0,
+    }
+  }
+  displayedSources={Array []}
   enabled={true}
   highlightLineRange={[MockFunction]}
   isOriginal={false}
@@ -884,7 +830,6 @@ exports[`QuickOpenModal showErrorEmoji false when no query 1`] = `
   selectSpecificLocation={[MockFunction]}
   setQuickOpenQuery={[MockFunction]}
   shortcutsModalEnabled={false}
-  sources={Array []}
   symbols={
     Object {
       "functions": Array [],
@@ -943,7 +888,7 @@ exports[`QuickOpenModal showErrorEmoji false when no query 1`] = `
               summaryMsg=""
             >
               <div
-                className="search-shadow"
+                className="search-outline"
               >
                 <div
                   aria-expanded={false}
@@ -952,34 +897,19 @@ exports[`QuickOpenModal showErrorEmoji false when no query 1`] = `
                   className="search-field"
                   role="combobox"
                 >
-                  <Svg
-                    name="magnifying-glass"
+                  <AccessibleImage
+                    className="search"
                   >
-                    <InlineSVG
-                      className="magnifying-glass "
-                      element="i"
-                      raw={false}
-                      src="<svg></svg>"
-                    >
-                      <i
-                        className="magnifying-glass "
-                        dangerouslySetInnerHTML={
-                          Object {
-                            "__html": "<svg></svg>",
-                          }
-                        }
-                        src={null}
-                      />
-                    </InlineSVG>
-                  </Svg>
+                    <span
+                      className="img search"
+                    />
+                  </AccessibleImage>
                   <input
                     aria-activedescendant=""
                     aria-autocomplete="list"
                     aria-controls="result-list"
                     className=""
-                    onBlur={[Function]}
                     onChange={[Function]}
-                    onFocus={[Function]}
                     onKeyDown={[Function]}
                     placeholder="Go to file…"
                     spellCheck={false}
@@ -1016,6 +946,12 @@ exports[`QuickOpenModal showErrorEmoji true when goto not numeric ':22k22' 1`] =
 <QuickOpenModal
   clearHighlightLineRange={[MockFunction]}
   closeQuickOpen={[MockFunction]}
+  cx={
+    Object {
+      "navigateCounter": 0,
+    }
+  }
+  displayedSources={Array []}
   enabled={true}
   highlightLineRange={[MockFunction]}
   isOriginal={false}
@@ -1024,7 +960,6 @@ exports[`QuickOpenModal showErrorEmoji true when goto not numeric ':22k22' 1`] =
   selectSpecificLocation={[MockFunction]}
   setQuickOpenQuery={[MockFunction]}
   shortcutsModalEnabled={false}
-  sources={Array []}
   symbols={
     Object {
       "functions": Array [],
@@ -1083,7 +1018,7 @@ exports[`QuickOpenModal showErrorEmoji true when goto not numeric ':22k22' 1`] =
               summaryMsg="Go to line"
             >
               <div
-                className="search-shadow"
+                className="search-outline"
               >
                 <div
                   aria-expanded={false}
@@ -1092,41 +1027,26 @@ exports[`QuickOpenModal showErrorEmoji true when goto not numeric ':22k22' 1`] =
                   className="search-field"
                   role="combobox"
                 >
-                  <Svg
-                    name="magnifying-glass"
+                  <AccessibleImage
+                    className="search"
                   >
-                    <InlineSVG
-                      className="magnifying-glass "
-                      element="i"
-                      raw={false}
-                      src="<svg></svg>"
-                    >
-                      <i
-                        className="magnifying-glass "
-                        dangerouslySetInnerHTML={
-                          Object {
-                            "__html": "<svg></svg>",
-                          }
-                        }
-                        src={null}
-                      />
-                    </InlineSVG>
-                  </Svg>
+                    <span
+                      className="img search"
+                    />
+                  </AccessibleImage>
                   <input
                     aria-activedescendant=""
                     aria-autocomplete="list"
                     aria-controls="result-list"
                     className="empty"
-                    onBlur={[Function]}
                     onChange={[Function]}
-                    onFocus={[Function]}
                     onKeyDown={[Function]}
                     placeholder="Go to file…"
                     spellCheck={false}
                     value=":22k22"
                   />
                   <div
-                    className="summary"
+                    className="search-field-summary"
                   >
                     Go to line
                   </div>
@@ -1145,6 +1065,12 @@ exports[`QuickOpenModal showErrorEmoji true when no count + query 1`] = `
 <QuickOpenModal
   clearHighlightLineRange={[MockFunction]}
   closeQuickOpen={[MockFunction]}
+  cx={
+    Object {
+      "navigateCounter": 0,
+    }
+  }
+  displayedSources={Array []}
   enabled={true}
   highlightLineRange={[MockFunction]}
   isOriginal={false}
@@ -1153,7 +1079,6 @@ exports[`QuickOpenModal showErrorEmoji true when no count + query 1`] = `
   selectSpecificLocation={[MockFunction]}
   setQuickOpenQuery={[MockFunction]}
   shortcutsModalEnabled={false}
-  sources={Array []}
   symbols={
     Object {
       "functions": Array [],
@@ -1212,7 +1137,7 @@ exports[`QuickOpenModal showErrorEmoji true when no count + query 1`] = `
               summaryMsg=""
             >
               <div
-                className="search-shadow"
+                className="search-outline"
               >
                 <div
                   aria-expanded={false}
@@ -1221,34 +1146,19 @@ exports[`QuickOpenModal showErrorEmoji true when no count + query 1`] = `
                   className="search-field"
                   role="combobox"
                 >
-                  <Svg
-                    name="magnifying-glass"
+                  <AccessibleImage
+                    className="search"
                   >
-                    <InlineSVG
-                      className="magnifying-glass "
-                      element="i"
-                      raw={false}
-                      src="<svg></svg>"
-                    >
-                      <i
-                        className="magnifying-glass "
-                        dangerouslySetInnerHTML={
-                          Object {
-                            "__html": "<svg></svg>",
-                          }
-                        }
-                        src={null}
-                      />
-                    </InlineSVG>
-                  </Svg>
+                    <span
+                      className="img search"
+                    />
+                  </AccessibleImage>
                   <input
                     aria-activedescendant=""
                     aria-autocomplete="list"
                     aria-controls="result-list"
                     className="empty"
-                    onBlur={[Function]}
                     onChange={[Function]}
-                    onFocus={[Function]}
                     onKeyDown={[Function]}
                     placeholder="Go to file…"
                     spellCheck={false}
@@ -1302,6 +1212,12 @@ exports[`QuickOpenModal updateResults on enable 1`] = `
 <QuickOpenModal
   clearHighlightLineRange={[MockFunction]}
   closeQuickOpen={[MockFunction]}
+  cx={
+    Object {
+      "navigateCounter": 0,
+    }
+  }
+  displayedSources={Array []}
   enabled={false}
   highlightLineRange={[MockFunction]}
   isOriginal={false}
@@ -1310,7 +1226,6 @@ exports[`QuickOpenModal updateResults on enable 1`] = `
   selectSpecificLocation={[MockFunction]}
   setQuickOpenQuery={[MockFunction]}
   shortcutsModalEnabled={false}
-  sources={Array []}
   symbols={
     Object {
       "functions": Array [],
@@ -1327,6 +1242,12 @@ exports[`QuickOpenModal updateResults on enable 2`] = `
 <QuickOpenModal
   clearHighlightLineRange={[MockFunction]}
   closeQuickOpen={[MockFunction]}
+  cx={
+    Object {
+      "navigateCounter": 0,
+    }
+  }
+  displayedSources={Array []}
   enabled={true}
   highlightLineRange={[MockFunction]}
   isOriginal={false}
@@ -1335,7 +1256,6 @@ exports[`QuickOpenModal updateResults on enable 2`] = `
   selectSpecificLocation={[MockFunction]}
   setQuickOpenQuery={[MockFunction]}
   shortcutsModalEnabled={false}
-  sources={Array []}
   symbols={
     Object {
       "functions": Array [],
@@ -1394,7 +1314,7 @@ exports[`QuickOpenModal updateResults on enable 2`] = `
               summaryMsg=""
             >
               <div
-                className="search-shadow"
+                className="search-outline"
               >
                 <div
                   aria-expanded={false}
@@ -1403,34 +1323,19 @@ exports[`QuickOpenModal updateResults on enable 2`] = `
                   className="search-field big"
                   role="combobox"
                 >
-                  <Svg
-                    name="magnifying-glass"
+                  <AccessibleImage
+                    className="search"
                   >
-                    <InlineSVG
-                      className="magnifying-glass "
-                      element="i"
-                      raw={false}
-                      src="<svg></svg>"
-                    >
-                      <i
-                        className="magnifying-glass "
-                        dangerouslySetInnerHTML={
-                          Object {
-                            "__html": "<svg></svg>",
-                          }
-                        }
-                        src={null}
-                      />
-                    </InlineSVG>
-                  </Svg>
+                    <span
+                      className="img search"
+                    />
+                  </AccessibleImage>
                   <input
                     aria-activedescendant=""
                     aria-autocomplete="list"
                     aria-controls="result-list"
                     className=""
-                    onBlur={[Function]}
                     onChange={[Function]}
-                    onFocus={[Function]}
                     onKeyDown={[Function]}
                     placeholder="Go to file…"
                     spellCheck={false}

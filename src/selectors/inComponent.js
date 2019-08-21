@@ -4,14 +4,14 @@
 
 // @flow
 
-import { getSymbols, getSource, getSelectedFrame } from ".";
+import { getSymbols, getSource, getSelectedFrame, getCurrentThread } from ".";
 import { findClosestClass } from "../utils/ast";
-import { getSourceMetaData } from "../reducers/ast";
 
 import type { State } from "../reducers/types";
 
 export function inComponent(state: State) {
-  const selectedFrame = getSelectedFrame(state);
+  const thread = getCurrentThread(state);
+  const selectedFrame = getSelectedFrame(state, thread);
   if (!selectedFrame) {
     return;
   }
@@ -23,7 +23,7 @@ export function inComponent(state: State) {
 
   const symbols = getSymbols(state, source);
 
-  if (!symbols) {
+  if (!symbols || symbols.loading) {
     return;
   }
 
@@ -32,13 +32,7 @@ export function inComponent(state: State) {
     return null;
   }
 
-  const sourceMetaData = getSourceMetaData(state, source.id);
-
-  if (!sourceMetaData || !sourceMetaData.framework) {
-    return;
-  }
-
-  const inReactFile = sourceMetaData.framework == "React";
+  const inReactFile = symbols.framework == "React";
   const { parent } = closestClass;
   const isComponent = parent && parent.name.includes("Component");
 

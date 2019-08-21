@@ -15,28 +15,20 @@
 
 .conditional-breakpoint-panel .prompt {
   font-size: 1.8em;
-  color: var(--theme-conditional-breakpoint-color);
+  color: var(--theme-graphs-orange);
   padding-left: 3px;
   padding-right: 3px;
   padding-bottom: 3px;
   text-align: right;
   width: 30px;
+  align-self: baseline;
+  margin-top: 3px;
 }
 
-.conditional-breakpoint-panel input {
-  margin: 5px 10px;
-  width: calc(100% - 4em);
-  border: none;
-  background: var(--theme-toolbar-background);
-  font-size: 14px;
-  color: var(--theme-conditional-breakpoint-color);
-  line-height: 30px;
+.conditional-breakpoint-panel.log-point .prompt {
+  color: var(--purple-60);
 }
 
-.conditional-breakpoint-panel input:not(:placeholder-shown) {
-  font-family: var(--monospace-font-family);
-}
-
-.conditional-breakpoint-panel input:focus {
-  outline-width: 0;
+.conditional-breakpoint-panel .CodeMirror {
+  margin: 6px 10px;
 }

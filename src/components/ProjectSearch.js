@@ -19,7 +19,8 @@ import {
   getActiveSearch,
   getTextSearchResults,
   getTextSearchStatus,
-  getTextSearchQuery
+  getTextSearchQuery,
+  getContext
 } from "../selectors";
 
 import ManagedTree from "./shared/ManagedTree";
@@ -29,6 +30,7 @@ import AccessibleImage from "./shared/AccessibleImage";
 import type { List } from "immutable";
 import type { ActiveSearchType } from "../reducers/types";
 import type { StatusType } from "../reducers/project-text-search";
+import type { Context } from "../types";
 
 import "./ProjectSearch.css";
 
@@ -54,11 +56,11 @@ type Item = Result | Match;
 
 type State = {
   inputValue: string,
-  inputFocused: boolean,
   focusedItem: ?Item
 };
 
 type Props = {
+  cx: Context,
   query: string,
   results: List<Result>,
   status: StatusType,
@@ -87,7 +89,6 @@ export class ProjectSearch extends Component<Props, State> {
     super(props);
     this.state = {
       inputValue: this.props.query || "",
-      inputFocused: false,
       focusedItem: null
     };
   }
@@ -119,17 +120,17 @@ export class ProjectSearch extends Component<Props, State> {
   }
 
   doSearch(searchTerm: string) {
-    this.props.searchSources(searchTerm);
+    this.props.searchSources(this.props.cx, searchTerm);
   }
 
   toggleProjectTextSearch = (key: string, e: KeyboardEvent) => {
-    const { closeProjectSearch, setActiveSearch } = this.props;
+    const { cx, closeProjectSearch, setActiveSearch } = this.props;
     if (e) {
       e.preventDefault();
     }
 
     if (this.isProjectSearchEnabled()) {
-      return closeProjectSearch();
+      return closeProjectSearch(cx);
     }
 
     return setActiveSearch("project");
@@ -138,7 +139,7 @@ export class ProjectSearch extends Component<Props, State> {
   isProjectSearchEnabled = () => this.props.activeSearch === "project";
 
   selectMatchItem = (matchItem: Match) => {
-    this.props.selectSpecificLocation({
+    this.props.selectSpecificLocation(this.props.cx, {
       sourceId: matchItem.sourceId,
       line: matchItem.line,
       column: matchItem.column
@@ -176,11 +177,7 @@ export class ProjectSearch extends Component<Props, State> {
   };
 
   onEnterPress = () => {
-    if (
-      !this.isProjectSearchEnabled() ||
-      !this.state.focusedItem ||
-      this.state.inputFocused
-    ) {
+    if (!this.isProjectSearchEnabled() || !this.state.focusedItem) {
       return;
     }
     if (this.state.focusedItem.type === "MATCH") {
@@ -196,10 +193,10 @@ export class ProjectSearch extends Component<Props, State> {
 
   inputOnChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-    const { clearSearch } = this.props;
+    const { cx, clearSearch } = this.props;
     this.setState({ inputValue });
     if (inputValue === "") {
-      clearSearch();
+      clearSearch(cx);
     }
   };
 
@@ -298,8 +295,6 @@ export class ProjectSearch extends Component<Props, State> {
         summaryMsg={this.renderSummary()}
         isLoading={status === statusType.fetching}
         onChange={this.inputOnChange}
-        onFocus={() => this.setState({ inputFocused: true })}
-        onBlur={() => this.setState({ inputFocused: false })}
         onKeyDown={this.onKeyDown}
         onHistoryScroll={this.onHistoryScroll}
         handleClose={
@@ -331,6 +326,7 @@ ProjectSearch.contextTypes = {
 };
 
 const mapStateToProps = state => ({
+  cx: getContext(state),
   activeSearch: getActiveSearch(state),
   results: getTextSearchResults(state),
   query: getTextSearchQuery(state),

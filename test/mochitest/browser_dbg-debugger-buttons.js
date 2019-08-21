@@ -1,5 +1,6 @@
-/* Any copyright is dedicated to the Public Domain.
- * http://creativecommons.org/publicdomain/zero/1.0/ */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at <http://mozilla.org/MPL/2.0/>. */
 
 function clickButton(dbg, button) {
   const resumeFired = waitForDispatch(dbg, "COMMAND");
@@ -42,24 +43,24 @@ add_task(async function() {
   await waitForLoadedSource(dbg, "debugger-statements.html");
   assertPausedLocation(dbg);
 
-  // resume
+  info("resume");
   await clickResume(dbg);
   await waitForPaused(dbg);
   assertPausedLocation(dbg);
 
-  // step over
+  info("step over");
   await clickStepOver(dbg);
   assertPausedLocation(dbg);
 
-  // step into
+  info("step into");
   await clickStepIn(dbg);
   assertPausedLocation(dbg);
 
-  // step over
+  info("step over");
   await clickStepOver(dbg);
   assertPausedLocation(dbg);
 
-  // step out
+  info("step out");
   await clickStepOut(dbg);
   assertPausedLocation(dbg);
 });

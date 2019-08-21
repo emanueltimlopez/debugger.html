@@ -51,7 +51,7 @@ The simplest way to see the size of the bundle,
 and which packages are taking up space is to look at the webpack visualizer.
 
 1.  `vis=true node bin/copy-assets.js --mc ../gecko --assets`
-2.  `cd ../gecko/devtools/client/debugger/new`
+2.  `cd ../gecko/devtools/client/debugger`
 3.  `open webpack-stats.html`
 
 ![][vis]
@@ -62,7 +62,7 @@ When you see that a package is included that you feel should not be in the bundl
 you can open the WebPack Analyzer and look.
 
 1.  go to [analyzer](http://webpack.github.io/analyse)
-2.  select open find the latest stats.json output `<debugger.html>/webpack-stats/stats-<sha>.json`
+2.  select open find the latest stats.json output `<debugger>/webpack-stats/stats-<sha>.json`
 
 The analyzer is a bit complicated, so here are some things to look for:
 

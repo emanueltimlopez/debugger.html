@@ -22,7 +22,7 @@ const libraryMap = [
   },
   {
     label: "React",
-    pattern: /(node_modules\/react)|(react(\.[a-z]+)*\.js$)/i
+    pattern: /(node_modules\/(?:react|react-dom)\/)|(react(\.[a-z]+)*\.js$)/
   },
   {
     label: "Immutable",
@@ -31,10 +31,6 @@ const libraryMap = [
   {
     label: "Webpack",
     pattern: /webpack\/bootstrap/i
-  },
-  {
-    label: "Node",
-    pattern: /(^internal\/|^[^.\/]+\.js)/
   },
   {
     label: "Express",
@@ -78,7 +74,7 @@ const libraryMap = [
   },
   {
     label: "Angular",
-    pattern: /angular/i,
+    pattern: /angular(?!.*\/app\/)/i,
     contextPattern: /(zone\.js)/
   },
   {

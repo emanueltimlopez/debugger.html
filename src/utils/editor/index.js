@@ -11,14 +11,19 @@ export * from "../ui";
 export { onMouseOver } from "./token-events";
 
 import { createEditor } from "./create-editor";
-import { shouldPrettyPrint, isOriginal } from "../source";
+import { shouldPrettyPrint } from "../source";
 import { findNext, findPrev } from "./source-search";
 
 import { isWasm, lineToWasmOffset, wasmOffsetToLine } from "../wasm";
 
 import type { AstLocation } from "../../workers/parser";
 import type { EditorPosition, EditorRange } from "../editor/types";
-import type { SearchModifiers, Source, SourceLocation } from "../../types";
+import type {
+  SearchModifiers,
+  Source,
+  SourceContent,
+  SourceLocation
+} from "../../types";
 type Editor = Object;
 
 let editor: ?Editor;
@@ -37,7 +42,7 @@ export function removeEditor() {
 }
 
 function getCodeMirror() {
-  return editor && editor.codeMirror;
+  return editor && editor.hasCodeMirror ? editor.codeMirror : null;
 }
 
 export function startOperation() {
@@ -58,18 +63,8 @@ export function endOperation() {
   codeMirror.endOperation();
 }
 
-export function shouldShowPrettyPrint(source: Source) {
-  return shouldPrettyPrint(source);
-}
-
-export function shouldShowFooter(source: ?Source, horizontal: boolean) {
-  if (!horizontal) {
-    return true;
-  }
-  if (!source) {
-    return false;
-  }
-  return shouldShowPrettyPrint(source) || isOriginal(source);
+export function shouldShowPrettyPrint(source: Source, content: SourceContent) {
+  return shouldPrettyPrint(source, content);
 }
 
 export function traverseResults(
@@ -96,6 +91,14 @@ export function toEditorLine(sourceId: string, lineOrOffset: number): number {
   }
 
   return lineOrOffset ? lineOrOffset - 1 : 1;
+}
+
+export function fromEditorLine(sourceId: string, line: number): number {
+  if (isWasm(sourceId)) {
+    return lineToWasmOffset(sourceId, line) || 0;
+  }
+
+  return line + 1;
 }
 
 export function toEditorPosition(location: SourceLocation): EditorPosition {
@@ -162,6 +165,12 @@ function isVisible(codeMirror: any, top: number, left: number) {
 
 export function getLocationsInViewport({ codeMirror }: Object) {
   // Get scroll position
+  if (!codeMirror) {
+    return {
+      start: { line: 0, column: 0 },
+      end: { line: 0, column: 0 }
+    };
+  }
   const charWidth = codeMirror.defaultCharWidth();
   const scrollArea = codeMirror.getScrollInfo();
   const { scrollLeft } = codeMirror.doc;
@@ -249,4 +258,13 @@ export function getTextForLine(codeMirror: Object, line: number): string {
 
 export function getCursorLine(codeMirror: Object): number {
   return codeMirror.getCursor().line;
+}
+
+export function getTokenEnd(codeMirror: Object, line: number, column: number) {
+  const token = codeMirror.getTokenAt({
+    line: line,
+    ch: column + 1
+  });
+
+  return token.end;
 }

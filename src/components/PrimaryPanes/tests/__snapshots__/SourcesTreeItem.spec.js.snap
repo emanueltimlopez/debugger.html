@@ -8,22 +8,20 @@ Object {
     onClick={[Function]}
     onContextMenu={[Function]}
   >
-    <i
-      className="no-arrow"
+    <span
+      className="img no-arrow"
     />
     <Connect(SourceIcon)
       source={
         Object {
-          "contentType": "",
-          "error": undefined,
           "id": "server1.conn13.child1/39",
+          "introductionType": undefined,
+          "introductionUrl": null,
           "isBlackBoxed": false,
           "isExtension": false,
           "isPrettyPrinted": false,
           "isWasm": false,
-          "loadedState": "unloaded",
-          "sourceMapURL": undefined,
-          "text": undefined,
+          "relativeUrl": "http://mdn.com/one.js",
           "url": "http://mdn.com/one.js",
         }
       }
@@ -31,7 +29,6 @@ Object {
     <span
       className="label"
     >
-       
       one.js
        
     </span>
@@ -49,16 +46,14 @@ Object {
       "focusItem": [MockFunction],
       "item": Object {
         "contents": Object {
-          "contentType": "",
-          "error": undefined,
           "id": "server1.conn13.child1/39",
+          "introductionType": undefined,
+          "introductionUrl": null,
           "isBlackBoxed": false,
           "isExtension": false,
           "isPrettyPrinted": false,
           "isWasm": false,
-          "loadedState": "unloaded",
-          "sourceMapURL": undefined,
-          "text": undefined,
+          "relativeUrl": "http://mdn.com/one.js",
           "url": "http://mdn.com/one.js",
         },
         "name": "one.js",
@@ -69,18 +64,22 @@ Object {
       "setExpanded": [MockFunction],
       "setProjectDirectoryRoot": [MockFunction],
       "source": Object {
-        "contentType": "",
-        "error": undefined,
         "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
         "isBlackBoxed": false,
         "isExtension": false,
         "isPrettyPrinted": false,
         "isWasm": false,
-        "loadedState": "unloaded",
-        "sourceMapURL": undefined,
-        "text": undefined,
+        "relativeUrl": "http://mdn.com/one.js",
         "url": "http://mdn.com/one.js",
       },
+      "threads": Array [
+        Object {
+          "name": "Main Thread",
+        },
+      ],
+      "toggleBlackBox": [MockFunction],
     },
     "refs": Object {},
     "state": null,
@@ -96,16 +95,14 @@ Object {
           item={
             Object {
               "contents": Object {
-                "contentType": "",
-                "error": undefined,
                 "id": "server1.conn13.child1/39",
+                "introductionType": undefined,
+                "introductionUrl": null,
                 "isBlackBoxed": false,
                 "isExtension": false,
                 "isPrettyPrinted": false,
                 "isWasm": false,
-                "loadedState": "unloaded",
-                "sourceMapURL": undefined,
-                "text": undefined,
+                "relativeUrl": "http://mdn.com/one.js",
                 "url": "http://mdn.com/one.js",
               },
               "name": "one.js",
@@ -118,19 +115,25 @@ Object {
           setProjectDirectoryRoot={[MockFunction]}
           source={
             Object {
-              "contentType": "",
-              "error": undefined,
               "id": "server1.conn13.child1/39",
+              "introductionType": undefined,
+              "introductionUrl": null,
               "isBlackBoxed": false,
               "isExtension": false,
               "isPrettyPrinted": false,
               "isWasm": false,
-              "loadedState": "unloaded",
-              "sourceMapURL": undefined,
-              "text": undefined,
+              "relativeUrl": "http://mdn.com/one.js",
               "url": "http://mdn.com/one.js",
             }
           }
+          threads={
+            Array [
+              Object {
+                "name": "Main Thread",
+              },
+            ]
+          }
+          toggleBlackBox={[MockFunction]}
         />,
         "_forcedUpdate": false,
         "_instance": [Circular],
@@ -140,22 +143,20 @@ Object {
           onClick={[Function]}
           onContextMenu={[Function]}
         >
-          <i
-            className="no-arrow"
+          <span
+            className="img no-arrow"
           />
           <Connect(SourceIcon)
             source={
               Object {
-                "contentType": "",
-                "error": undefined,
                 "id": "server1.conn13.child1/39",
+                "introductionType": undefined,
+                "introductionUrl": null,
                 "isBlackBoxed": false,
                 "isExtension": false,
                 "isPrettyPrinted": false,
                 "isWasm": false,
-                "loadedState": "unloaded",
-                "sourceMapURL": undefined,
-                "text": undefined,
+                "relativeUrl": "http://mdn.com/one.js",
                 "url": "http://mdn.com/one.js",
               }
             }
@@ -163,7 +164,6 @@ Object {
           <span
             className="label"
           >
-             
             one.js
              
           </span>
@@ -180,16 +180,14 @@ Object {
     "focusItem": [MockFunction],
     "item": Object {
       "contents": Object {
-        "contentType": "",
-        "error": undefined,
         "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
         "isBlackBoxed": false,
         "isExtension": false,
         "isPrettyPrinted": false,
         "isWasm": false,
-        "loadedState": "unloaded",
-        "sourceMapURL": undefined,
-        "text": undefined,
+        "relativeUrl": "http://mdn.com/one.js",
         "url": "http://mdn.com/one.js",
       },
       "name": "one.js",
@@ -200,18 +198,22 @@ Object {
     "setExpanded": [MockFunction],
     "setProjectDirectoryRoot": [MockFunction],
     "source": Object {
-      "contentType": "",
-      "error": undefined,
       "id": "server1.conn13.child1/39",
+      "introductionType": undefined,
+      "introductionUrl": null,
       "isBlackBoxed": false,
       "isExtension": false,
       "isPrettyPrinted": false,
       "isWasm": false,
-      "loadedState": "unloaded",
-      "sourceMapURL": undefined,
-      "text": undefined,
+      "relativeUrl": "http://mdn.com/one.js",
       "url": "http://mdn.com/one.js",
     },
+    "threads": Array [
+      Object {
+        "name": "Main Thread",
+      },
+    ],
+    "toggleBlackBox": [MockFunction],
   },
 }
 `;
@@ -224,22 +226,20 @@ Object {
     onClick={[Function]}
     onContextMenu={[Function]}
   >
-    <i
-      className="no-arrow"
+    <span
+      className="img no-arrow"
     />
     <Connect(SourceIcon)
       source={
         Object {
-          "contentType": "",
-          "error": undefined,
           "id": "server1.conn13.child1/39",
+          "introductionType": undefined,
+          "introductionUrl": null,
           "isBlackBoxed": false,
           "isExtension": false,
           "isPrettyPrinted": false,
           "isWasm": false,
-          "loadedState": "unloaded",
-          "sourceMapURL": undefined,
-          "text": undefined,
+          "relativeUrl": "http://mdn.com/one.js",
           "url": "http://mdn.com/one.js",
         }
       }
@@ -247,7 +247,6 @@ Object {
     <span
       className="label"
     >
-       
       one.js
        
       <span
@@ -271,17 +270,15 @@ Object {
       "hasMatchingGeneratedSource": true,
       "item": Object {
         "contents": Object {
-          "contentType": "",
-          "error": undefined,
           "id": "server1.conn13.child1/39",
+          "introductionType": undefined,
+          "introductionUrl": null,
           "isBlackBoxed": false,
           "isExtension": false,
           "isPrettyPrinted": false,
           "isWasm": false,
-          "loadedState": "unloaded",
-          "sourceMapURL": undefined,
-          "text": undefined,
-          "url": undefined,
+          "relativeUrl": "url",
+          "url": "url",
         },
         "name": "one.js",
         "path": "http://mdn.com/one.js",
@@ -292,18 +289,22 @@ Object {
       "setExpanded": [MockFunction],
       "setProjectDirectoryRoot": [MockFunction],
       "source": Object {
-        "contentType": "",
-        "error": undefined,
         "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
         "isBlackBoxed": false,
         "isExtension": false,
         "isPrettyPrinted": false,
         "isWasm": false,
-        "loadedState": "unloaded",
-        "sourceMapURL": undefined,
-        "text": undefined,
+        "relativeUrl": "http://mdn.com/one.js",
         "url": "http://mdn.com/one.js",
       },
+      "threads": Array [
+        Object {
+          "name": "Main Thread",
+        },
+      ],
+      "toggleBlackBox": [MockFunction],
     },
     "refs": Object {},
     "state": null,
@@ -320,17 +321,15 @@ Object {
           item={
             Object {
               "contents": Object {
-                "contentType": "",
-                "error": undefined,
                 "id": "server1.conn13.child1/39",
+                "introductionType": undefined,
+                "introductionUrl": null,
                 "isBlackBoxed": false,
                 "isExtension": false,
                 "isPrettyPrinted": false,
                 "isWasm": false,
-                "loadedState": "unloaded",
-                "sourceMapURL": undefined,
-                "text": undefined,
-                "url": undefined,
+                "relativeUrl": "url",
+                "url": "url",
               },
               "name": "one.js",
               "path": "http://mdn.com/one.js",
@@ -343,19 +342,25 @@ Object {
           setProjectDirectoryRoot={[MockFunction]}
           source={
             Object {
-              "contentType": "",
-              "error": undefined,
               "id": "server1.conn13.child1/39",
+              "introductionType": undefined,
+              "introductionUrl": null,
               "isBlackBoxed": false,
               "isExtension": false,
               "isPrettyPrinted": false,
               "isWasm": false,
-              "loadedState": "unloaded",
-              "sourceMapURL": undefined,
-              "text": undefined,
+              "relativeUrl": "http://mdn.com/one.js",
               "url": "http://mdn.com/one.js",
             }
           }
+          threads={
+            Array [
+              Object {
+                "name": "Main Thread",
+              },
+            ]
+          }
+          toggleBlackBox={[MockFunction]}
         />,
         "_forcedUpdate": false,
         "_instance": [Circular],
@@ -365,22 +370,20 @@ Object {
           onClick={[Function]}
           onContextMenu={[Function]}
         >
-          <i
-            className="no-arrow"
+          <span
+            className="img no-arrow"
           />
           <Connect(SourceIcon)
             source={
               Object {
-                "contentType": "",
-                "error": undefined,
                 "id": "server1.conn13.child1/39",
+                "introductionType": undefined,
+                "introductionUrl": null,
                 "isBlackBoxed": false,
                 "isExtension": false,
                 "isPrettyPrinted": false,
                 "isWasm": false,
-                "loadedState": "unloaded",
-                "sourceMapURL": undefined,
-                "text": undefined,
+                "relativeUrl": "http://mdn.com/one.js",
                 "url": "http://mdn.com/one.js",
               }
             }
@@ -388,7 +391,6 @@ Object {
           <span
             className="label"
           >
-             
             one.js
              
             <span
@@ -411,17 +413,15 @@ Object {
     "hasMatchingGeneratedSource": true,
     "item": Object {
       "contents": Object {
-        "contentType": "",
-        "error": undefined,
         "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
         "isBlackBoxed": false,
         "isExtension": false,
         "isPrettyPrinted": false,
         "isWasm": false,
-        "loadedState": "unloaded",
-        "sourceMapURL": undefined,
-        "text": undefined,
-        "url": undefined,
+        "relativeUrl": "url",
+        "url": "url",
       },
       "name": "one.js",
       "path": "http://mdn.com/one.js",
@@ -432,18 +432,22 @@ Object {
     "setExpanded": [MockFunction],
     "setProjectDirectoryRoot": [MockFunction],
     "source": Object {
-      "contentType": "",
-      "error": undefined,
       "id": "server1.conn13.child1/39",
+      "introductionType": undefined,
+      "introductionUrl": null,
       "isBlackBoxed": false,
       "isExtension": false,
       "isPrettyPrinted": false,
       "isWasm": false,
-      "loadedState": "unloaded",
-      "sourceMapURL": undefined,
-      "text": undefined,
+      "relativeUrl": "http://mdn.com/one.js",
       "url": "http://mdn.com/one.js",
     },
+    "threads": Array [
+      Object {
+        "name": "Main Thread",
+      },
+    ],
+    "toggleBlackBox": [MockFunction],
   },
 }
 `;
@@ -456,16 +460,27 @@ Object {
     onClick={[Function]}
     onContextMenu={[Function]}
   >
-    <i
-      className="no-arrow"
+    <span
+      className="img no-arrow"
     />
-    <AccessibleImage
-      className="domain"
+    <Connect(SourceIcon)
+      source={
+        Object {
+          "id": "server1.conn13.child1/39",
+          "introductionType": undefined,
+          "introductionUrl": null,
+          "isBlackBoxed": false,
+          "isExtension": false,
+          "isPrettyPrinted": false,
+          "isWasm": false,
+          "relativeUrl": "http://mdn.com/one.js",
+          "url": "http://mdn.com/one.js",
+        }
+      }
     />
     <span
       className="label"
     >
-       
       root
        
     </span>
@@ -484,17 +499,15 @@ Object {
       "focusItem": [MockFunction],
       "item": Object {
         "contents": Object {
-          "contentType": "",
-          "error": undefined,
           "id": "server1.conn13.child1/39",
+          "introductionType": undefined,
+          "introductionUrl": null,
           "isBlackBoxed": false,
           "isExtension": false,
           "isPrettyPrinted": false,
           "isWasm": false,
-          "loadedState": "unloaded",
-          "sourceMapURL": undefined,
-          "text": undefined,
-          "url": undefined,
+          "relativeUrl": "url",
+          "url": "url",
         },
         "name": "root",
         "path": "root",
@@ -505,18 +518,22 @@ Object {
       "setExpanded": [MockFunction],
       "setProjectDirectoryRoot": [MockFunction],
       "source": Object {
-        "contentType": "",
-        "error": undefined,
         "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
         "isBlackBoxed": false,
         "isExtension": false,
         "isPrettyPrinted": false,
         "isWasm": false,
-        "loadedState": "unloaded",
-        "sourceMapURL": undefined,
-        "text": undefined,
+        "relativeUrl": "http://mdn.com/one.js",
         "url": "http://mdn.com/one.js",
       },
+      "threads": Array [
+        Object {
+          "name": "Main Thread",
+        },
+      ],
+      "toggleBlackBox": [MockFunction],
     },
     "refs": Object {},
     "state": null,
@@ -533,17 +550,15 @@ Object {
           item={
             Object {
               "contents": Object {
-                "contentType": "",
-                "error": undefined,
                 "id": "server1.conn13.child1/39",
+                "introductionType": undefined,
+                "introductionUrl": null,
                 "isBlackBoxed": false,
                 "isExtension": false,
                 "isPrettyPrinted": false,
                 "isWasm": false,
-                "loadedState": "unloaded",
-                "sourceMapURL": undefined,
-                "text": undefined,
-                "url": undefined,
+                "relativeUrl": "url",
+                "url": "url",
               },
               "name": "root",
               "path": "root",
@@ -556,19 +571,25 @@ Object {
           setProjectDirectoryRoot={[MockFunction]}
           source={
             Object {
-              "contentType": "",
-              "error": undefined,
               "id": "server1.conn13.child1/39",
+              "introductionType": undefined,
+              "introductionUrl": null,
               "isBlackBoxed": false,
               "isExtension": false,
               "isPrettyPrinted": false,
               "isWasm": false,
-              "loadedState": "unloaded",
-              "sourceMapURL": undefined,
-              "text": undefined,
+              "relativeUrl": "http://mdn.com/one.js",
               "url": "http://mdn.com/one.js",
             }
           }
+          threads={
+            Array [
+              Object {
+                "name": "Main Thread",
+              },
+            ]
+          }
+          toggleBlackBox={[MockFunction]}
         />,
         "_forcedUpdate": false,
         "_instance": [Circular],
@@ -578,16 +599,27 @@ Object {
           onClick={[Function]}
           onContextMenu={[Function]}
         >
-          <i
-            className="no-arrow"
+          <span
+            className="img no-arrow"
           />
-          <AccessibleImage
-            className="domain"
+          <Connect(SourceIcon)
+            source={
+              Object {
+                "id": "server1.conn13.child1/39",
+                "introductionType": undefined,
+                "introductionUrl": null,
+                "isBlackBoxed": false,
+                "isExtension": false,
+                "isPrettyPrinted": false,
+                "isWasm": false,
+                "relativeUrl": "http://mdn.com/one.js",
+                "url": "http://mdn.com/one.js",
+              }
+            }
           />
           <span
             className="label"
           >
-             
             root
              
           </span>
@@ -605,17 +637,15 @@ Object {
     "focusItem": [MockFunction],
     "item": Object {
       "contents": Object {
-        "contentType": "",
-        "error": undefined,
         "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
         "isBlackBoxed": false,
         "isExtension": false,
         "isPrettyPrinted": false,
         "isWasm": false,
-        "loadedState": "unloaded",
-        "sourceMapURL": undefined,
-        "text": undefined,
-        "url": undefined,
+        "relativeUrl": "url",
+        "url": "url",
       },
       "name": "root",
       "path": "root",
@@ -626,18 +656,22 @@ Object {
     "setExpanded": [MockFunction],
     "setProjectDirectoryRoot": [MockFunction],
     "source": Object {
-      "contentType": "",
-      "error": undefined,
       "id": "server1.conn13.child1/39",
+      "introductionType": undefined,
+      "introductionUrl": null,
       "isBlackBoxed": false,
       "isExtension": false,
       "isPrettyPrinted": false,
       "isWasm": false,
-      "loadedState": "unloaded",
-      "sourceMapURL": undefined,
-      "text": undefined,
+      "relativeUrl": "http://mdn.com/one.js",
       "url": "http://mdn.com/one.js",
     },
+    "threads": Array [
+      Object {
+        "name": "Main Thread",
+      },
+    ],
+    "toggleBlackBox": [MockFunction],
   },
 }
 `;
@@ -654,12 +688,11 @@ Object {
       className="arrow"
     />
     <AccessibleImage
-      className="domain debuggee"
+      className="folder"
     />
     <span
       className="label"
     >
-       
       http://mdn.com
        
     </span>
@@ -687,18 +720,22 @@ Object {
       "setExpanded": [MockFunction],
       "setProjectDirectoryRoot": [MockFunction],
       "source": Object {
-        "contentType": "",
-        "error": undefined,
         "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
         "isBlackBoxed": false,
         "isExtension": false,
         "isPrettyPrinted": false,
         "isWasm": false,
-        "loadedState": "unloaded",
-        "sourceMapURL": undefined,
-        "text": undefined,
+        "relativeUrl": "http://mdn.com/one.js",
         "url": "http://mdn.com/one.js",
       },
+      "threads": Array [
+        Object {
+          "name": "Main Thread",
+        },
+      ],
+      "toggleBlackBox": [MockFunction],
     },
     "refs": Object {},
     "state": null,
@@ -726,19 +763,25 @@ Object {
           setProjectDirectoryRoot={[MockFunction]}
           source={
             Object {
-              "contentType": "",
-              "error": undefined,
               "id": "server1.conn13.child1/39",
+              "introductionType": undefined,
+              "introductionUrl": null,
               "isBlackBoxed": false,
               "isExtension": false,
               "isPrettyPrinted": false,
               "isWasm": false,
-              "loadedState": "unloaded",
-              "sourceMapURL": undefined,
-              "text": undefined,
+              "relativeUrl": "http://mdn.com/one.js",
               "url": "http://mdn.com/one.js",
             }
           }
+          threads={
+            Array [
+              Object {
+                "name": "Main Thread",
+              },
+            ]
+          }
+          toggleBlackBox={[MockFunction]}
         />,
         "_forcedUpdate": false,
         "_instance": [Circular],
@@ -752,12 +795,11 @@ Object {
             className="arrow"
           />
           <AccessibleImage
-            className="domain debuggee"
+            className="folder"
           />
           <span
             className="label"
           >
-             
             http://mdn.com
              
           </span>
@@ -784,18 +826,22 @@ Object {
     "setExpanded": [MockFunction],
     "setProjectDirectoryRoot": [MockFunction],
     "source": Object {
-      "contentType": "",
-      "error": undefined,
       "id": "server1.conn13.child1/39",
+      "introductionType": undefined,
+      "introductionUrl": null,
       "isBlackBoxed": false,
       "isExtension": false,
       "isPrettyPrinted": false,
       "isWasm": false,
-      "loadedState": "unloaded",
-      "sourceMapURL": undefined,
-      "text": undefined,
+      "relativeUrl": "http://mdn.com/one.js",
       "url": "http://mdn.com/one.js",
     },
+    "threads": Array [
+      Object {
+        "name": "Main Thread",
+      },
+    ],
+    "toggleBlackBox": [MockFunction],
   },
 }
 `;
@@ -812,12 +858,11 @@ Object {
       className="arrow"
     />
     <AccessibleImage
-      className="domain debuggee"
+      className="folder"
     />
     <span
       className="label"
     >
-       
       http://mdn.com
        
     </span>
@@ -846,18 +891,22 @@ Object {
       "setExpanded": [MockFunction],
       "setProjectDirectoryRoot": [MockFunction],
       "source": Object {
-        "contentType": "",
-        "error": undefined,
         "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
         "isBlackBoxed": false,
         "isExtension": false,
         "isPrettyPrinted": false,
         "isWasm": false,
-        "loadedState": "unloaded",
-        "sourceMapURL": undefined,
-        "text": undefined,
+        "relativeUrl": "http://mdn.com/one.js",
         "url": "http://mdn.com/one.js",
       },
+      "threads": Array [
+        Object {
+          "name": "Main Thread",
+        },
+      ],
+      "toggleBlackBox": [MockFunction],
     },
     "refs": Object {},
     "state": null,
@@ -886,19 +935,25 @@ Object {
           setProjectDirectoryRoot={[MockFunction]}
           source={
             Object {
-              "contentType": "",
-              "error": undefined,
               "id": "server1.conn13.child1/39",
+              "introductionType": undefined,
+              "introductionUrl": null,
               "isBlackBoxed": false,
               "isExtension": false,
               "isPrettyPrinted": false,
               "isWasm": false,
-              "loadedState": "unloaded",
-              "sourceMapURL": undefined,
-              "text": undefined,
+              "relativeUrl": "http://mdn.com/one.js",
               "url": "http://mdn.com/one.js",
             }
           }
+          threads={
+            Array [
+              Object {
+                "name": "Main Thread",
+              },
+            ]
+          }
+          toggleBlackBox={[MockFunction]}
         />,
         "_forcedUpdate": false,
         "_instance": [Circular],
@@ -912,12 +967,11 @@ Object {
             className="arrow"
           />
           <AccessibleImage
-            className="domain debuggee"
+            className="folder"
           />
           <span
             className="label"
           >
-             
             http://mdn.com
              
           </span>
@@ -945,18 +999,22 @@ Object {
     "setExpanded": [MockFunction],
     "setProjectDirectoryRoot": [MockFunction],
     "source": Object {
-      "contentType": "",
-      "error": undefined,
       "id": "server1.conn13.child1/39",
+      "introductionType": undefined,
+      "introductionUrl": null,
       "isBlackBoxed": false,
       "isExtension": false,
       "isPrettyPrinted": false,
       "isWasm": false,
-      "loadedState": "unloaded",
-      "sourceMapURL": undefined,
-      "text": undefined,
+      "relativeUrl": "http://mdn.com/one.js",
       "url": "http://mdn.com/one.js",
     },
+    "threads": Array [
+      Object {
+        "name": "Main Thread",
+      },
+    ],
+    "toggleBlackBox": [MockFunction],
   },
 }
 `;
@@ -965,7 +1023,7 @@ exports[`SourceTreeItem renderItem should show focused item for folder with expa
 Object {
   "component": <div
     className="node focused"
-    key="folder/"
+    key="domain/subfolder"
     onClick={[Function]}
     onContextMenu={[Function]}
   >
@@ -973,12 +1031,11 @@ Object {
       className="arrow expanded"
     />
     <AccessibleImage
-      className="folder"
+      className="globe-small"
     />
     <span
       className="label"
     >
-       
       folder
        
     </span>
@@ -999,7 +1056,7 @@ Object {
       "item": Object {
         "contents": Array [],
         "name": "folder",
-        "path": "folder/",
+        "path": "domain/subfolder",
         "type": "directory",
       },
       "projectRoot": "",
@@ -1007,6 +1064,12 @@ Object {
       "setExpanded": [MockFunction],
       "setProjectDirectoryRoot": [MockFunction],
       "source": null,
+      "threads": Array [
+        Object {
+          "name": "Main Thread",
+        },
+      ],
+      "toggleBlackBox": [MockFunction],
     },
     "refs": Object {},
     "state": null,
@@ -1025,7 +1088,7 @@ Object {
             Object {
               "contents": Array [],
               "name": "folder",
-              "path": "folder/",
+              "path": "domain/subfolder",
               "type": "directory",
             }
           }
@@ -1034,6 +1097,14 @@ Object {
           setExpanded={[MockFunction]}
           setProjectDirectoryRoot={[MockFunction]}
           source={null}
+          threads={
+            Array [
+              Object {
+                "name": "Main Thread",
+              },
+            ]
+          }
+          toggleBlackBox={[MockFunction]}
         />,
         "_forcedUpdate": false,
         "_instance": [Circular],
@@ -1047,12 +1118,11 @@ Object {
             className="arrow expanded"
           />
           <AccessibleImage
-            className="folder"
+            className="globe-small"
           />
           <span
             className="label"
           >
-             
             folder
              
           </span>
@@ -1072,7 +1142,7 @@ Object {
     "item": Object {
       "contents": Array [],
       "name": "folder",
-      "path": "folder/",
+      "path": "domain/subfolder",
       "type": "directory",
     },
     "projectRoot": "",
@@ -1080,6 +1150,12 @@ Object {
     "setExpanded": [MockFunction],
     "setProjectDirectoryRoot": [MockFunction],
     "source": null,
+    "threads": Array [
+      Object {
+        "name": "Main Thread",
+      },
+    ],
+    "toggleBlackBox": [MockFunction],
   },
 }
 `;
@@ -1101,7 +1177,6 @@ Object {
     <span
       className="label"
     >
-       
       Angular
        
     </span>
@@ -1128,18 +1203,22 @@ Object {
       "setExpanded": [MockFunction],
       "setProjectDirectoryRoot": [MockFunction],
       "source": Object {
-        "contentType": "",
-        "error": undefined,
         "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
         "isBlackBoxed": false,
         "isExtension": false,
         "isPrettyPrinted": false,
         "isWasm": false,
-        "loadedState": "unloaded",
-        "sourceMapURL": undefined,
-        "text": undefined,
+        "relativeUrl": "http://mdn.com/one.js",
         "url": "http://mdn.com/one.js",
       },
+      "threads": Array [
+        Object {
+          "name": "Main Thread",
+        },
+      ],
+      "toggleBlackBox": [MockFunction],
     },
     "refs": Object {},
     "state": null,
@@ -1166,19 +1245,25 @@ Object {
           setProjectDirectoryRoot={[MockFunction]}
           source={
             Object {
-              "contentType": "",
-              "error": undefined,
               "id": "server1.conn13.child1/39",
+              "introductionType": undefined,
+              "introductionUrl": null,
               "isBlackBoxed": false,
               "isExtension": false,
               "isPrettyPrinted": false,
               "isWasm": false,
-              "loadedState": "unloaded",
-              "sourceMapURL": undefined,
-              "text": undefined,
+              "relativeUrl": "http://mdn.com/one.js",
               "url": "http://mdn.com/one.js",
             }
           }
+          threads={
+            Array [
+              Object {
+                "name": "Main Thread",
+              },
+            ]
+          }
+          toggleBlackBox={[MockFunction]}
         />,
         "_forcedUpdate": false,
         "_instance": [Circular],
@@ -1197,7 +1282,6 @@ Object {
           <span
             className="label"
           >
-             
             Angular
              
           </span>
@@ -1223,18 +1307,22 @@ Object {
     "setExpanded": [MockFunction],
     "setProjectDirectoryRoot": [MockFunction],
     "source": Object {
-      "contentType": "",
-      "error": undefined,
       "id": "server1.conn13.child1/39",
+      "introductionType": undefined,
+      "introductionUrl": null,
       "isBlackBoxed": false,
       "isExtension": false,
       "isPrettyPrinted": false,
       "isWasm": false,
-      "loadedState": "unloaded",
-      "sourceMapURL": undefined,
-      "text": undefined,
+      "relativeUrl": "http://mdn.com/one.js",
       "url": "http://mdn.com/one.js",
     },
+    "threads": Array [
+      Object {
+        "name": "Main Thread",
+      },
+    ],
+    "toggleBlackBox": [MockFunction],
   },
 }
 `;
@@ -1243,7 +1331,7 @@ exports[`SourceTreeItem renderItem should show icon for folder with arrow 1`] = 
 Object {
   "component": <div
     className="node"
-    key="folder/"
+    key="domain/subfolder"
     onClick={[Function]}
     onContextMenu={[Function]}
   >
@@ -1256,7 +1344,6 @@ Object {
     <span
       className="label"
     >
-       
       folder
        
     </span>
@@ -1275,7 +1362,7 @@ Object {
       "item": Object {
         "contents": Array [],
         "name": "folder",
-        "path": "folder/",
+        "path": "domain/subfolder",
         "type": "directory",
       },
       "projectRoot": "",
@@ -1283,6 +1370,12 @@ Object {
       "setExpanded": [MockFunction],
       "setProjectDirectoryRoot": [MockFunction],
       "source": null,
+      "threads": Array [
+        Object {
+          "name": "Main Thread",
+        },
+      ],
+      "toggleBlackBox": [MockFunction],
     },
     "refs": Object {},
     "state": null,
@@ -1299,7 +1392,7 @@ Object {
             Object {
               "contents": Array [],
               "name": "folder",
-              "path": "folder/",
+              "path": "domain/subfolder",
               "type": "directory",
             }
           }
@@ -1308,6 +1401,14 @@ Object {
           setExpanded={[MockFunction]}
           setProjectDirectoryRoot={[MockFunction]}
           source={null}
+          threads={
+            Array [
+              Object {
+                "name": "Main Thread",
+              },
+            ]
+          }
+          toggleBlackBox={[MockFunction]}
         />,
         "_forcedUpdate": false,
         "_instance": [Circular],
@@ -1326,7 +1427,6 @@ Object {
           <span
             className="label"
           >
-             
             folder
              
           </span>
@@ -1344,7 +1444,7 @@ Object {
     "item": Object {
       "contents": Array [],
       "name": "folder",
-      "path": "folder/",
+      "path": "domain/subfolder",
       "type": "directory",
     },
     "projectRoot": "",
@@ -1352,6 +1452,12 @@ Object {
     "setExpanded": [MockFunction],
     "setProjectDirectoryRoot": [MockFunction],
     "source": null,
+    "threads": Array [
+      Object {
+        "name": "Main Thread",
+      },
+    ],
+    "toggleBlackBox": [MockFunction],
   },
 }
 `;
@@ -1360,7 +1466,7 @@ exports[`SourceTreeItem renderItem should show icon for folder with expanded arr
 Object {
   "component": <div
     className="node"
-    key="folder/"
+    key="domain/subfolder"
     onClick={[Function]}
     onContextMenu={[Function]}
   >
@@ -1368,12 +1474,11 @@ Object {
       className="arrow expanded"
     />
     <AccessibleImage
-      className="folder"
+      className="globe-small"
     />
     <span
       className="label"
     >
-       
       folder
        
     </span>
@@ -1394,7 +1499,7 @@ Object {
       "item": Object {
         "contents": Array [],
         "name": "folder",
-        "path": "folder/",
+        "path": "domain/subfolder",
         "type": "directory",
       },
       "projectRoot": "",
@@ -1402,6 +1507,12 @@ Object {
       "setExpanded": [MockFunction],
       "setProjectDirectoryRoot": [MockFunction],
       "source": null,
+      "threads": Array [
+        Object {
+          "name": "Main Thread",
+        },
+      ],
+      "toggleBlackBox": [MockFunction],
     },
     "refs": Object {},
     "state": null,
@@ -1420,7 +1531,7 @@ Object {
             Object {
               "contents": Array [],
               "name": "folder",
-              "path": "folder/",
+              "path": "domain/subfolder",
               "type": "directory",
             }
           }
@@ -1429,6 +1540,14 @@ Object {
           setExpanded={[MockFunction]}
           setProjectDirectoryRoot={[MockFunction]}
           source={null}
+          threads={
+            Array [
+              Object {
+                "name": "Main Thread",
+              },
+            ]
+          }
+          toggleBlackBox={[MockFunction]}
         />,
         "_forcedUpdate": false,
         "_instance": [Circular],
@@ -1442,12 +1561,11 @@ Object {
             className="arrow expanded"
           />
           <AccessibleImage
-            className="folder"
+            className="globe-small"
           />
           <span
             className="label"
           >
-             
             folder
              
           </span>
@@ -1467,7 +1585,7 @@ Object {
     "item": Object {
       "contents": Array [],
       "name": "folder",
-      "path": "folder/",
+      "path": "domain/subfolder",
       "type": "directory",
     },
     "projectRoot": "",
@@ -1475,6 +1593,12 @@ Object {
     "setExpanded": [MockFunction],
     "setProjectDirectoryRoot": [MockFunction],
     "source": null,
+    "threads": Array [
+      Object {
+        "name": "Main Thread",
+      },
+    ],
+    "toggleBlackBox": [MockFunction],
   },
 }
 `;
@@ -1491,12 +1615,11 @@ Object {
       className="arrow"
     />
     <AccessibleImage
-      className="extension"
+      className="folder"
     />
     <span
       className="label"
     >
-       
       moz-extension://e37c3c08-beac-a04b-8032-c4f699a1a856
        
     </span>
@@ -1524,18 +1647,22 @@ Object {
       "setExpanded": [MockFunction],
       "setProjectDirectoryRoot": [MockFunction],
       "source": Object {
-        "contentType": "",
-        "error": undefined,
         "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
         "isBlackBoxed": false,
         "isExtension": false,
         "isPrettyPrinted": false,
         "isWasm": false,
-        "loadedState": "unloaded",
-        "sourceMapURL": undefined,
-        "text": undefined,
+        "relativeUrl": "http://mdn.com/one.js",
         "url": "http://mdn.com/one.js",
       },
+      "threads": Array [
+        Object {
+          "name": "Main Thread",
+        },
+      ],
+      "toggleBlackBox": [MockFunction],
     },
     "refs": Object {},
     "state": null,
@@ -1563,19 +1690,25 @@ Object {
           setProjectDirectoryRoot={[MockFunction]}
           source={
             Object {
-              "contentType": "",
-              "error": undefined,
               "id": "server1.conn13.child1/39",
+              "introductionType": undefined,
+              "introductionUrl": null,
               "isBlackBoxed": false,
               "isExtension": false,
               "isPrettyPrinted": false,
               "isWasm": false,
-              "loadedState": "unloaded",
-              "sourceMapURL": undefined,
-              "text": undefined,
+              "relativeUrl": "http://mdn.com/one.js",
               "url": "http://mdn.com/one.js",
             }
           }
+          threads={
+            Array [
+              Object {
+                "name": "Main Thread",
+              },
+            ]
+          }
+          toggleBlackBox={[MockFunction]}
         />,
         "_forcedUpdate": false,
         "_instance": [Circular],
@@ -1589,12 +1722,11 @@ Object {
             className="arrow"
           />
           <AccessibleImage
-            className="extension"
+            className="folder"
           />
           <span
             className="label"
           >
-             
             moz-extension://e37c3c08-beac-a04b-8032-c4f699a1a856
              
           </span>
@@ -1621,18 +1753,22 @@ Object {
     "setExpanded": [MockFunction],
     "setProjectDirectoryRoot": [MockFunction],
     "source": Object {
-      "contentType": "",
-      "error": undefined,
       "id": "server1.conn13.child1/39",
+      "introductionType": undefined,
+      "introductionUrl": null,
       "isBlackBoxed": false,
       "isExtension": false,
       "isPrettyPrinted": false,
       "isWasm": false,
-      "loadedState": "unloaded",
-      "sourceMapURL": undefined,
-      "text": undefined,
+      "relativeUrl": "http://mdn.com/one.js",
       "url": "http://mdn.com/one.js",
     },
+    "threads": Array [
+      Object {
+        "name": "Main Thread",
+      },
+    ],
+    "toggleBlackBox": [MockFunction],
   },
 }
 `;
@@ -1654,7 +1790,6 @@ Object {
     <span
       className="label"
     >
-       
       Webpack
        
     </span>
@@ -1681,18 +1816,22 @@ Object {
       "setExpanded": [MockFunction],
       "setProjectDirectoryRoot": [MockFunction],
       "source": Object {
-        "contentType": "",
-        "error": undefined,
         "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
         "isBlackBoxed": false,
         "isExtension": false,
         "isPrettyPrinted": false,
         "isWasm": false,
-        "loadedState": "unloaded",
-        "sourceMapURL": undefined,
-        "text": undefined,
+        "relativeUrl": "http://mdn.com/one.js",
         "url": "http://mdn.com/one.js",
       },
+      "threads": Array [
+        Object {
+          "name": "Main Thread",
+        },
+      ],
+      "toggleBlackBox": [MockFunction],
     },
     "refs": Object {},
     "state": null,
@@ -1719,19 +1858,25 @@ Object {
           setProjectDirectoryRoot={[MockFunction]}
           source={
             Object {
-              "contentType": "",
-              "error": undefined,
               "id": "server1.conn13.child1/39",
+              "introductionType": undefined,
+              "introductionUrl": null,
               "isBlackBoxed": false,
               "isExtension": false,
               "isPrettyPrinted": false,
               "isWasm": false,
-              "loadedState": "unloaded",
-              "sourceMapURL": undefined,
-              "text": undefined,
+              "relativeUrl": "http://mdn.com/one.js",
               "url": "http://mdn.com/one.js",
             }
           }
+          threads={
+            Array [
+              Object {
+                "name": "Main Thread",
+              },
+            ]
+          }
+          toggleBlackBox={[MockFunction]}
         />,
         "_forcedUpdate": false,
         "_instance": [Circular],
@@ -1750,7 +1895,6 @@ Object {
           <span
             className="label"
           >
-             
             Webpack
              
           </span>
@@ -1776,18 +1920,22 @@ Object {
     "setExpanded": [MockFunction],
     "setProjectDirectoryRoot": [MockFunction],
     "source": Object {
-      "contentType": "",
-      "error": undefined,
       "id": "server1.conn13.child1/39",
+      "introductionType": undefined,
+      "introductionUrl": null,
       "isBlackBoxed": false,
       "isExtension": false,
       "isPrettyPrinted": false,
       "isWasm": false,
-      "loadedState": "unloaded",
-      "sourceMapURL": undefined,
-      "text": undefined,
+      "relativeUrl": "http://mdn.com/one.js",
       "url": "http://mdn.com/one.js",
     },
+    "threads": Array [
+      Object {
+        "name": "Main Thread",
+      },
+    ],
+    "toggleBlackBox": [MockFunction],
   },
 }
 `;
@@ -1800,22 +1948,20 @@ Object {
     onClick={[Function]}
     onContextMenu={[Function]}
   >
-    <i
-      className="no-arrow"
+    <span
+      className="img no-arrow"
     />
     <Connect(SourceIcon)
       source={
         Object {
-          "contentType": "",
-          "error": undefined,
           "id": "server1.conn13.child1/39",
+          "introductionType": undefined,
+          "introductionUrl": null,
           "isBlackBoxed": false,
           "isExtension": false,
           "isPrettyPrinted": false,
           "isWasm": false,
-          "loadedState": "unloaded",
-          "sourceMapURL": undefined,
-          "text": undefined,
+          "relativeUrl": "http://mdn.com/one.js",
           "url": "http://mdn.com/one.js",
         }
       }
@@ -1823,7 +1969,6 @@ Object {
     <span
       className="label"
     >
-       
       one.js
        
     </span>
@@ -1841,17 +1986,15 @@ Object {
       "focusItem": [MockFunction],
       "item": Object {
         "contents": Object {
-          "contentType": "",
-          "error": undefined,
           "id": "server1.conn13.child1/39",
+          "introductionType": undefined,
+          "introductionUrl": null,
           "isBlackBoxed": false,
           "isExtension": false,
           "isPrettyPrinted": false,
           "isWasm": false,
-          "loadedState": "unloaded",
-          "sourceMapURL": undefined,
-          "text": undefined,
-          "url": undefined,
+          "relativeUrl": "url",
+          "url": "url",
         },
         "name": "one.js",
         "path": "http://mdn.com/one.js",
@@ -1862,18 +2005,22 @@ Object {
       "setExpanded": [MockFunction],
       "setProjectDirectoryRoot": [MockFunction],
       "source": Object {
-        "contentType": "",
-        "error": undefined,
         "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
         "isBlackBoxed": false,
         "isExtension": false,
         "isPrettyPrinted": false,
         "isWasm": false,
-        "loadedState": "unloaded",
-        "sourceMapURL": undefined,
-        "text": undefined,
+        "relativeUrl": "http://mdn.com/one.js",
         "url": "http://mdn.com/one.js",
       },
+      "threads": Array [
+        Object {
+          "name": "Main Thread",
+        },
+      ],
+      "toggleBlackBox": [MockFunction],
     },
     "refs": Object {},
     "state": null,
@@ -1889,17 +2036,15 @@ Object {
           item={
             Object {
               "contents": Object {
-                "contentType": "",
-                "error": undefined,
                 "id": "server1.conn13.child1/39",
+                "introductionType": undefined,
+                "introductionUrl": null,
                 "isBlackBoxed": false,
                 "isExtension": false,
                 "isPrettyPrinted": false,
                 "isWasm": false,
-                "loadedState": "unloaded",
-                "sourceMapURL": undefined,
-                "text": undefined,
-                "url": undefined,
+                "relativeUrl": "url",
+                "url": "url",
               },
               "name": "one.js",
               "path": "http://mdn.com/one.js",
@@ -1912,19 +2057,25 @@ Object {
           setProjectDirectoryRoot={[MockFunction]}
           source={
             Object {
-              "contentType": "",
-              "error": undefined,
               "id": "server1.conn13.child1/39",
+              "introductionType": undefined,
+              "introductionUrl": null,
               "isBlackBoxed": false,
               "isExtension": false,
               "isPrettyPrinted": false,
               "isWasm": false,
-              "loadedState": "unloaded",
-              "sourceMapURL": undefined,
-              "text": undefined,
+              "relativeUrl": "http://mdn.com/one.js",
               "url": "http://mdn.com/one.js",
             }
           }
+          threads={
+            Array [
+              Object {
+                "name": "Main Thread",
+              },
+            ]
+          }
+          toggleBlackBox={[MockFunction]}
         />,
         "_forcedUpdate": false,
         "_instance": [Circular],
@@ -1934,22 +2085,20 @@ Object {
           onClick={[Function]}
           onContextMenu={[Function]}
         >
-          <i
-            className="no-arrow"
+          <span
+            className="img no-arrow"
           />
           <Connect(SourceIcon)
             source={
               Object {
-                "contentType": "",
-                "error": undefined,
                 "id": "server1.conn13.child1/39",
+                "introductionType": undefined,
+                "introductionUrl": null,
                 "isBlackBoxed": false,
                 "isExtension": false,
                 "isPrettyPrinted": false,
                 "isWasm": false,
-                "loadedState": "unloaded",
-                "sourceMapURL": undefined,
-                "text": undefined,
+                "relativeUrl": "http://mdn.com/one.js",
                 "url": "http://mdn.com/one.js",
               }
             }
@@ -1957,7 +2106,6 @@ Object {
           <span
             className="label"
           >
-             
             one.js
              
           </span>
@@ -1974,17 +2122,15 @@ Object {
     "focusItem": [MockFunction],
     "item": Object {
       "contents": Object {
-        "contentType": "",
-        "error": undefined,
         "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
         "isBlackBoxed": false,
         "isExtension": false,
         "isPrettyPrinted": false,
         "isWasm": false,
-        "loadedState": "unloaded",
-        "sourceMapURL": undefined,
-        "text": undefined,
-        "url": undefined,
+        "relativeUrl": "url",
+        "url": "url",
       },
       "name": "one.js",
       "path": "http://mdn.com/one.js",
@@ -1995,18 +2141,22 @@ Object {
     "setExpanded": [MockFunction],
     "setProjectDirectoryRoot": [MockFunction],
     "source": Object {
-      "contentType": "",
-      "error": undefined,
       "id": "server1.conn13.child1/39",
+      "introductionType": undefined,
+      "introductionUrl": null,
       "isBlackBoxed": false,
       "isExtension": false,
       "isPrettyPrinted": false,
       "isWasm": false,
-      "loadedState": "unloaded",
-      "sourceMapURL": undefined,
-      "text": undefined,
+      "relativeUrl": "http://mdn.com/one.js",
       "url": "http://mdn.com/one.js",
     },
+    "threads": Array [
+      Object {
+        "name": "Main Thread",
+      },
+    ],
+    "toggleBlackBox": [MockFunction],
   },
 }
 `;
@@ -2019,22 +2169,20 @@ Object {
     onClick={[Function]}
     onContextMenu={[Function]}
   >
-    <i
-      className="no-arrow"
+    <span
+      className="img no-arrow"
     />
     <Connect(SourceIcon)
       source={
         Object {
-          "contentType": "",
-          "error": undefined,
           "id": "server1.conn13.child1/39",
+          "introductionType": undefined,
+          "introductionUrl": null,
           "isBlackBoxed": false,
           "isExtension": false,
           "isPrettyPrinted": false,
           "isWasm": false,
-          "loadedState": "unloaded",
-          "sourceMapURL": undefined,
-          "text": undefined,
+          "relativeUrl": "http://mdn.com/one.js",
           "url": "http://mdn.com/one.js",
         }
       }
@@ -2042,7 +2190,6 @@ Object {
     <span
       className="label"
     >
-       
       one.js
        
     </span>
@@ -2062,16 +2209,14 @@ Object {
       "focused": true,
       "item": Object {
         "contents": Object {
-          "contentType": "",
-          "error": undefined,
           "id": "server1.conn13.child1/39",
+          "introductionType": undefined,
+          "introductionUrl": null,
           "isBlackBoxed": false,
           "isExtension": false,
           "isPrettyPrinted": false,
           "isWasm": false,
-          "loadedState": "unloaded",
-          "sourceMapURL": undefined,
-          "text": undefined,
+          "relativeUrl": "http://mdn.com/one.js",
           "url": "http://mdn.com/one.js",
         },
         "name": "one.js",
@@ -2082,18 +2227,22 @@ Object {
       "setExpanded": [MockFunction],
       "setProjectDirectoryRoot": [MockFunction],
       "source": Object {
-        "contentType": "",
-        "error": undefined,
         "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
         "isBlackBoxed": false,
         "isExtension": false,
         "isPrettyPrinted": false,
         "isWasm": false,
-        "loadedState": "unloaded",
-        "sourceMapURL": undefined,
-        "text": undefined,
+        "relativeUrl": "http://mdn.com/one.js",
         "url": "http://mdn.com/one.js",
       },
+      "threads": Array [
+        Object {
+          "name": "Main Thread",
+        },
+      ],
+      "toggleBlackBox": [MockFunction],
     },
     "refs": Object {},
     "state": null,
@@ -2111,16 +2260,14 @@ Object {
           item={
             Object {
               "contents": Object {
-                "contentType": "",
-                "error": undefined,
                 "id": "server1.conn13.child1/39",
+                "introductionType": undefined,
+                "introductionUrl": null,
                 "isBlackBoxed": false,
                 "isExtension": false,
                 "isPrettyPrinted": false,
                 "isWasm": false,
-                "loadedState": "unloaded",
-                "sourceMapURL": undefined,
-                "text": undefined,
+                "relativeUrl": "http://mdn.com/one.js",
                 "url": "http://mdn.com/one.js",
               },
               "name": "one.js",
@@ -2133,19 +2280,25 @@ Object {
           setProjectDirectoryRoot={[MockFunction]}
           source={
             Object {
-              "contentType": "",
-              "error": undefined,
               "id": "server1.conn13.child1/39",
+              "introductionType": undefined,
+              "introductionUrl": null,
               "isBlackBoxed": false,
               "isExtension": false,
               "isPrettyPrinted": false,
               "isWasm": false,
-              "loadedState": "unloaded",
-              "sourceMapURL": undefined,
-              "text": undefined,
+              "relativeUrl": "http://mdn.com/one.js",
               "url": "http://mdn.com/one.js",
             }
           }
+          threads={
+            Array [
+              Object {
+                "name": "Main Thread",
+              },
+            ]
+          }
+          toggleBlackBox={[MockFunction]}
         />,
         "_forcedUpdate": false,
         "_instance": [Circular],
@@ -2155,22 +2308,20 @@ Object {
           onClick={[Function]}
           onContextMenu={[Function]}
         >
-          <i
-            className="no-arrow"
+          <span
+            className="img no-arrow"
           />
           <Connect(SourceIcon)
             source={
               Object {
-                "contentType": "",
-                "error": undefined,
                 "id": "server1.conn13.child1/39",
+                "introductionType": undefined,
+                "introductionUrl": null,
                 "isBlackBoxed": false,
                 "isExtension": false,
                 "isPrettyPrinted": false,
                 "isWasm": false,
-                "loadedState": "unloaded",
-                "sourceMapURL": undefined,
-                "text": undefined,
+                "relativeUrl": "http://mdn.com/one.js",
                 "url": "http://mdn.com/one.js",
               }
             }
@@ -2178,7 +2329,6 @@ Object {
           <span
             className="label"
           >
-             
             one.js
              
           </span>
@@ -2197,16 +2347,14 @@ Object {
     "focused": true,
     "item": Object {
       "contents": Object {
-        "contentType": "",
-        "error": undefined,
         "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
         "isBlackBoxed": false,
         "isExtension": false,
         "isPrettyPrinted": false,
         "isWasm": false,
-        "loadedState": "unloaded",
-        "sourceMapURL": undefined,
-        "text": undefined,
+        "relativeUrl": "http://mdn.com/one.js",
         "url": "http://mdn.com/one.js",
       },
       "name": "one.js",
@@ -2217,18 +2365,243 @@ Object {
     "setExpanded": [MockFunction],
     "setProjectDirectoryRoot": [MockFunction],
     "source": Object {
-      "contentType": "",
-      "error": undefined,
       "id": "server1.conn13.child1/39",
+      "introductionType": undefined,
+      "introductionUrl": null,
       "isBlackBoxed": false,
       "isExtension": false,
       "isPrettyPrinted": false,
       "isWasm": false,
-      "loadedState": "unloaded",
-      "sourceMapURL": undefined,
-      "text": undefined,
+      "relativeUrl": "http://mdn.com/one.js",
       "url": "http://mdn.com/one.js",
     },
+    "threads": Array [
+      Object {
+        "name": "Main Thread",
+      },
+    ],
+    "toggleBlackBox": [MockFunction],
+  },
+}
+`;
+
+exports[`SourceTreeItem renderItem should unescape escaped source URLs 1`] = `
+Object {
+  "component": <div
+    className="node"
+    key="mdn.com/external%20file"
+    onClick={[Function]}
+    onContextMenu={[Function]}
+  >
+    <span
+      className="img no-arrow"
+    />
+    <Connect(SourceIcon)
+      source={
+        Object {
+          "id": "server1.conn13.child1/39",
+          "introductionType": undefined,
+          "introductionUrl": null,
+          "isBlackBoxed": false,
+          "isExtension": false,
+          "isPrettyPrinted": false,
+          "isWasm": false,
+          "relativeUrl": "http://mdn.com/one.js",
+          "url": "http://mdn.com/one.js",
+        }
+      }
+    />
+    <span
+      className="label"
+    >
+      external file
+       
+    </span>
+  </div>,
+  "defaultState": null,
+  "instance": SourceTreeItem {
+    "addCollapseExpandAllOptions": [Function],
+    "context": Object {},
+    "onClick": [Function],
+    "onContextMenu": [Function],
+    "props": Object {
+      "clearProjectDirectoryRoot": [MockFunction],
+      "debuggeeUrl": "http://mdn.com",
+      "expanded": false,
+      "focusItem": [MockFunction],
+      "item": Object {
+        "contents": Object {
+          "id": "server1.conn13.child1/39",
+          "introductionType": undefined,
+          "introductionUrl": null,
+          "isBlackBoxed": false,
+          "isExtension": false,
+          "isPrettyPrinted": false,
+          "isWasm": false,
+          "relativeUrl": "url",
+          "url": "url",
+        },
+        "name": "external%20file",
+        "path": "mdn.com/external%20file",
+        "type": "source",
+      },
+      "projectRoot": "",
+      "selectItem": [MockFunction],
+      "setExpanded": [MockFunction],
+      "setProjectDirectoryRoot": [MockFunction],
+      "source": Object {
+        "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
+        "isBlackBoxed": false,
+        "isExtension": false,
+        "isPrettyPrinted": false,
+        "isWasm": false,
+        "relativeUrl": "http://mdn.com/one.js",
+        "url": "http://mdn.com/one.js",
+      },
+      "threads": Array [
+        Object {
+          "name": "Main Thread",
+        },
+      ],
+      "toggleBlackBox": [MockFunction],
+    },
+    "refs": Object {},
+    "state": null,
+    "updater": Updater {
+      "_callbacks": Array [],
+      "_renderer": ReactShallowRenderer {
+        "_context": Object {},
+        "_element": <SourceTreeItem
+          clearProjectDirectoryRoot={[MockFunction]}
+          debuggeeUrl="http://mdn.com"
+          expanded={false}
+          focusItem={[MockFunction]}
+          item={
+            Object {
+              "contents": Object {
+                "id": "server1.conn13.child1/39",
+                "introductionType": undefined,
+                "introductionUrl": null,
+                "isBlackBoxed": false,
+                "isExtension": false,
+                "isPrettyPrinted": false,
+                "isWasm": false,
+                "relativeUrl": "url",
+                "url": "url",
+              },
+              "name": "external%20file",
+              "path": "mdn.com/external%20file",
+              "type": "source",
+            }
+          }
+          projectRoot=""
+          selectItem={[MockFunction]}
+          setExpanded={[MockFunction]}
+          setProjectDirectoryRoot={[MockFunction]}
+          source={
+            Object {
+              "id": "server1.conn13.child1/39",
+              "introductionType": undefined,
+              "introductionUrl": null,
+              "isBlackBoxed": false,
+              "isExtension": false,
+              "isPrettyPrinted": false,
+              "isWasm": false,
+              "relativeUrl": "http://mdn.com/one.js",
+              "url": "http://mdn.com/one.js",
+            }
+          }
+          threads={
+            Array [
+              Object {
+                "name": "Main Thread",
+              },
+            ]
+          }
+          toggleBlackBox={[MockFunction]}
+        />,
+        "_forcedUpdate": false,
+        "_instance": [Circular],
+        "_newState": null,
+        "_rendered": <div
+          className="node"
+          onClick={[Function]}
+          onContextMenu={[Function]}
+        >
+          <span
+            className="img no-arrow"
+          />
+          <Connect(SourceIcon)
+            source={
+              Object {
+                "id": "server1.conn13.child1/39",
+                "introductionType": undefined,
+                "introductionUrl": null,
+                "isBlackBoxed": false,
+                "isExtension": false,
+                "isPrettyPrinted": false,
+                "isWasm": false,
+                "relativeUrl": "http://mdn.com/one.js",
+                "url": "http://mdn.com/one.js",
+              }
+            }
+          />
+          <span
+            className="label"
+          >
+            external file
+             
+          </span>
+        </div>,
+        "_rendering": false,
+        "_updater": [Circular],
+      },
+    },
+  },
+  "props": Object {
+    "clearProjectDirectoryRoot": [MockFunction],
+    "debuggeeUrl": "http://mdn.com",
+    "expanded": false,
+    "focusItem": [MockFunction],
+    "item": Object {
+      "contents": Object {
+        "id": "server1.conn13.child1/39",
+        "introductionType": undefined,
+        "introductionUrl": null,
+        "isBlackBoxed": false,
+        "isExtension": false,
+        "isPrettyPrinted": false,
+        "isWasm": false,
+        "relativeUrl": "url",
+        "url": "url",
+      },
+      "name": "external%20file",
+      "path": "mdn.com/external%20file",
+      "type": "source",
+    },
+    "projectRoot": "",
+    "selectItem": [MockFunction],
+    "setExpanded": [MockFunction],
+    "setProjectDirectoryRoot": [MockFunction],
+    "source": Object {
+      "id": "server1.conn13.child1/39",
+      "introductionType": undefined,
+      "introductionUrl": null,
+      "isBlackBoxed": false,
+      "isExtension": false,
+      "isPrettyPrinted": false,
+      "isWasm": false,
+      "relativeUrl": "http://mdn.com/one.js",
+      "url": "http://mdn.com/one.js",
+    },
+    "threads": Array [
+      Object {
+        "name": "Main Thread",
+      },
+    ],
+    "toggleBlackBox": [MockFunction],
   },
 }
 `;

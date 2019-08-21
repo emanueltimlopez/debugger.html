@@ -13,7 +13,7 @@ import { getURL } from "./getURL";
 const IGNORED_URLS = ["debugger eval code", "XStringBundle"];
 
 export function nodeHasChildren(item: TreeNode): boolean {
-  return Array.isArray(item.contents) && item.type === "directory";
+  return Array.isArray(item.contents) && item.type == "directory";
 }
 
 export function isExactUrlMatch(pathPart: string, debuggeeUrl: string) {
@@ -64,7 +64,7 @@ export function isNotJavaScript(source: Source): boolean {
 
 export function isInvalidUrl(url: Object, source: Source) {
   return (
-    IGNORED_URLS.indexOf(url) != -1 ||
+    IGNORED_URLS.includes(url) ||
     !source.url ||
     !url.group ||
     isPretty(source) ||

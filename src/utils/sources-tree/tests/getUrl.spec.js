@@ -5,26 +5,25 @@
 // @flow
 
 import { getURL } from "../getURL";
-import { createSource } from "../../../reducers/sources";
+import { makeMockSource } from "../../../utils/test-mockup";
+import type { Source } from "../../../types";
 
-function createMockSource(props) {
-  return createSource(
-    Object.assign(
+function createMockSource(props): Source {
+  const rv = {
+    ...makeMockSource(),
+    ...Object.assign(
       {
         id: "server1.conn13.child1/39",
         url: "",
         sourceMapURL: "",
         isBlackBoxed: false,
         isPrettyPrinted: false,
-        isWasm: false,
-        text: "",
-        contentType: "",
-        error: "",
-        loadedState: "unloaded"
+        isWasm: false
       },
       props
     )
-  );
+  };
+  return (rv: any);
 }
 
 describe("getUrl", () => {
@@ -56,10 +55,20 @@ describe("getUrl", () => {
     expect(urlObject.filename).toBe("b.js");
   });
 
-  it("handles url with no filename for filename", function() {
+  it("handles url with no file extension for filename", function() {
     const urlObject = getURL(
       createMockSource({
         url: "https://a/c",
+        id: "c"
+      })
+    );
+    expect(urlObject.filename).toBe("c");
+  });
+
+  it("handles url with no name for filename", function() {
+    const urlObject = getURL(
+      createMockSource({
+        url: "https://a/",
         id: "c"
       })
     );

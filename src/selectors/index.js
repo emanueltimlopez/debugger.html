@@ -19,6 +19,13 @@ export * from "../reducers/project-text-search";
 export * from "../reducers/source-tree";
 
 export {
+  getSourceActor,
+  hasSourceActor,
+  getSourceActors,
+  getSourceActorsForThread
+} from "../reducers/source-actors";
+
+export {
   getQuickOpenEnabled,
   getQuickOpenQuery,
   getQuickOpenType
@@ -35,12 +42,16 @@ export {
 export { inComponent } from "./inComponent";
 export { isSelectedFrameVisible } from "./isSelectedFrameVisible";
 export { getCallStackFrames } from "./getCallStackFrames";
-export { getVisibleSelectedFrame } from "./visibleSelectedFrame";
 export { getBreakpointSources } from "./breakpointSources";
 export { getXHRBreakpoints, shouldPauseOnAnyXHR } from "./breakpoints";
-export { visibleColumnBreakpoints } from "./visibleColumnBreakpoints";
-export { getVisiblePausePoints } from "./visiblePausePoints";
+export * from "./visibleColumnBreakpoints";
+export {
+  getSelectedFrame,
+  getSelectedFrames,
+  getVisibleSelectedFrame
+} from "./pause";
 
+// eslint-disable-next-line import/named
 import { objectInspector } from "devtools-reps";
 
 const { reducer } = objectInspector;

@@ -41,15 +41,14 @@ exports[`Group displays a group 1`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "url",
-            "text": "",
             "url": "url",
           },
           "this": Object {},
@@ -113,15 +112,14 @@ exports[`Group passes the getFrameTitle prop to the Frame components 1`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "http://myfile.com/mahscripts.js",
-            "text": "",
             "url": "http://myfile.com/mahscripts.js",
           },
           "this": Object {},
@@ -144,9 +142,19 @@ exports[`Group passes the getFrameTitle prop to the Frame components 1`] = `
   <div
     className="frames-list"
   >
-    <FrameIndent />
+    <FrameIndent
+      key="frame-indent-0"
+    />
     <Frame
       copyStackTrace={[MockFunction]}
+      cx={
+        Object {
+          "isPaused": false,
+          "navigateCounter": 0,
+          "pauseCounter": 0,
+          "thread": "FakeThread",
+        }
+      }
       disableContextMenu={false}
       displayFullUrl={false}
       frame={
@@ -174,15 +182,14 @@ exports[`Group passes the getFrameTitle prop to the Frame components 1`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "http://myfile.com/mahscripts.js",
-            "text": "",
             "url": "http://myfile.com/mahscripts.js",
           },
           "this": Object {},
@@ -220,15 +227,14 @@ exports[`Group passes the getFrameTitle prop to the Frame components 1`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "url",
-            "text": "",
             "url": "url",
           },
           "this": Object {},
@@ -239,9 +245,19 @@ exports[`Group passes the getFrameTitle prop to the Frame components 1`] = `
       toggleBlackBox={[MockFunction]}
       toggleFrameworkGrouping={[MockFunction]}
     />
-    <FrameIndent />
+    <FrameIndent
+      key="frame-indent-1"
+    />
     <Frame
       copyStackTrace={[MockFunction]}
+      cx={
+        Object {
+          "isPaused": false,
+          "navigateCounter": 0,
+          "pauseCounter": 0,
+          "thread": "FakeThread",
+        }
+      }
       disableContextMenu={false}
       displayFullUrl={false}
       frame={
@@ -269,15 +285,14 @@ exports[`Group passes the getFrameTitle prop to the Frame components 1`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "http://myfile.com/back.js",
-            "text": "",
             "url": "http://myfile.com/back.js",
           },
           "this": Object {},
@@ -315,15 +330,14 @@ exports[`Group passes the getFrameTitle prop to the Frame components 1`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "url",
-            "text": "",
             "url": "url",
           },
           "this": Object {},
@@ -334,9 +348,19 @@ exports[`Group passes the getFrameTitle prop to the Frame components 1`] = `
       toggleBlackBox={[MockFunction]}
       toggleFrameworkGrouping={[MockFunction]}
     />
-    <FrameIndent />
+    <FrameIndent
+      key="frame-indent-2"
+    />
     <Frame
       copyStackTrace={[MockFunction]}
+      cx={
+        Object {
+          "isPaused": false,
+          "navigateCounter": 0,
+          "pauseCounter": 0,
+          "thread": "FakeThread",
+        }
+      }
       disableContextMenu={false}
       displayFullUrl={false}
       frame={
@@ -364,15 +388,14 @@ exports[`Group passes the getFrameTitle prop to the Frame components 1`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "http://myfile.com/back.js",
-            "text": "",
             "url": "http://myfile.com/back.js",
           },
           "this": Object {},
@@ -410,15 +433,14 @@ exports[`Group passes the getFrameTitle prop to the Frame components 1`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "url",
-            "text": "",
             "url": "url",
           },
           "this": Object {},
@@ -474,15 +496,14 @@ exports[`Group renders group with anonymous functions 1`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "http://myfile.com/mahscripts.js",
-            "text": "",
             "url": "http://myfile.com/mahscripts.js",
           },
           "this": Object {},
@@ -546,15 +567,14 @@ exports[`Group renders group with anonymous functions 2`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "http://myfile.com/mahscripts.js",
-            "text": "",
             "url": "http://myfile.com/mahscripts.js",
           },
           "this": Object {},
@@ -577,9 +597,19 @@ exports[`Group renders group with anonymous functions 2`] = `
   <div
     className="frames-list"
   >
-    <FrameIndent />
+    <FrameIndent
+      key="frame-indent-0"
+    />
     <Frame
       copyStackTrace={[MockFunction]}
+      cx={
+        Object {
+          "isPaused": false,
+          "navigateCounter": 0,
+          "pauseCounter": 0,
+          "thread": "FakeThread",
+        }
+      }
       disableContextMenu={false}
       displayFullUrl={false}
       frame={
@@ -607,15 +637,14 @@ exports[`Group renders group with anonymous functions 2`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "http://myfile.com/mahscripts.js",
-            "text": "",
             "url": "http://myfile.com/mahscripts.js",
           },
           "this": Object {},
@@ -652,15 +681,14 @@ exports[`Group renders group with anonymous functions 2`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "url",
-            "text": "",
             "url": "url",
           },
           "this": Object {},
@@ -671,9 +699,19 @@ exports[`Group renders group with anonymous functions 2`] = `
       toggleBlackBox={[MockFunction]}
       toggleFrameworkGrouping={[MockFunction]}
     />
-    <FrameIndent />
+    <FrameIndent
+      key="frame-indent-1"
+    />
     <Frame
       copyStackTrace={[MockFunction]}
+      cx={
+        Object {
+          "isPaused": false,
+          "navigateCounter": 0,
+          "pauseCounter": 0,
+          "thread": "FakeThread",
+        }
+      }
       disableContextMenu={false}
       displayFullUrl={false}
       frame={
@@ -701,15 +739,14 @@ exports[`Group renders group with anonymous functions 2`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "http://myfile.com/back.js",
-            "text": "",
             "url": "http://myfile.com/back.js",
           },
           "this": Object {},
@@ -746,15 +783,14 @@ exports[`Group renders group with anonymous functions 2`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "url",
-            "text": "",
             "url": "url",
           },
           "this": Object {},
@@ -765,9 +801,19 @@ exports[`Group renders group with anonymous functions 2`] = `
       toggleBlackBox={[MockFunction]}
       toggleFrameworkGrouping={[MockFunction]}
     />
-    <FrameIndent />
+    <FrameIndent
+      key="frame-indent-2"
+    />
     <Frame
       copyStackTrace={[MockFunction]}
+      cx={
+        Object {
+          "isPaused": false,
+          "navigateCounter": 0,
+          "pauseCounter": 0,
+          "thread": "FakeThread",
+        }
+      }
       disableContextMenu={false}
       displayFullUrl={false}
       frame={
@@ -795,15 +841,14 @@ exports[`Group renders group with anonymous functions 2`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "http://myfile.com/back.js",
-            "text": "",
             "url": "http://myfile.com/back.js",
           },
           "this": Object {},
@@ -840,15 +885,14 @@ exports[`Group renders group with anonymous functions 2`] = `
             "type": "block",
           },
           "source": Object {
-            "contentType": "text/javascript",
             "id": "source",
+            "introductionType": undefined,
             "introductionUrl": null,
             "isBlackBoxed": false,
+            "isExtension": false,
             "isPrettyPrinted": false,
             "isWasm": false,
-            "loadedState": "unloaded",
             "relativeUrl": "url",
-            "text": "",
             "url": "url",
           },
           "this": Object {},

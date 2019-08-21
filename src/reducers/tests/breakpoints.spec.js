@@ -12,7 +12,7 @@ import {
   initialBreakpointsState
 } from "../breakpoints";
 
-import { createBreakpoint } from "../../utils/breakpoint";
+import { makeMockBreakpoint, makeMockSource } from "../../utils/test-mockup";
 
 function initializeStateWith(data) {
   const state = initialBreakpointsState();
@@ -24,11 +24,11 @@ describe("Breakpoints Selectors", () => {
   it("it gets a breakpoint for an original source", () => {
     const sourceId = "server1.conn1.child1/source1/originalSource";
     const matchingBreakpoints = {
-      id1: createBreakpoint({ line: 1, sourceId: sourceId })
+      id1: makeMockBreakpoint(makeMockSource(undefined, sourceId), 1)
     };
 
     const otherBreakpoints = {
-      id2: createBreakpoint({ line: 1, sourceId: "not-this-source" })
+      id2: makeMockBreakpoint(makeMockSource(undefined, "not-this-source"), 1)
     };
 
     const data = {
@@ -50,23 +50,17 @@ describe("Breakpoints Selectors", () => {
   it("it gets a breakpoint for a generated source", () => {
     const generatedSourceId = "random-source";
     const matchingBreakpoints = {
-      id1: createBreakpoint(
-        {
-          line: 1,
-          sourceId: "original-source-id-1"
-        },
-        { generatedLocation: { line: 1, sourceId: generatedSourceId } }
-      )
+      id1: {
+        ...makeMockBreakpoint(makeMockSource(undefined, generatedSourceId), 1),
+        location: { line: 1, sourceId: "original-source-id-1" }
+      }
     };
 
     const otherBreakpoints = {
-      id2: createBreakpoint(
-        {
-          line: 1,
-          sourceId: "original-source-id-2"
-        },
-        { generatedLocation: { line: 1, sourceId: "not-this-source" } }
-      )
+      id2: {
+        ...makeMockBreakpoint(makeMockSource(undefined, "not-this-source"), 1),
+        location: { line: 1, sourceId: "original-source-id-2" }
+      }
     };
 
     const data = {

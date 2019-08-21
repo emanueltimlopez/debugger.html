@@ -55,7 +55,7 @@ We use variable theme colors to standardize the colors inside of devtools. A goo
 
 ### Internationalization
 
-The Debugger supports two types of internationalization RTL (right to left) layout and L10N (localization).
+The Debugger supports two types of internationalization: localization (L10N), and right-to-left layout (RTL).
 
 #### L10N
 
@@ -80,17 +80,11 @@ Set the `dir` field in the Launchpad's settings pane.
 
 _How do I change how something looks in rtl?_
 
-We use [postcss-bidirection][bidirection] to support [logical CSS][logical] properties. In practice, this means we can write `float:left` or `margin-inline-block: start`, and it just works. Under the hood, `float: left` gets translated into two different CSS rules for `html[dir="rtl"]` and `html:not([dir="rtl"])`.
-
-`public/js/components/SourceFooter.css`
+We use [logical CSS][logical] properties. For instance, if you need to add some padding-left in left-to-right layout and padding-right in right-to-left layout:
 
 ```css
-html:not([dir="rtl"]) .source-footer .command-bar {
-  float: right;
-}
-
-html[dir="rtl"] .source-footer .command-bar {
-  float: left;
+.my-component {
+  padding-inline-start: 10px;
 }
 ```
 
@@ -100,8 +94,8 @@ User preferences are stored in Prefs. Prefs uses localStorage locally and firefo
 
 The two relevant files to look at are:
 
-- `[assets/panel/prefs.js](https://github.com/devtools-html/debugger.html/blob/master/assets/panel/prefs.js)`
-- `[src/utils/prefs.js](https://github.com/devtools-html/debugger.html/blob/master/src/utils/prefs.js)`
+- `[assets/panel/prefs.js](https://github.com/firefox-devtools/debugger/blob/master/assets/panel/prefs.js)`
+- `[src/utils/prefs.js](https://github.com/firefox-devtools/debugger/blob/master/src/utils/prefs.js)`
 
 **Setting a default value**
 
@@ -195,76 +189,47 @@ index a390df2..c610c1a 100644
 
 We use SVGs in DevTools because they look good at any resolution.
 
-**Adding a new SVG**
+To achieve sharp results on low resolutions, we make sure that our SVG icons are defined as 16-by-16 squares, with most paths and shapes following this pixel grid. See the [Photon Iconography guide](https://design.firefox.com/photon/visuals/iconography.html) for details.
 
-- add the SVG in /images](../images)
-- add it to [Svg.js](../images/Svg.js)
+#### Adding a new SVG
 
-```diff
-diff --git a/images/Svg.js b/images/Svg.js
-index 775aecf..6a7c19d 100644
---- a/images/Svg.js
-+++ b/images/Svg.js
-@@ -24,7 +24,8 @@ const svg = {
-   "subSettings": require("./subSettings.svg"),
-   "toggleBreakpoints": require("./toggle-breakpoints.svg"),
-   "worker": require("./worker.svg"),
--  "sad-face": require("./sad-face.svg")
-+  "sad-face": require("./sad-face.svg"),
-+  "happy-face": require("./happy-face.svg")
- };
+1. Your SVG file should start with a licensing comment:
+
+```xml
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <!-- SVG paths and shapes go here -->
+</svg>
 ```
 
-**Using an SVG**
+2. Optimize your paths and shapes using [svgo](https://github.com/svg/svgo) or [SVGOMG](https://jakearchibald.github.io/svgomg/).
+3. Add your SVG file the [`/images`](../images) folder.
 
-- import the `Svg` module
-- call `Svg(<your-svg>)`
+#### Using SVGs
 
-```diff
-diff --git a/src/components/Breakpoints.js b/src/components/Breakpoints.js
-index 8c79f4d..6893673 100644
---- a/src/components/Breakpoints.js
-+++ b/src/components/Breakpoints.js
-@@ -4,6 +4,7 @@ const { bindActionCreators } = require("redux");
- const ImPropTypes = require("react-immutable-proptypes");
- const classnames = require("classnames");
- const actions = require("../actions");
-+const Svg = require("./shared/Svg");
- const { getSource, getPause, getBreakpoints } = require("../selectors");
- const { makeLocationId } = require("../reducers/breakpoints");
-@@ -89,6 +90,7 @@ const Breakpoints = React.createClass({
-         key: locationId,
-         onClick: () => this.selectBreakpoint(breakpoint)
-       },
-+      Svg("happy-face"),
-       dom.input({
-         type: "checkbox",
-         className: "breakpoint-checkbox",
+1. Import the `AccessibleImage` component
+2. Use it in JSX as: `<AccessibleImage className="my-icon" />`
+3. Add a CSS rule in [`AccessibleImage.css`](../src/components/shared/AccessibleImage.css) that defines your icon as a mask, for example:
+
+```css
+.img.my-icon {
+  mask-image: url(/images/my-icon.svg);
+}
 ```
 
-**Styling an SVG element**
+#### Styling an SVG element
 
-You can style several SVG elements (_svg_, _i_, _path_) just as you would other elements.
+By default, with `AccessibleImage` you will get a `<span class="img my-icon"></span>` element with a gray `background-color` and your SVG icon applied as a mask. You can set a different background color in CSS to change the icon's color.
 
-- _fill_ is especially useful for changing the color
+For multicolor icons, you will need to use `background-image` and reset the background color:
 
-```diff
-diff --git a/src/components/Breakpoints.css b/src/components/Breakpoints.css
-index 5996700..bb828d8 100644
---- a/src/components/Breakpoints.css
-+++ b/src/components/Breakpoints.css
-@@ -69,3 +69,11 @@
- .breakpoint:hover .close {
-   display: block;
- }
-+
-+.breakpoint svg {
-+  width: 16px;
-+  position: absolute;
-+  top: 12px;
-+  left: 10px;
-+  fill: var(--theme-graphs-full-red);
-+}
+```css
+.img.my-multicolor-icon {
+  background-image: url(/images/my-multicolor-icon.svg);
+  background-color: transparent !important;
+}
 ```
 
 ### Context Menus
@@ -770,11 +735,10 @@ your questions on [Slack][slack].
 | Breakpoints        | ![][breakpoints] | ![][wldcordeiro] [@wldcordeiro][@wldcordeiro] <br /> ![][jbhoosreddy] [@jbhoosreddy][@jbhoosreddy] |
 | Product & UI       |                  | ![][clarkbw] [@clarkbw][@clarkbw] <br /> ![][jasonlaster] [@jasonlaster][@jasonlaster]             |
 
-[devtools-config-readme]: https://github.com/devtools-html/devtools-core/blob/master/packages/devtools-config/README.md
-[create-local-config]: https://github.com/devtools-html/devtools-core/blob/master/packages/devtools-config/README.md#local-config
-[l10n-issues]: https://github.com/devtools-html/debugger.html/labels/localization
-[flow-issues]: https://github.com/devtools-html/debugger.html/labels/flow
-[bidirection]: https://github.com/gasolin/postcss-bidirection
+[devtools-config-readme]: https://github.com/firefox-devtools/devtools-core/blob/master/packages/devtools-config/README.md
+[create-local-config]: https://github.com/firefox-devtools/devtools-core/blob/master/packages/devtools-config/README.md#local-config
+[l10n-issues]: https://github.com/firefox-devtools/debugger/labels/localization
+[flow-issues]: https://github.com/firefox-devtools/debugger/labels/flow
 [logical]: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties
 [scopes]: https://cloud.githubusercontent.com/assets/254562/22392764/019de6e6-e4cb-11e6-8445-2c4ec87cb4a6.png
 [call-stack]: https://cloud.githubusercontent.com/assets/254562/22392766/019eca70-e4cb-11e6-8b1a-e92b33a7cecb.png
@@ -795,9 +759,9 @@ your questions on [Slack][slack].
 [@jbhoosreddy]: https://github.com/jbhoosreddy
 [@arthur801031]: https://github.com/arthur801031
 [@zacqary]: https://github.com/zacqary
-[slack]: https://devtools-html-slack.herokuapp.com/
-[kill-strings]: https://github.com/devtools-html/devtools-core/issues/57
-[l10n]: https://github.com/devtools-html/devtools-core/blob/master/packages/devtools-launchpad/src/utils/L10N.js
+[slack]: https://firefox-devtools-slack.herokuapp.com/
+[kill-strings]: https://github.com/firefox-devtools/devtools-core/issues/57
+[l10n]: https://github.com/firefox-devtools/devtools-core/blob/master/packages/devtools-launchpad/src/utils/L10N.js
 [rtl-screenshot]: https://cloud.githubusercontent.com/assets/394320/19226865/ef18b0d0-8eb9-11e6-82b4-8c4da702fe91.png
 [jest]: https://facebook.github.io/jest/
 [jest-matchers]: https://facebook.github.io/jest/docs/using-matchers.html#content
@@ -806,22 +770,22 @@ your questions on [Slack][slack].
 [debugger-properties]: ../assets/panel/debugger.properties
 [development-json]: ../configs/development.json
 [mdn-colors]: https://developer.mozilla.org/en-US/docs/Tools/DevToolsColors
-[light-theme]: https://github.com/devtools-html/devtools-core/blob/master/packages/devtools-launchpad/src/lib/themes/light-theme.css#L1
-[dark-theme]: https://github.com/devtools-html/devtools-core/blob/master/packages/devtools-launchpad/src/lib/themes/dark-theme.css#L1
-[devtools-css-variables]: https://github.com/devtools-html/devtools-core/blob/master/packages/devtools-launchpad/src/lib/themes/variables.css#L1
+[light-theme]: https://github.com/firefox-devtools/devtools-core/blob/master/packages/devtools-launchpad/src/lib/themes/light-theme.css#L1
+[dark-theme]: https://github.com/firefox-devtools/devtools-core/blob/master/packages/devtools-launchpad/src/lib/themes/dark-theme.css#L1
+[devtools-css-variables]: https://github.com/firefox-devtools/devtools-core/blob/master/packages/devtools-launchpad/src/lib/themes/variables.css#L1
 [css variables]: https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables
 [light-ui-screen]: https://cloud.githubusercontent.com/assets/1755089/22209736/9b194f2a-e1ad-11e6-9de0-561dd529d5f0.png
 [pr-table]: ./pull-requests.md#screenshots
 [mochitest]: ./mochitests.md
 [mocha]: ./integration-tests.md
 [contrast-ratio-tool]: http://leaverou.github.io/contrast-ratio/#rgb%28204%2C%20209%2C%20213%29-on-rgb%28252%2C%20252%2C%20252%29
-[launchpad]: https://github.com/devtools-html/devtools-core/tree/master/packages/devtools-launchpad
-[reps]: https://github.com/devtools-html/reps
-[client adapters]: https://github.com/devtools-html/devtools-core/tree/master/packages/devtools-client-adapters
-[modules]: https://github.com/devtools-html/devtools-core/tree/master/packages/devtools-modules
-[source maps]: https://github.com/devtools-html/devtools-core/tree/master/packages/devtools-source-map
-[shimmed-context-menus]: https://github.com/devtools-html/devtools-core/blob/master/packages/devtools-contextmenu/menu.js
-[context-menus]: https://github.com/devtools-html/devtools-core/blob/master/packages/devtools-modules/src/menu/index.js
+[launchpad]: https://github.com/firefox-devtools/devtools-core/tree/master/packages/devtools-launchpad
+[reps]: https://github.com/firefox-devtools/reps
+[client adapters]: https://github.com/firefox-devtools/devtools-core/tree/master/packages/devtools-client-adapters
+[modules]: https://github.com/firefox-devtools/devtools-core/tree/master/packages/devtools-modules
+[source maps]: https://github.com/firefox-devtools/devtools-core/tree/master/packages/devtools-source-map
+[shimmed-context-menus]: https://github.com/firefox-devtools/devtools-core/blob/master/packages/devtools-contextmenu/menu.js
+[context-menus]: https://github.com/firefox-devtools/devtools-core/blob/master/packages/devtools-modules/src/menu/index.js
 [web-workers]: https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers
 [l10n-docs]: https://developer.mozilla.org/en-US/docs/Mozilla/Localization/Localization_content_best_practices#Choose_good_key_IDs
 [immutable-docs]: https://facebook.github.io/immutable-js/docs/#/

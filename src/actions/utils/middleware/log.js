@@ -7,10 +7,10 @@
 
 import { isTesting } from "devtools-environment";
 import type { ThunkArgs } from "../../types";
+import { prefs } from "../../../utils/prefs";
 
 const blacklist = [
-  "SET_POPUP_OBJECT_PROPERTIES",
-  "SET_PAUSE_POINTS",
+  "ADD_BREAKPOINT_POSITIONS",
   "SET_SYMBOLS",
   "OUT_OF_SCOPE_LOCATIONS",
   "MAP_SCOPES",
@@ -18,7 +18,10 @@ const blacklist = [
   "ADD_SCOPES",
   "IN_SCOPE_LINES",
   "REMOVE_BREAKPOINT",
-  "NODE_PROPERTIES_LOADED"
+  "NODE_PROPERTIES_LOADED",
+  "SET_FOCUSED_SOURCE_ITEM",
+  "NODE_EXPAND",
+  "IN_SCOPE_LINES"
 ];
 
 function cloneAction(action: any) {
@@ -94,7 +97,7 @@ export function log({ dispatch, getState }: ThunkArgs) {
   return (next: any) => (action: any) => {
     const asyncMsg = !action.status ? "" : `[${action.status}]`;
 
-    if (isTesting()) {
+    if (isTesting() && prefs.logActions) {
       // $FlowIgnore
       dump(
         `[ACTION] ${action.type} ${asyncMsg} - ${serializeAction(action)}\n`

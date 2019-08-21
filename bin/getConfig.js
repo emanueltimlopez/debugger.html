@@ -3,7 +3,6 @@ const fs = require("fs");
 const path = require("path");
 
 function getConfig() {
-  const applicationConfig = require("../configs/application.json");
   const firefoxConfig = require("../configs/firefox-panel.json");
   const developmentConfig = require("../configs/development.json");
 
@@ -16,8 +15,7 @@ function getConfig() {
     return firefoxConfig;
   }
 
-  const envConfig = process.env.TARGET === "application" ?
-                  applicationConfig : developmentConfig;
+  const envConfig = developmentConfig;
 
   return merge({}, envConfig, localConfig);
 }

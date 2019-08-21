@@ -56,7 +56,9 @@ import Editor from "./Editor";
 import SecondaryPanes from "./SecondaryPanes";
 import WelcomeBox from "./WelcomeBox";
 import EditorTabs from "./Editor/Tabs";
+import EditorFooter from "./Editor/Footer";
 import QuickOpenModal from "./QuickOpenModal";
+import WhyPaused from "./SecondaryPanes/WhyPaused";
 
 type Props = {
   selectedSource: Source,
@@ -151,6 +153,7 @@ class App extends Component<Props, State> {
       closeQuickOpen,
       quickOpenEnabled
     } = this.props;
+    const { shortcutsModalEnabled } = this.state;
 
     if (activeSearch) {
       e.preventDefault();
@@ -160,6 +163,10 @@ class App extends Component<Props, State> {
     if (quickOpenEnabled) {
       e.preventDefault();
       closeQuickOpen();
+    }
+
+    if (shortcutsModalEnabled) {
+      this.toggleShortcutsModal();
     }
   };
 
@@ -191,7 +198,6 @@ class App extends Component<Props, State> {
       return;
     }
     openQuickOpen();
-    return;
   };
 
   onLayoutChange = () => {
@@ -229,12 +235,16 @@ class App extends Component<Props, State> {
             startPanelSize={startPanelSize}
             endPanelSize={endPanelSize}
           />
+          {this.props.endPanelCollapsed ? (
+            <WhyPaused horizontal={horizontal} />
+          ) : null}
           {!this.props.selectedSource ? (
             <WelcomeBox
               horizontal={horizontal}
               toggleShortcutsModal={() => this.toggleShortcutsModal()}
             />
           ) : null}
+          <EditorFooter horizontal={horizontal} />
           <ProjectSearch />
         </div>
       </div>
@@ -260,14 +270,12 @@ class App extends Component<Props, State> {
     const { startPanelCollapsed, endPanelCollapsed } = this.props;
     const horizontal = this.isHorizontal();
 
-    const maxSize = horizontal ? "70%" : "95%";
-
     return (
       <SplitBox
         style={{ width: "100vw" }}
         initialSize={prefs.endPanelSize}
         minSize={30}
-        maxSize={maxSize}
+        maxSize="70%"
         splitterSize={1}
         vert={horizontal}
         onResizeEnd={num => {

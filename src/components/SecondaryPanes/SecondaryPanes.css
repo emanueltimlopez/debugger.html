@@ -3,13 +3,13 @@
  * file, You can obtain one at <http://mozilla.org/MPL/2.0/>. */
 
 .secondary-panes {
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   flex: 1;
   white-space: nowrap;
   --breakpoint-expression-right-clear-space: 36px;
-  --breakpoint-expression-height: 2.4em;
 }
 
 /*
@@ -17,7 +17,7 @@
   This allows the commandbar to remain fixed when scrolling
   until the content completely ends. Not just the height of
   the wrapper.
-  Ref: https://github.com/devtools-html/debugger.html/issues/3426
+  Ref: https://github.com/firefox-devtools/debugger/issues/3426
 */
 
 .secondary-panes-wrapper {
@@ -53,17 +53,12 @@
   display: flex;
 }
 
-.secondary-panes .accordion .plus svg {
-  width: 12px;
-  margin-top: 3px;
-  fill: var(--theme-body-color);
-}
-
-.secondary-panes .accordion .plus.active svg {
-  fill: var(--theme-highlight-blue);
-}
-
 .dropdown {
   width: 20em;
   overflow: auto;
+}
+
+.secondary-panes input[type="checkbox"] {
+  margin: 0;
+  margin-inline-end: 4px;
 }

@@ -4,16 +4,18 @@
 
 // @flow
 
-import { sortBy } from "lodash";
-
-import { getBreakpoint } from "../../selectors";
+import {
+  getBreakpoint,
+  getSource,
+  getSourceActorsForSource
+} from "../../selectors";
 import { isGenerated } from "../source";
-
+import { sortSelectedLocations } from "../location";
 import assert from "../assert";
 import { features } from "../prefs";
-import { getSelectedLocation } from "../source-maps";
 
-export { getASTLocation, findScopeByName } from "./astBreakpointLocation";
+export * from "./astBreakpointLocation";
+export * from "./breakpointPositions";
 
 import type {
   Source,
@@ -22,6 +24,7 @@ import type {
   SourceActorLocation,
   PendingLocation,
   Breakpoint,
+  BreakpointLocation,
   PendingBreakpoint
 } from "../../types";
 
@@ -38,15 +41,6 @@ export function firstString(...args: string[]) {
   return null;
 }
 
-export function locationMoved(
-  location: SourceLocation,
-  newLocation: SourceLocation
-) {
-  return (
-    location.line !== newLocation.line || location.column !== newLocation.column
-  );
-}
-
 // The ID for a Breakpoint is derived from its location in its Source.
 export function makeBreakpointId(location: SourceLocation) {
   const { sourceId, line, column } = location;
@@ -59,13 +53,38 @@ export function getLocationWithoutColumn(location: SourceLocation) {
   return `${sourceId}:${line}`;
 }
 
-export function makePendingLocationId(location: SourceLocation) {
+type AnySourceLocation = SourceLocation | PendingLocation;
+
+export function makePendingLocationId(location: AnySourceLocation) {
   assertPendingLocation(location);
   const { sourceUrl, line, column } = location;
   const sourceUrlString = sourceUrl || "";
   const columnString = column || "";
 
   return `${sourceUrlString}:${line}:${columnString}`;
+}
+
+export function makeBreakpointLocation(
+  state: State,
+  location: SourceLocation
+): BreakpointLocation {
+  const source = getSource(state, location.sourceId);
+  if (!source) {
+    throw new Error("no source");
+  }
+  const breakpointLocation: any = {
+    line: location.line,
+    column: location.column
+  };
+  if (source.url) {
+    breakpointLocation.sourceUrl = source.url;
+  } else {
+    breakpointLocation.sourceId = getSourceActorsForSource(
+      state,
+      source.id
+    )[0].id;
+  }
+  return breakpointLocation;
 }
 
 export function makeSourceActorLocation(
@@ -83,7 +102,7 @@ export function makeSourceActorLocation(
 export function makeBreakpointActorId(location: SourceActorLocation) {
   const { sourceActor, line, column } = location;
   const columnString = column || "";
-  return `${sourceActor.actor}:${line}:${columnString}`;
+  return `${(sourceActor: any)}:${line}:${columnString}`;
 }
 
 export function assertBreakpoint(breakpoint: Breakpoint) {
@@ -142,45 +161,6 @@ export function breakpointExists(state: State, location: SourceLocation) {
   return currentBp && !currentBp.disabled;
 }
 
-export function createBreakpoint(
-  location: SourceLocation,
-  overrides: Object = {}
-): Breakpoint {
-  const {
-    condition,
-    disabled,
-    hidden,
-    generatedLocation,
-    astLocation,
-    text,
-    originalText,
-    logValue
-  } = overrides;
-
-  const defaultASTLocation = {
-    name: undefined,
-    offset: location,
-    index: 0
-  };
-  const properties = {
-    id: makeBreakpointId(location),
-    options: {
-      condition: condition || null,
-      logValue: logValue || null,
-      hidden: hidden || false
-    },
-    disabled: disabled || false,
-    loading: false,
-    astLocation: astLocation || defaultASTLocation,
-    generatedLocation: generatedLocation || location,
-    location,
-    text,
-    originalText
-  };
-
-  return properties;
-}
-
 export function createXHRBreakpoint(
   path: string,
   method: string,
@@ -227,36 +207,8 @@ export function getSelectedText(
 }
 
 export function sortSelectedBreakpoints(
-  breakpoints: Breakpoint[],
-  selectedSource: Source
-): Breakpoint[] {
-  return sortBy(breakpoints, [
-    // Priority: line number, undefined column, column number
-    bp => getSelectedLocation(bp, selectedSource).line,
-    bp => {
-      const location = getSelectedLocation(bp, selectedSource);
-      return location.column === undefined || location.column;
-    }
-  ]);
-}
-
-export function sortBreakpoints(breakpoints: Breakpoint[]) {
-  return _sortBreakpoints(breakpoints, "location");
-}
-
-function _sortBreakpoints(
-  breakpoints: Array<Object>,
-  property: string
-): Array<Object> {
-  // prettier-ignore
-  return sortBy(
-    breakpoints,
-    [
-      // Priority: line number, undefined column, column number
-      `${property}.line`,
-      bp => {
-        return bp[property].column === undefined || bp[property].column;
-      }
-    ]
-  );
+  breakpoints: Array<Breakpoint>,
+  selectedSource: ?Source
+): Array<Breakpoint> {
+  return sortSelectedLocations(breakpoints, selectedSource);
 }

@@ -51,9 +51,9 @@ The script will rm your `yarn.lock` file and `node_modules` directory.
 If that fails you can re-clone the repo:
 
 ```bash
-rm -rf [yourpath]/debugger.html
-git clone https://github.com/devtools-html/debugger.html
-cd debugger.html
+rm -rf [yourpath]/debugger
+git clone https://github.com/firefox-devtools/debugger
+cd debugger
 yarn install
 yarn start
 ```

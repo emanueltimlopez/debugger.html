@@ -10,7 +10,7 @@ exports[`Outline renders a list of functions when properties change 1`] = `
       updateFilter={[Function]}
     />
     <ul
-      className="outline-list"
+      className="outline-list devtools-monospace"
     >
       <li
         className="outline-list__element"
@@ -77,9 +77,9 @@ exports[`Outline renders outline renders functions by function class 1`] = `
       updateFilter={[Function]}
     />
     <ul
-      className="outline-list"
+      className="outline-list devtools-monospace"
     >
-      <div
+      <li
         className="outline-list__class"
         key="x_klass"
       >
@@ -118,8 +118,8 @@ exports[`Outline renders outline renders functions by function class 1`] = `
             />
           </li>
         </ul>
-      </div>
-      <div
+      </li>
+      <li
         className="outline-list__class"
         key="a_klass"
       >
@@ -178,7 +178,7 @@ exports[`Outline renders outline renders functions by function class 1`] = `
             />
           </li>
         </ul>
-      </div>
+      </li>
     </ul>
     <div
       className="outline-footer bottom"
@@ -204,9 +204,9 @@ exports[`Outline renders outline renders functions by function class, alphabetic
       updateFilter={[Function]}
     />
     <ul
-      className="outline-list"
+      className="outline-list devtools-monospace"
     >
-      <div
+      <li
         className="outline-list__class"
         key="x_klass"
       >
@@ -245,8 +245,8 @@ exports[`Outline renders outline renders functions by function class, alphabetic
             />
           </li>
         </ul>
-      </div>
-      <div
+      </li>
+      <li
         className="outline-list__class"
         key="a_klass"
       >
@@ -305,7 +305,7 @@ exports[`Outline renders outline renders functions by function class, alphabetic
             />
           </li>
         </ul>
-      </div>
+      </li>
     </ul>
     <div
       className="outline-footer bottom"
@@ -331,7 +331,7 @@ exports[`Outline renders outline renders ignore anonymous functions 1`] = `
       updateFilter={[Function]}
     />
     <ul
-      className="outline-list"
+      className="outline-list devtools-monospace"
     >
       <li
         className="outline-list__element"
@@ -418,7 +418,7 @@ exports[`Outline renders outline sorts functions alphabetically by function name
       updateFilter={[Function]}
     />
     <ul
-      className="outline-list"
+      className="outline-list devtools-monospace"
     >
       <li
         className="outline-list__element"

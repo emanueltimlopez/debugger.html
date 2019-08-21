@@ -8,10 +8,13 @@ import React from "react";
 import { shallow } from "enzyme";
 
 import BreakpointsContextMenu from "../BreakpointsContextMenu";
-import { createBreakpoint } from "../../../../utils/breakpoint";
 import { buildMenu } from "devtools-contextmenu";
 
-import { makeMockSource } from "../../../../utils/test-mockup";
+import {
+  makeMockBreakpoint,
+  makeMockSource,
+  mockcx
+} from "../../../../utils/test-mockup";
 
 jest.mock("devtools-contextmenu");
 
@@ -22,37 +25,38 @@ function render(disabled = false) {
 }
 
 function generateDefaults(disabled) {
+  const source = makeMockSource(
+    "https://example.com/main.js",
+    "source-https://example.com/main.js"
+  );
   const breakpoints = [
-    createBreakpoint(
-      {
-        line: 1,
-        column: undefined,
-        sourceId: "source-https://example.com/main.js",
-        sourceUrl: "https://example.com/main.js"
-      },
-      { id: "source-https://example.com/main.js:1:", disabled: disabled }
-    ),
-    createBreakpoint(
-      {
-        line: 2,
-        column: undefined,
-        sourceId: "source-https://example.com/main.js",
-        sourceUrl: "https://example.com/main.js"
-      },
-      { id: "source-https://example.com/main.js:2:", disabled: disabled }
-    ),
-    createBreakpoint(
-      {
-        line: 3,
-        column: undefined,
-        sourceId: "source-https://example.com/main.js",
-        sourceUrl: "https://example.com/main.js"
-      },
-      { id: "source-https://example.com/main.js:3:", disabled: disabled }
-    )
+    {
+      ...makeMockBreakpoint(source, 1),
+      id: "https://example.com/main.js:1:",
+      disabled: disabled,
+      options: {
+        condition: "",
+        logValue: "",
+        hidden: false
+      }
+    },
+    {
+      ...makeMockBreakpoint(source, 2),
+      id: "https://example.com/main.js:2:",
+      disabled: disabled,
+      options: {
+        hidden: false
+      }
+    },
+    {
+      ...makeMockBreakpoint(source, 3),
+      id: "https://example.com/main.js:3:",
+      disabled: disabled
+    }
   ];
 
   const props = {
+    cx: mockcx,
     breakpoints,
     breakpoint: breakpoints[0],
     removeBreakpoint: jest.fn(),
@@ -88,7 +92,7 @@ describe("BreakpointsContextMenu", () => {
       expect(props.removeBreakpoints).toHaveBeenCalled();
 
       const otherBreakpoints = [props.breakpoints[1], props.breakpoints[2]];
-      expect(props.removeBreakpoints.mock.calls[0][0]).toEqual(
+      expect(props.removeBreakpoints.mock.calls[0][1]).toEqual(
         otherBreakpoints
       );
     });
@@ -103,10 +107,10 @@ describe("BreakpointsContextMenu", () => {
 
       expect(props.toggleBreakpoints).toHaveBeenCalled();
 
-      expect(props.toggleBreakpoints.mock.calls[0][0]).toBe(false);
+      expect(props.toggleBreakpoints.mock.calls[0][1]).toBe(false);
 
       const otherBreakpoints = [props.breakpoints[1], props.breakpoints[2]];
-      expect(props.toggleBreakpoints.mock.calls[0][1]).toEqual(
+      expect(props.toggleBreakpoints.mock.calls[0][2]).toEqual(
         otherBreakpoints
       );
     });
@@ -120,10 +124,10 @@ describe("BreakpointsContextMenu", () => {
       disableOthers.item.click();
 
       expect(props.toggleBreakpoints).toHaveBeenCalled();
-      expect(props.toggleBreakpoints.mock.calls[0][0]).toBe(true);
+      expect(props.toggleBreakpoints.mock.calls[0][1]).toBe(true);
 
       const otherBreakpoints = [props.breakpoints[1], props.breakpoints[2]];
-      expect(props.toggleBreakpoints.mock.calls[0][1]).toEqual(
+      expect(props.toggleBreakpoints.mock.calls[0][2]).toEqual(
         otherBreakpoints
       );
     });

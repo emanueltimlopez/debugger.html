@@ -38,10 +38,28 @@ describe("test String with URL", () => {
     const element = renderRep(url, { openLink, useQuotes: false });
     expect(element.text()).toEqual(url);
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);
+  });
+
+  it("renders a href when openLink isn't defined", () => {
+    const url = "http://example.com";
+    const element = renderRep(url, { useQuotes: false });
+    expect(element.text()).toEqual(url);
+    const link = element.find("a");
+    expect(link.prop("href")).toBe(null);
+    expect(link.prop("title")).toBe(url);
+  });
+
+  it("renders a href when no openLink but isInContentPage is true", () => {
+    const url = "http://example.com";
+    const element = renderRep(url, { useQuotes: false, isInContentPage: true });
+    expect(element.text()).toEqual(url);
+    const link = element.find("a");
+    expect(link.prop("href")).toBe(url);
+    expect(link.prop("title")).toBe(url);
   });
 
   it("renders a simple quoted URL", () => {
@@ -51,7 +69,7 @@ describe("test String with URL", () => {
     const element = renderRep(string, { openLink, useQuotes: false });
     expect(element.text()).toEqual(string);
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);
@@ -64,7 +82,7 @@ describe("test String with URL", () => {
     const element = renderRep(string, { openLink, useQuotes: false });
     expect(element.text()).toEqual(string);
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);
@@ -77,7 +95,7 @@ describe("test String with URL", () => {
     const element = renderRep(string, { openLink, useQuotes: true });
     expect(element.text()).toEqual(`"\\"${url}\\""`);
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);
@@ -89,7 +107,7 @@ describe("test String with URL", () => {
     const element = renderRep(url, { openLink, useQuotes: false });
     expect(element.text()).toEqual(url);
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);
@@ -101,7 +119,7 @@ describe("test String with URL", () => {
     const element = renderRep(url, { openLink, useQuotes: false });
     expect(element.text()).toEqual(url);
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);
@@ -113,7 +131,7 @@ describe("test String with URL", () => {
     const element = renderRep(url, { openLink, useQuotes: false });
     expect(element.text()).toEqual(url);
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);
@@ -126,7 +144,7 @@ describe("test String with URL", () => {
     const element = renderRep(string, { openLink, useQuotes: false });
     expect(element.text()).toEqual(string);
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);
@@ -140,7 +158,7 @@ describe("test String with URL", () => {
     expect(element.text()).toEqual(string);
 
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);
@@ -157,12 +175,12 @@ describe("test String with URL", () => {
     expect(links).toHaveLength(2);
 
     const firstLink = links.at(0);
-    expect(firstLink.prop("href")).toBe(undefined);
+    expect(firstLink.prop("href")).toBe(url1);
     expect(firstLink.prop("title")).toBe(url1);
     testLinkClick(firstLink, openLink, url1);
 
     const secondLink = links.at(1);
-    expect(secondLink.prop("href")).toBe(undefined);
+    expect(secondLink.prop("href")).toBe(url2);
     expect(secondLink.prop("title")).toBe(url2);
     testLinkClick(secondLink, openLink, url2);
   });
@@ -188,7 +206,7 @@ describe("test String with URL", () => {
 
     expect(element.text()).toEqual("http://…ple.com");
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);
@@ -205,7 +223,7 @@ describe("test String with URL", () => {
 
     expect(element.text()).toEqual(url);
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);
@@ -224,7 +242,7 @@ describe("test String with URL", () => {
 
     expect(element.text()).toEqual(url);
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);
@@ -241,11 +259,11 @@ describe("test String with URL", () => {
 
     expect(element.text()).toEqual("- http://example.fr … http://example.us -");
     const linkFr = element.find("a").at(0);
-    expect(linkFr.prop("href")).toBe(undefined);
+    expect(linkFr.prop("href")).toBe("http://example.fr");
     expect(linkFr.prop("title")).toBe("http://example.fr");
 
     const linkUs = element.find("a").at(1);
-    expect(linkUs.prop("href")).toBe(undefined);
+    expect(linkUs.prop("href")).toBe("http://example.us");
     expect(linkUs.prop("title")).toBe("http://example.us");
   });
 
@@ -262,11 +280,11 @@ describe("test String with URL", () => {
       "- http://example.fr -…- http://example.us -"
     );
     const linkFr = element.find("a").at(0);
-    expect(linkFr.prop("href")).toBe(undefined);
+    expect(linkFr.prop("href")).toBe("http://example.fr");
     expect(linkFr.prop("title")).toBe("http://example.fr");
 
     const linkUs = element.find("a").at(1);
-    expect(linkUs.prop("href")).toBe(undefined);
+    expect(linkUs.prop("href")).toBe("http://example.us");
     expect(linkUs.prop("title")).toBe("http://example.us");
   });
 
@@ -281,11 +299,11 @@ describe("test String with URL", () => {
 
     expect(element.text()).toEqual("- http://e…ample.us -");
     const linkFr = element.find("a").at(0);
-    expect(linkFr.prop("href")).toBe(undefined);
+    expect(linkFr.prop("href")).toBe("http://example-long.fr");
     expect(linkFr.prop("title")).toBe("http://example-long.fr");
 
     const linkUs = element.find("a").at(1);
-    expect(linkUs.prop("href")).toBe(undefined);
+    expect(linkUs.prop("href")).toBe("http://example.us");
     expect(linkUs.prop("title")).toBe("http://example.us");
   });
 
@@ -303,21 +321,21 @@ describe("test String with URL", () => {
       "- http://example-long.fr http:…xample.com http://example.us -"
     );
     const linkFr = element.find("a").at(0);
-    expect(linkFr.prop("href")).toBe(undefined);
+    expect(linkFr.prop("href")).toBe("http://example-long.fr");
     expect(linkFr.prop("title")).toBe("http://example-long.fr");
 
     const linkCom = element.find("a").at(1);
-    expect(linkCom.prop("href")).toBe(undefined);
+    expect(linkCom.prop("href")).toBe("http://example.com");
     expect(linkCom.prop("title")).toBe("http://example.com");
 
     const linkUs = element.find("a").at(2);
-    expect(linkUs.prop("href")).toBe(undefined);
+    expect(linkUs.prop("href")).toBe("http://example.us");
     expect(linkUs.prop("title")).toBe("http://example.us");
   });
 
   it("renders successive cropped URLs with cropped elements between", () => {
     const text =
-      "- http://example.fr test http://example.fr test http://example.us -";
+      "- http://example.fr test http://example.es test http://example.us -";
     const openLink = jest.fn();
     const element = renderRep(text, {
       openLink,
@@ -327,11 +345,11 @@ describe("test String with URL", () => {
 
     expect(element.text()).toEqual("- http://e…ample.us -");
     const linkFr = element.find("a").at(0);
-    expect(linkFr.prop("href")).toBe(undefined);
+    expect(linkFr.prop("href")).toBe("http://example.fr");
     expect(linkFr.prop("title")).toBe("http://example.fr");
 
     const linkUs = element.find("a").at(1);
-    expect(linkUs.prop("href")).toBe(undefined);
+    expect(linkUs.prop("href")).toBe("http://example.us");
     expect(linkUs.prop("title")).toBe("http://example.us");
   });
 
@@ -346,7 +364,7 @@ describe("test String with URL", () => {
 
     expect(element.text()).toEqual("http://exa…cdefghijkl");
     const linkFr = element.find("a").at(0);
-    expect(linkFr.prop("href")).toBe(undefined);
+    expect(linkFr.prop("href")).toBe("http://example.fr");
     expect(linkFr.prop("title")).toBe("http://example.fr");
   });
 
@@ -361,7 +379,105 @@ describe("test String with URL", () => {
 
     expect(element.text()).toEqual("abcdefghij…xample.fr ");
     const linkFr = element.find("a").at(0);
-    expect(linkFr.prop("href")).toBe(undefined);
+    expect(linkFr.prop("href")).toBe("http://example.fr");
+    expect(linkFr.prop("title")).toBe("http://example.fr");
+  });
+
+  it("renders URLs without unrelated characters", () => {
+    const text =
+      "global(http://example.com) and local(http://example.us)" +
+      " and maybe https://example.fr, “https://example.cz“, https://example.es?";
+    const openLink = jest.fn();
+    const element = renderRep(text, {
+      openLink,
+      useQuotes: false
+    });
+
+    expect(element.text()).toEqual(text);
+    const linkCom = element.find("a").at(0);
+    expect(linkCom.prop("href")).toBe("http://example.com");
+
+    const linkUs = element.find("a").at(1);
+    expect(linkUs.prop("href")).toBe("http://example.us");
+
+    const linkFr = element.find("a").at(2);
+    expect(linkFr.prop("href")).toBe("https://example.fr");
+
+    const linkCz = element.find("a").at(3);
+    expect(linkCz.prop("href")).toBe("https://example.cz");
+
+    const linkEs = element.find("a").at(4);
+    expect(linkEs.prop("href")).toBe("https://example.es");
+  });
+
+  it("renders a cropped URL with urlCropLimit", () => {
+    const xyzUrl = "http://xyz.com/abcdefghijklmnopqrst";
+    const text = `${xyzUrl} is the best`;
+    const openLink = jest.fn();
+    const element = renderRep(text, {
+      openLink,
+      useQuotes: false,
+      urlCropLimit: 20
+    });
+
+    expect(element.text()).toEqual("http://xyz…klmnopqrst is the best");
+    const link = element.find("a").at(0);
+    expect(link.prop("href")).toBe(xyzUrl);
+    expect(link.prop("title")).toBe(xyzUrl);
+  });
+
+  it("renders multiple cropped URL", () => {
+    const xyzUrl = "http://xyz.com/abcdefghijklmnopqrst";
+    const abcUrl = "http://abc.com/abcdefghijklmnopqrst";
+    const text = `${xyzUrl} is lit, not ${abcUrl}`;
+    const openLink = jest.fn();
+    const element = renderRep(text, {
+      openLink,
+      useQuotes: false,
+      urlCropLimit: 20
+    });
+
+    expect(element.text()).toEqual(
+      "http://xyz…klmnopqrst is lit, not http://abc…klmnopqrst"
+    );
+
+    const links = element.find("a");
+    const xyzLink = links.at(0);
+    expect(xyzLink.prop("href")).toBe(xyzUrl);
+    expect(xyzLink.prop("title")).toBe(xyzUrl);
+    const abc = links.at(1);
+    expect(abc.prop("href")).toBe(abcUrl);
+    expect(abc.prop("title")).toBe(abcUrl);
+  });
+
+  it("renders full URL if smaller than cropLimit", () => {
+    const xyzUrl = "http://example.com/";
+
+    const openLink = jest.fn();
+    const element = renderRep(xyzUrl, {
+      openLink,
+      useQuotes: false,
+      urlCropLimit: 20
+    });
+
+    expect(element.text()).toEqual(xyzUrl);
+    const link = element.find("a").at(0);
+    expect(link.prop("href")).toBe(xyzUrl);
+    expect(link.prop("title")).toBe(xyzUrl);
+  });
+
+  it("renders cropped URL followed by cropped string with urlCropLimit", () => {
+    const text = "http://example.fr abcdefghijkl";
+    const openLink = jest.fn();
+    const element = renderRep(text, {
+      openLink,
+      useQuotes: false,
+      cropLimit: 20
+    });
+
+    expect(element.text()).toEqual("http://exa…cdefghijkl");
+    const linkFr = element.find("a").at(0);
+    expect(linkFr.prop("href")).toBe("http://example.fr");
     expect(linkFr.prop("title")).toBe("http://example.fr");
   });
 
@@ -403,7 +519,7 @@ describe("test String with URL", () => {
     expect(element.text()).toEqual(`[ "${string}" ]`);
 
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);
@@ -422,7 +538,7 @@ describe("test String with URL", () => {
     expect(element.text()).toEqual(`Array${length} [ "${string}" ]`);
 
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);
@@ -437,7 +553,7 @@ describe("test String with URL", () => {
     expect(element.text()).toEqual(`Object { test: "${string}" }`);
 
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);
@@ -455,7 +571,7 @@ describe("test String with URL", () => {
     expect(element.text()).toEqual(`Object { test: "${string}" }`);
 
     const link = element.find("a");
-    expect(link.prop("href")).toBe(undefined);
+    expect(link.prop("href")).toBe(url);
     expect(link.prop("title")).toBe(url);
 
     testLinkClick(link, openLink, url);

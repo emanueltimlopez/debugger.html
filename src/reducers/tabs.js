@@ -17,9 +17,10 @@ import { asyncStore } from "../utils/prefs";
 import {
   getSource,
   getSources,
+  getSourceInSources,
   getUrls,
   getSpecificSourceByURL,
-  getSpecificSourceByUrlInSources
+  getSpecificSourceByURLInSources
 } from "./sources";
 
 import type { Action } from "../actions/types";
@@ -167,9 +168,8 @@ export function getNewSelectedSourceId(
   const availableTab = availableTabs[newSelectedTabIndex];
 
   if (availableTab) {
-    const tabSource = getSpecificSourceByUrlInSources(
-      getSources(state),
-      getUrls(state),
+    const tabSource = getSpecificSourceByURL(
+      state,
       availableTab.url,
       availableTab.isOriginal
     );
@@ -213,7 +213,7 @@ export const getSourcesForTabs: Selector<Source[]> = createSelector(
 
 function getTabWithOrWithoutUrl(tab, sources, urls) {
   if (tab.url) {
-    return getSpecificSourceByUrlInSources(
+    return getSpecificSourceByURLInSources(
       sources,
       urls,
       tab.url,
@@ -221,7 +221,7 @@ function getTabWithOrWithoutUrl(tab, sources, urls) {
     );
   }
 
-  return tab.sourceId ? sources[tab.sourceId] : null;
+  return tab.sourceId ? getSourceInSources(sources, tab.sourceId) : null;
 }
 
 export default update;

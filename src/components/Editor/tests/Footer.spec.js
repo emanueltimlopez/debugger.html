@@ -9,7 +9,7 @@ import React from "react";
 import { shallow } from "enzyme";
 
 import SourceFooter from "../Footer";
-import { makeSource } from "../../../utils/test-head";
+import { createSourceObject } from "../../../utils/test-head";
 import { setDocument } from "../../../utils/editor";
 
 function createMockDocument(clear, position) {
@@ -28,7 +28,11 @@ function generateDefaults(overrides) {
         on: jest.fn()
       }
     },
-    selectedSource: makeSource("foo").source,
+    endPanelCollapsed: false,
+    selectedSourceWithContent: {
+      source: createSourceObject("foo"),
+      content: null
+    },
     ...overrides
   };
 }
@@ -38,7 +42,7 @@ function render(overrides = {}, position = { line: 0, column: 0 }) {
   const props = generateDefaults(overrides);
 
   const doc = createMockDocument(clear, position);
-  setDocument(props.selectedSource.id, doc);
+  setDocument(props.selectedSourceWithContent.source.id, doc);
 
   // $FlowIgnore
   const component = shallow(<SourceFooter.WrappedComponent {...props} />, {

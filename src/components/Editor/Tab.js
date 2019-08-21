@@ -13,7 +13,7 @@ import SourceIcon from "../shared/SourceIcon";
 import { CloseButton } from "../shared/Button";
 
 import type { List } from "immutable";
-import type { Source } from "../../types";
+import type { Source, Context } from "../../types";
 
 import actions from "../../actions";
 
@@ -23,9 +23,9 @@ import {
   getRawSourceURL,
   getSourceQueryString,
   getTruncatedFileName,
-  isPretty
+  isPretty,
+  shouldBlackbox
 } from "../../utils/source";
-import { shouldShowPrettyPrint } from "../../utils/editor";
 import { copyToTheClipboard } from "../../utils/clipboard";
 import { getTabMenuItems } from "../../utils/tabs";
 
@@ -33,7 +33,8 @@ import {
   getSelectedSource,
   getActiveSearch,
   getSourcesForTabs,
-  getHasSiblingOfSameName
+  getHasSiblingOfSameName,
+  getContext
 } from "../../selectors";
 import type { ActiveSearchType } from "../../selectors";
 
@@ -42,6 +43,7 @@ import classnames from "classnames";
 type SourcesList = List<Source>;
 
 type Props = {
+  cx: Context,
   tabSources: SourcesList,
   selectedSource: Source,
   source: Source,
@@ -51,7 +53,8 @@ type Props = {
   closeTab: typeof actions.closeTab,
   closeTabs: typeof actions.closeTabs,
   togglePrettyPrint: typeof actions.togglePrettyPrint,
-  showSource: typeof actions.showSource
+  showSource: typeof actions.showSource,
+  toggleBlackBox: typeof actions.toggleBlackBox
 };
 
 class Tab extends PureComponent<Props> {
@@ -62,10 +65,12 @@ class Tab extends PureComponent<Props> {
 
   showContextMenu(e, tab: string) {
     const {
+      cx,
       closeTab,
       closeTabs,
       tabSources,
       showSource,
+      toggleBlackBox,
       togglePrettyPrint,
       selectedSource,
       source
@@ -86,13 +91,13 @@ class Tab extends PureComponent<Props> {
       {
         item: {
           ...tabMenuItems.closeTab,
-          click: () => closeTab(sourceTab)
+          click: () => closeTab(cx, sourceTab)
         }
       },
       {
         item: {
           ...tabMenuItems.closeOtherTabs,
-          click: () => closeTabs(otherTabURLs),
+          click: () => closeTabs(cx, otherTabURLs),
           disabled: otherTabURLs.length === 0
         }
       },
@@ -101,7 +106,7 @@ class Tab extends PureComponent<Props> {
           ...tabMenuItems.closeTabsToEnd,
           click: () => {
             const tabIndex = tabSources.findIndex(t => t.id == tab);
-            closeTabs(tabURLs.filter((t, i) => i > tabIndex));
+            closeTabs(cx, tabURLs.filter((t, i) => i > tabIndex));
           },
           disabled:
             tabCount === 1 ||
@@ -109,7 +114,10 @@ class Tab extends PureComponent<Props> {
         }
       },
       {
-        item: { ...tabMenuItems.closeAllTabs, click: () => closeTabs(tabURLs) }
+        item: {
+          ...tabMenuItems.closeAllTabs,
+          click: () => closeTabs(cx, tabURLs)
+        }
       },
       { item: { type: "separator" } },
       {
@@ -130,18 +138,27 @@ class Tab extends PureComponent<Props> {
         item: {
           ...tabMenuItems.showSource,
           disabled: !selectedSource.url,
-          click: () => showSource(tab)
+          click: () => showSource(cx, tab)
+        }
+      },
+      {
+        item: {
+          ...tabMenuItems.toggleBlackBox,
+          label: source.isBlackBoxed
+            ? L10N.getStr("sourceFooter.unblackbox")
+            : L10N.getStr("sourceFooter.blackbox"),
+          disabled: !shouldBlackbox(source),
+          click: () => toggleBlackBox(cx, source)
+        }
+      },
+      {
+        item: {
+          ...tabMenuItems.prettyPrint,
+          click: () => togglePrettyPrint(cx, tab),
+          disabled: isPretty(sourceTab)
         }
       }
     ];
-
-    items.push({
-      item: {
-        ...tabMenuItems.prettyPrint,
-        click: () => togglePrettyPrint(tab),
-        disabled: !shouldShowPrettyPrint(source)
-      }
-    });
 
     showMenu(e, buildMenu(items));
   }
@@ -156,6 +173,7 @@ class Tab extends PureComponent<Props> {
 
   render() {
     const {
+      cx,
       selectedSource,
       selectSource,
       closeTab,
@@ -172,13 +190,13 @@ class Tab extends PureComponent<Props> {
 
     function onClickClose(e) {
       e.stopPropagation();
-      closeTab(source);
+      closeTab(cx, source);
     }
 
     function handleTabClick(e) {
       e.preventDefault();
       e.stopPropagation();
-      return selectSource(sourceId);
+      return selectSource(cx, sourceId);
     }
 
     const className = classnames("source-tab", {
@@ -195,7 +213,7 @@ class Tab extends PureComponent<Props> {
         key={sourceId}
         onClick={handleTabClick}
         // Accommodate middle click to close tab
-        onMouseUp={e => e.button === 1 && closeTab(source)}
+        onMouseUp={e => e.button === 1 && closeTab(cx, source)}
         onContextMenu={e => this.onTabContextMenu(e, sourceId)}
         title={getFileURL(source, false)}
       >
@@ -220,6 +238,7 @@ const mapStateToProps = (state, { source }) => {
   const selectedSource = getSelectedSource(state);
 
   return {
+    cx: getContext(state),
     tabSources: getSourcesForTabs(state),
     selectedSource: selectedSource,
     activeSearch: getActiveSearch(state),
@@ -234,6 +253,7 @@ export default connect(
     closeTab: actions.closeTab,
     closeTabs: actions.closeTabs,
     togglePrettyPrint: actions.togglePrettyPrint,
-    showSource: actions.showSource
+    showSource: actions.showSource,
+    toggleBlackBox: actions.toggleBlackBox
   }
 )(Tab);

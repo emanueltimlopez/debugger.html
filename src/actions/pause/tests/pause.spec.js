@@ -29,10 +29,9 @@ const mockThreadClient = {
   stepOver: () => new Promise(_resolve => _resolve),
   evaluate: async () => {},
   evaluateInFrame: async () => {},
-  evaluateExpressions: async () => {},
-
+  evaluateExpressions: async () => [],
+  resume: async () => {},
   getFrameScopes: async frame => frame.scope,
-  setPausePoints: async () => {},
   setBreakpoint: () => new Promise(_resolve => {}),
   sourceContents: ({ source }) => {
     return new Promise((resolve, reject) => {
@@ -70,7 +69,9 @@ const mockThreadClient = {
           });
       }
     });
-  }
+  },
+  getBreakpointPositions: async () => ({}),
+  getBreakableLines: async () => []
 };
 
 const mockFrameId = "1";
@@ -100,30 +101,30 @@ function createPauseInfo(
 function resumedPacket() {
   return { from: "FakeThread", type: "resumed" };
 }
-
 describe("pause", () => {
   describe("stepping", () => {
     it("should set and clear the command", async () => {
       const { dispatch, getState } = createStore(mockThreadClient);
       const mockPauseInfo = createPauseInfo();
 
-      await dispatch(actions.newSource(makeSource("foo1")));
+      await dispatch(actions.newGeneratedSource(makeSource("foo1")));
       await dispatch(actions.paused(mockPauseInfo));
-      const stepped = dispatch(actions.stepIn());
-      expect(isStepping(getState())).toBeTruthy();
+      const cx = selectors.getThreadContext(getState());
+      const stepped = dispatch(actions.stepIn(cx));
+      expect(isStepping(getState(), "FakeThread")).toBeTruthy();
       if (!stepInResolve) {
         throw new Error("no stepInResolve");
       }
       await stepInResolve();
       await stepped;
-      expect(isStepping(getState())).toBeFalsy();
+      expect(isStepping(getState(), "FakeThread")).toBeFalsy();
     });
 
     it("should only step when paused", async () => {
       const client = { stepIn: jest.fn() };
-      const { dispatch } = createStore(client);
+      const { dispatch, cx } = createStore(client);
 
-      dispatch(actions.stepIn());
+      dispatch(actions.stepIn(cx));
       expect(client.stepIn.mock.calls).toHaveLength(0);
     });
 
@@ -131,10 +132,11 @@ describe("pause", () => {
       const { dispatch, getState } = createStore(mockThreadClient);
       const mockPauseInfo = createPauseInfo();
 
-      await dispatch(actions.newSource(makeSource("foo1")));
+      await dispatch(actions.newGeneratedSource(makeSource("foo1")));
       await dispatch(actions.paused(mockPauseInfo));
-      dispatch(actions.stepIn());
-      expect(isStepping(getState())).toBeTruthy();
+      const cx = selectors.getThreadContext(getState());
+      dispatch(actions.stepIn(cx));
+      expect(isStepping(getState(), "FakeThread")).toBeTruthy();
     });
 
     it("should step over when paused", async () => {
@@ -142,50 +144,52 @@ describe("pause", () => {
       const { dispatch, getState } = store;
       const mockPauseInfo = createPauseInfo();
 
-      await dispatch(actions.newSource(makeSource("foo1")));
+      await dispatch(actions.newGeneratedSource(makeSource("foo1")));
       await dispatch(actions.paused(mockPauseInfo));
+      const cx = selectors.getThreadContext(getState());
       const getNextStepSpy = jest.spyOn(parser, "getNextStep");
-      dispatch(actions.stepOver());
+      dispatch(actions.stepOver(cx));
       expect(getNextStepSpy).not.toBeCalled();
-      expect(isStepping(getState())).toBeTruthy();
+      expect(isStepping(getState(), "FakeThread")).toBeTruthy();
     });
 
     it("should step over when paused before an await", async () => {
       const store = createStore(mockThreadClient);
-      const { dispatch } = store;
+      const { dispatch, getState } = store;
       const mockPauseInfo = createPauseInfo({
         sourceId: "await",
         line: 2,
         column: 0
       });
 
-      const csr = makeSource("await");
-      await dispatch(actions.newSource(csr));
-      await dispatch(actions.loadSourceText(csr.source));
+      await dispatch(actions.newGeneratedSource(makeSource("await")));
 
       await dispatch(actions.paused(mockPauseInfo));
+      const cx = selectors.getThreadContext(getState());
       const getNextStepSpy = jest.spyOn(parser, "getNextStep");
-      dispatch(actions.stepOver());
+      dispatch(actions.stepOver(cx));
       expect(getNextStepSpy).toBeCalled();
       getNextStepSpy.mockRestore();
     });
 
     it("should step over when paused after an await", async () => {
-      const store = createStore(mockThreadClient);
-      const { dispatch } = store;
+      const store = createStore({
+        ...mockThreadClient,
+        getBreakpointPositions: async () => ({ [2]: [1] })
+      });
+      const { dispatch, getState } = store;
       const mockPauseInfo = createPauseInfo({
         sourceId: "await",
         line: 2,
         column: 6
       });
 
-      const csr = makeSource("await");
-      await dispatch(actions.newSource(csr));
-      await dispatch(actions.loadSourceText(csr.source));
+      await dispatch(actions.newGeneratedSource(makeSource("await")));
 
       await dispatch(actions.paused(mockPauseInfo));
+      const cx = selectors.getThreadContext(getState());
       const getNextStepSpy = jest.spyOn(parser, "getNextStep");
-      dispatch(actions.stepOver());
+      dispatch(actions.stepOver(cx));
       expect(getNextStepSpy).toBeCalled();
       getNextStepSpy.mockRestore();
     });
@@ -205,24 +209,26 @@ describe("pause", () => {
         }
       });
 
-      const csr = makeSource("foo");
-      await dispatch(actions.newSource(csr));
-      await dispatch(actions.newSource(makeOriginalSource("foo")));
-      await dispatch(actions.loadSourceText(csr.source));
+      const source = await dispatch(
+        actions.newGeneratedSource(makeSource("foo"))
+      );
+      await dispatch(actions.newOriginalSource(makeOriginalSource(source)));
 
       await dispatch(actions.paused(mockPauseInfo));
-      expect(selectors.getFrames(getState())).toEqual([
+      expect(selectors.getFrames(getState(), "FakeThread")).toEqual([
         {
           generatedLocation: { column: 0, line: 1, sourceId: "foo" },
           id: mockFrameId,
           location: { column: 0, line: 1, sourceId: "foo" },
+          originalDisplayName: "foo",
           scope: {
             bindings: { arguments: [{ a: {} }], variables: { b: {} } }
-          }
+          },
+          thread: "FakeThread"
         }
       ]);
 
-      expect(selectors.getFrameScopes(getState())).toEqual({
+      expect(selectors.getFrameScopes(getState(), "FakeThread")).toEqual({
         generated: {
           "1": {
             pending: false,
@@ -235,10 +241,9 @@ describe("pause", () => {
         original: { "1": { pending: false, scope: null } }
       });
 
-      expect(selectors.getSelectedFrameBindings(getState())).toEqual([
-        "b",
-        "a"
-      ]);
+      expect(
+        selectors.getSelectedFrameBindings(getState(), "FakeThread")
+      ).toEqual(["b", "a"]);
     });
 
     it("maps frame locations and names to original source", async () => {
@@ -256,8 +261,9 @@ describe("pause", () => {
 
       const sourceMapsMock = {
         getOriginalLocation: () => Promise.resolve(originalLocation),
+        getOriginalLocations: async items => items,
         getOriginalSourceText: async () => ({
-          source: "\n\nfunction fooOriginal() {\n  return -5;\n}",
+          text: "\n\nfunction fooOriginal() {\n  return -5;\n}",
           contentType: "text/javascript"
         }),
         getGeneratedLocation: async location => location
@@ -267,22 +273,18 @@ describe("pause", () => {
       const { dispatch, getState } = store;
       const mockPauseInfo = createPauseInfo(generatedLocation);
 
-      const fooCSR = makeSource("foo");
-      const fooOriginalCSR = makeSource("foo-original");
-      await dispatch(actions.newSource(fooCSR));
-      await dispatch(actions.newSource(fooOriginalCSR));
-      await dispatch(actions.loadSourceText(fooCSR.source));
-      await dispatch(actions.loadSourceText(fooOriginalCSR.source));
-      await dispatch(actions.setSymbols("foo-original"));
+      await dispatch(actions.newGeneratedSource(makeSource("foo")));
+      await dispatch(actions.newGeneratedSource(makeSource("foo-original")));
 
       await dispatch(actions.paused(mockPauseInfo));
-      expect(selectors.getFrames(getState())).toEqual([
+      expect(selectors.getFrames(getState(), "FakeThread")).toEqual([
         {
           generatedLocation: { column: 0, line: 1, sourceId: "foo" },
           id: mockFrameId,
           location: { column: 0, line: 3, sourceId: "foo-original" },
           originalDisplayName: "fooOriginal",
-          scope: { bindings: { arguments: [], variables: {} } }
+          scope: { bindings: { arguments: [], variables: {} } },
+          thread: "FakeThread"
         }
       ]);
     });
@@ -307,37 +309,40 @@ describe("pause", () => {
 
       const originStackFrames = [
         {
-          displayName: "fooBar"
+          displayName: "fooBar",
+          thread: "FakeThread"
         },
         {
           displayName: "barZoo",
-          location: originalLocation2
+          location: originalLocation2,
+          thread: "FakeThread"
         }
       ];
 
       const sourceMapsMock = {
         getOriginalStackFrames: loc => Promise.resolve(originStackFrames),
         getOriginalLocation: () => Promise.resolve(originalLocation),
+        getOriginalLocations: async items => items,
         getOriginalSourceText: async () => ({
-          source: "fn fooBar() {}\nfn barZoo() { fooBar() }",
+          text: "fn fooBar() {}\nfn barZoo() { fooBar() }",
           contentType: "text/rust"
-        })
+        }),
+        getGeneratedRangesForOriginal: async () => []
       };
 
       const store = createStore(mockThreadClient, {}, sourceMapsMock);
       const { dispatch, getState } = store;
       const mockPauseInfo = createPauseInfo(generatedLocation);
 
-      const csr = makeSource("foo-wasm", { isWasm: true });
-      const originalCSR = makeOriginalSource("foo-wasm");
-
-      await dispatch(actions.newSource(csr));
-      await dispatch(actions.newSource(originalCSR));
-      await dispatch(actions.loadSourceText(csr.source));
-      await dispatch(actions.loadSourceText(originalCSR.source));
+      const source = await dispatch(
+        actions.newGeneratedSource(
+          makeSource("foo-wasm", { introductionType: "wasm" })
+        )
+      );
+      await dispatch(actions.newOriginalSource(makeOriginalSource(source)));
 
       await dispatch(actions.paused(mockPauseInfo));
-      expect(selectors.getFrames(getState())).toEqual([
+      expect(selectors.getFrames(getState(), "FakeThread")).toEqual([
         {
           displayName: "fooBar",
           generatedLocation: { column: 0, line: 1, sourceId: "foo-wasm" },
@@ -348,7 +353,7 @@ describe("pause", () => {
           scope: { bindings: { arguments: [], variables: {} } },
           source: null,
           this: undefined,
-          thread: undefined
+          thread: "FakeThread"
         },
         {
           displayName: "barZoo",
@@ -360,7 +365,7 @@ describe("pause", () => {
           scope: { bindings: { arguments: [], variables: {} } },
           source: null,
           this: undefined,
-          thread: undefined
+          thread: "FakeThread"
         }
       ]);
     });
@@ -368,25 +373,31 @@ describe("pause", () => {
 
   describe("resumed", () => {
     it("should not evaluate expression while stepping", async () => {
-      const client = { evaluateExpressions: jest.fn() };
-      const { dispatch } = createStore(client);
+      const client = { ...mockThreadClient, evaluateExpressions: jest.fn() };
+      const { dispatch, getState } = createStore(client);
+      const mockPauseInfo = createPauseInfo();
 
-      dispatch(actions.stepIn());
+      await dispatch(actions.newGeneratedSource(makeSource("foo1")));
+      await dispatch(actions.paused(mockPauseInfo));
+
+      const cx = selectors.getThreadContext(getState());
+      dispatch(actions.stepIn(cx));
       await dispatch(actions.resumed(resumedPacket()));
       expect(client.evaluateExpressions.mock.calls).toHaveLength(1);
     });
 
     it("resuming - will re-evaluate watch expressions", async () => {
-      const store = createStore(mockThreadClient);
-      const { dispatch, getState } = store;
+      const client = { ...mockThreadClient, evaluateExpressions: jest.fn() };
+      const store = createStore(client);
+      const { dispatch, getState, cx } = store;
       const mockPauseInfo = createPauseInfo();
 
-      await dispatch(actions.newSource(makeSource("foo1")));
-      await dispatch(actions.newSource(makeSource("foo")));
-      dispatch(actions.addExpression("foo"));
+      await dispatch(actions.newGeneratedSource(makeSource("foo1")));
+      await dispatch(actions.newGeneratedSource(makeSource("foo")));
+      await dispatch(actions.addExpression(cx, "foo"));
       await waitForState(store, state => selectors.getExpression(state, "foo"));
 
-      mockThreadClient.evaluateExpressions = () => new Promise(r => r(["YAY"]));
+      client.evaluateExpressions.mockReturnValue(Promise.resolve(["YAY"]));
       await dispatch(actions.paused(mockPauseInfo));
 
       await dispatch(actions.resumed(resumedPacket()));

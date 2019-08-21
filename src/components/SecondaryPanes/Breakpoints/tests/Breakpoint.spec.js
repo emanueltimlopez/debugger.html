@@ -8,7 +8,10 @@ import React from "react";
 import { shallow } from "enzyme";
 
 import Breakpoint from "../Breakpoint";
-import { makeSource, makeOriginalSource } from "../../../../utils/test-head";
+import {
+  createSourceObject,
+  createOriginalSourceObject
+} from "../../../../utils/test-head";
 
 describe("Breakpoint", () => {
   it("simple", () => {
@@ -29,9 +32,12 @@ describe("Breakpoint", () => {
   });
 
   it("paused at an original location", () => {
+    const source = createSourceObject("foo");
+    const origSource = createOriginalSourceObject(source);
+
     const { component } = render(
       {
-        selectedSource: makeOriginalSource("foo").source,
+        selectedSource: origSource,
         frame: { selectedLocation: location }
       },
       { location, options: {} }
@@ -67,19 +73,27 @@ function makeBreakpoint(overrides = {}) {
     generatedLocation,
     disabled: false,
     options: {},
-    ...overrides
+    ...overrides,
+    id: 1
   };
 }
 
 function generateDefaults(overrides = {}, breakpointOverrides = {}) {
-  const source = makeSource("foo").source;
+  const source = createSourceObject("foo");
   const breakpoint = makeBreakpoint(breakpointOverrides);
-  const selectedSource = makeSource("foo").source;
+  const selectedSource = createSourceObject("foo");
   return {
     source,
     breakpoint,
     selectedSource,
     frame: (null: any),
+    editor: {
+      CodeMirror: {
+        runMode: function() {
+          return "";
+        }
+      }
+    },
     ...overrides
   };
 }

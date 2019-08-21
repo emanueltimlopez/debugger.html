@@ -3,16 +3,16 @@
  * file, You can obtain one at <http://mozilla.org/MPL/2.0/>. */
 
 // @flow
+import type { SourceId } from "../../types";
+
+export type { SourceId };
+
+export type AstSource = {|
+  id: SourceId,
+  isWasm: boolean,
+  text: string,
+  contentType: ?string
+|};
 
 export type AstPosition = { +line: number, +column: number };
 export type AstLocation = { +end: AstPosition, +start: AstPosition };
-
-export type PausePoint = {|
-  types: { break: boolean, step: boolean },
-  location: AstPosition,
-  generatedLocation: AstPosition
-|};
-
-export type PausePointsMap = {
-  [line: string]: { [column: string]: PausePoint }
-};

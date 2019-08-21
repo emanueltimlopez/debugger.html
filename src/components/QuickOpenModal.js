@@ -7,17 +7,20 @@ import React, { Component } from "react";
 import { connect } from "../utils/connect";
 import fuzzyAldrin from "fuzzaldrin-plus";
 import { basename } from "../utils/path";
+import { throttle } from "lodash";
 
 import actions from "../actions";
 import {
-  getRelativeSourcesList,
+  getDisplayedSourcesList,
   getQuickOpenEnabled,
   getQuickOpenQuery,
   getQuickOpenType,
   getSelectedSource,
+  getSourceContent,
   getSymbols,
   getTabs,
-  isSymbolsLoading
+  isSymbolsLoading,
+  getContext
 } from "../selectors";
 import { scrollList } from "../utils/result-list";
 import {
@@ -35,16 +38,18 @@ import type {
   QuickOpenResult
 } from "../utils/quick-open";
 
-import type { Source } from "../types";
+import type { Source, Context } from "../types";
 import type { QuickOpenType } from "../reducers/quick-open";
 import type { Tab } from "../reducers/tabs";
 
 import "./QuickOpenModal.css";
 
 type Props = {
+  cx: Context,
   enabled: boolean,
-  sources: Array<Object>,
+  displayedSources: Source[],
   selectedSource?: Source,
+  selectedContentLoaded?: boolean,
   query: string,
   searchType: QuickOpenType,
   symbols: FormattedSymbolDeclarations,
@@ -69,10 +74,16 @@ type GotoLocationType = {
   column?: number
 };
 
+const updateResultsThrottle = 100;
+const maxResults = 100;
+
 function filter(values, query) {
+  const preparedQuery = fuzzyAldrin.prepareQuery(query);
+
   return fuzzyAldrin.filter(values, query, {
     key: "value",
-    maxResults: 1000
+    maxResults: maxResults,
+    preparedQuery
   });
 }
 
@@ -80,6 +91,13 @@ export class QuickOpenModal extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { results: null, selectedIndex: 0 };
+  }
+
+  setResults(results: ?Array<QuickOpenResult>) {
+    if (results) {
+      results = results.slice(0, maxResults);
+    }
+    this.setState({ results });
   }
 
   componentDidMount() {
@@ -97,11 +115,7 @@ export class QuickOpenModal extends Component<Props, State> {
     const queryChanged = prevProps.query !== this.props.query;
 
     if (this.refs.resultList && this.refs.resultList.refs) {
-      scrollList(
-        this.refs.resultList.refs,
-        this.state.selectedIndex,
-        nowEnabled || !queryChanged
-      );
+      scrollList(this.refs.resultList.refs, this.state.selectedIndex);
     }
 
     if (nowEnabled || queryChanged) {
@@ -118,10 +132,13 @@ export class QuickOpenModal extends Component<Props, State> {
   };
 
   searchSources = (query: string) => {
-    const { sources } = this.props;
+    const { displayedSources, tabs } = this.props;
+    const tabUrls = new Set(tabs.map((tab: Tab) => tab.url));
+    const sources = formatSources(displayedSources, tabUrls);
+
     const results =
       query == "" ? sources : filter(sources, this.dropGoto(query));
-    return this.setState({ results });
+    return this.setResults(results);
   };
 
   searchSymbols = (query: string) => {
@@ -133,35 +150,40 @@ export class QuickOpenModal extends Component<Props, State> {
     results = results.filter(result => result.title !== "anonymous");
 
     if (query === "@" || query === "#") {
-      return this.setState({ results });
+      return this.setResults(results);
     }
-
-    this.setState({ results: filter(results, query.slice(1)) });
+    results = filter(results, query.slice(1));
+    return this.setResults(results);
   };
 
   searchShortcuts = (query: string) => {
     const results = formatShortcutResults();
     if (query == "?") {
-      this.setState({ results });
+      this.setResults(results);
     } else {
-      this.setState({ results: filter(results, query.slice(1)) });
+      this.setResults(filter(results, query.slice(1)));
     }
   };
 
   showTopSources = () => {
-    const { tabs, sources } = this.props;
-    if (tabs.length > 0) {
-      const tabUrls = tabs.map((tab: Tab) => tab.url);
+    const { displayedSources, tabs } = this.props;
+    const tabUrls = new Set(tabs.map((tab: Tab) => tab.url));
 
-      this.setState({
-        results: sources.filter(source => tabUrls.includes(source.url))
-      });
+    if (tabs.length > 0) {
+      this.setResults(
+        formatSources(
+          displayedSources.filter(
+            source => !!source.url && tabUrls.has(source.url)
+          ),
+          tabUrls
+        )
+      );
     } else {
-      this.setState({ results: sources.slice(0, 100) });
+      this.setResults(formatSources(displayedSources, tabUrls));
     }
   };
 
-  updateResults = (query: string) => {
+  updateResults = throttle((query: string) => {
     if (this.isGotoQuery()) {
       return;
     }
@@ -179,7 +201,7 @@ export class QuickOpenModal extends Component<Props, State> {
     }
 
     return this.searchSources(query);
-  };
+  }, updateResultsThrottle);
 
   setModifier = (item: QuickOpenResult) => {
     if (["@", "#", ":"].includes(item.id)) {
@@ -235,7 +257,7 @@ export class QuickOpenModal extends Component<Props, State> {
     const { selectedIndex, results } = this.state;
     const resultCount = this.getResultCount();
     const index = selectedIndex + direction;
-    const nextIndex = (index + resultCount) % resultCount;
+    const nextIndex = (index + resultCount) % resultCount || 0;
 
     this.setState({ selectedIndex: nextIndex });
 
@@ -245,11 +267,11 @@ export class QuickOpenModal extends Component<Props, State> {
   };
 
   gotoLocation = (location: ?GotoLocationType) => {
-    const { selectSpecificLocation, selectedSource } = this.props;
+    const { cx, selectSpecificLocation, selectedSource } = this.props;
     const selectedSourceId = selectedSource ? selectedSource.id : "";
     if (location != null) {
       const sourceId = location.sourceId ? location.sourceId : selectedSourceId;
-      selectSpecificLocation({
+      selectSpecificLocation(cx, {
         sourceId,
         line: location.line,
         column: location.column
@@ -259,9 +281,13 @@ export class QuickOpenModal extends Component<Props, State> {
   };
 
   onChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
-    const { selectedSource, setQuickOpenQuery } = this.props;
+    const {
+      selectedSource,
+      selectedContentLoaded,
+      setQuickOpenQuery
+    } = this.props;
     setQuickOpenQuery(e.target.value);
-    const noSource = !selectedSource || !selectedSource.text;
+    const noSource = !selectedSource || !selectedContentLoaded;
     if ((this.isSymbolSearch() && noSource) || this.isGotoQuery()) {
       return;
     }
@@ -374,8 +400,7 @@ export class QuickOpenModal extends Component<Props, State> {
     if (!enabled) {
       return null;
     }
-    const newResults = results && results.slice(0, 100);
-    const items = this.highlightMatching(query, newResults || []);
+    const items = this.highlightMatching(query, results || []);
     const expanded = !!items && items.length > 0;
 
     return (
@@ -398,7 +423,7 @@ export class QuickOpenModal extends Component<Props, State> {
           }
           {...(this.isSourceSearch() ? { size: "big" } : {})}
         />
-        {newResults && (
+        {results && (
           <ResultList
             key="results"
             items={items}
@@ -417,16 +442,22 @@ export class QuickOpenModal extends Component<Props, State> {
 /* istanbul ignore next: ignoring testing of redux connection stuff */
 function mapStateToProps(state) {
   const selectedSource = getSelectedSource(state);
+  const displayedSources = getDisplayedSourcesList(state);
+  const tabs = getTabs(state);
 
   return {
+    cx: getContext(state),
     enabled: getQuickOpenEnabled(state),
-    sources: formatSources(getRelativeSourcesList(state), getTabs(state)),
+    displayedSources,
     selectedSource,
+    selectedContentLoaded: selectedSource
+      ? !!getSourceContent(state, selectedSource.id)
+      : undefined,
     symbols: formatSymbols(getSymbols(state, selectedSource)),
     symbolsLoading: isSymbolsLoading(state, selectedSource),
     query: getQuickOpenQuery(state),
     searchType: getQuickOpenType(state),
-    tabs: getTabs(state)
+    tabs
   };
 }
 

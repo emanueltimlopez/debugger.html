@@ -35,6 +35,21 @@ const { clearWasmXScopes } = require("./utils/wasmXScopes");
 
 import type { SourceLocation, Source, SourceId } from "debugger-html";
 
+type Range = {
+  start: {
+    line: number,
+    column: number
+  },
+  end: {
+    line: number,
+    column: number
+  }
+};
+
+export type LocationOptions = {
+  search?: "LEAST_UPPER_BOUND" | "GREATEST_LOWER_BOUND"
+};
+
 async function getOriginalURLs(
   generatedSource: Source
 ): Promise<SourceMapConsumer> {
@@ -246,22 +261,30 @@ async function getAllGeneratedLocations(
   }));
 }
 
-export type locationOptions = {
-  search?: "LEAST_UPPER_BOUND" | "GREATEST_LOWER_BOUND"
-};
-async function getOriginalLocation(
-  location: SourceLocation,
-  { search }: locationOptions = {}
-): Promise<SourceLocation> {
-  if (!isGeneratedId(location.sourceId)) {
-    return location;
+async function getOriginalLocations(
+  sourceId: string,
+  locations: SourceLocation[],
+  options: LocationOptions = {}
+): Promise<SourceLocation[]> {
+  if (locations.some(location => location.sourceId != sourceId)) {
+    throw new Error("Generated locations must belong to the same source");
   }
 
-  const map = await getSourceMap(location.sourceId);
+  const map = await getSourceMap(sourceId);
   if (!map) {
-    return location;
+    return locations;
   }
 
+  return locations.map(location =>
+    getOriginalLocationSync(map, location, options)
+  );
+}
+
+function getOriginalLocationSync(
+  map,
+  location: SourceLocation,
+  { search }: LocationOptions = {}
+): SourceLocation {
   // First check for an exact match
   let match = map.originalPositionFor({
     line: location.line,
@@ -300,6 +323,22 @@ async function getOriginalLocation(
   };
 }
 
+async function getOriginalLocation(
+  location: SourceLocation,
+  options: LocationOptions = {}
+): Promise<SourceLocation> {
+  if (!isGeneratedId(location.sourceId)) {
+    return location;
+  }
+
+  const map = await getSourceMap(location.sourceId);
+  if (!map) {
+    return location;
+  }
+
+  return getOriginalLocationSync(map, location, options);
+}
+
 async function getOriginalSourceText(
   originalSource: Source
 ): Promise<?{
@@ -323,6 +362,148 @@ async function getOriginalSourceText(
   return {
     text,
     contentType: getContentType(originalSource.url || "")
+  };
+}
+
+/**
+ * Find the set of ranges on the generated file that map from the original
+ * file's locations.
+ *
+ * @param sourceId - The original ID of the file we are processing.
+ * @param url - The original URL of the file we are processing.
+ * @param mergeUnmappedRegions - If unmapped regions are encountered between
+ *   two mappings for the given original file, allow the two mappings to be
+ *   merged anyway. This is useful if you are more interested in the general
+ *   contiguous ranges associated with a file, rather than the specifics of
+ *   the ranges provided by the sourcemap.
+ */
+const GENERATED_MAPPINGS = new WeakMap();
+async function getGeneratedRangesForOriginal(
+  sourceId: SourceId,
+  url: string,
+  mergeUnmappedRegions: boolean = false
+): Promise<Range[]> {
+  assert(isOriginalId(sourceId), "Source is not an original source");
+
+  const map = await getSourceMap(originalToGeneratedId(sourceId));
+
+  // NOTE: this is only needed for Flow
+  if (!map) {
+    return [];
+  }
+
+  if (!COMPUTED_SPANS.has(map)) {
+    COMPUTED_SPANS.add(map);
+    map.computeColumnSpans();
+  }
+
+  if (!GENERATED_MAPPINGS.has(map)) {
+    GENERATED_MAPPINGS.set(map, new Map());
+  }
+
+  const generatedRangesMap = GENERATED_MAPPINGS.get(map);
+  if (!generatedRangesMap) {
+    return [];
+  }
+
+  if (generatedRangesMap.has(sourceId)) {
+    // NOTE we need to coerce the result to an array for Flow
+    return generatedRangesMap.get(sourceId) || [];
+  }
+
+  // Gather groups of mappings on the generated file, with new groups created
+  // if we cross a mapping for a different file.
+  let currentGroup = [];
+  const originalGroups = [currentGroup];
+  map.eachMapping(
+    mapping => {
+      if (mapping.source === url) {
+        currentGroup.push({
+          start: {
+            line: mapping.generatedLine,
+            column: mapping.generatedColumn
+          },
+          end: {
+            line: mapping.generatedLine,
+            // The lastGeneratedColumn value is an inclusive value so we add
+            // one to it to get the exclusive end position.
+            column: mapping.lastGeneratedColumn + 1
+          }
+        });
+      } else if (
+        typeof mapping.source === "string" &&
+        currentGroup.length > 0
+      ) {
+        // If there is a URL, but it is for a _different_ file, we create a
+        // new group of mappings so that we can tell
+        currentGroup = [];
+        originalGroups.push(currentGroup);
+      }
+    },
+    null,
+    SourceMapConsumer.GENERATED_ORDER
+  );
+
+  const generatedMappingsForOriginal = [];
+  if (mergeUnmappedRegions) {
+    // If we don't care about excluding unmapped regions, then we just need to
+    // create a range that is the fully encompasses each group, ignoring the
+    // empty space between each individual range.
+    for (const group of originalGroups) {
+      if (group.length > 0) {
+        generatedMappingsForOriginal.push({
+          start: group[0].start,
+          end: group[group.length - 1].end
+        });
+      }
+    }
+  } else {
+    let lastEntry;
+    for (const group of originalGroups) {
+      lastEntry = null;
+      for (const { start, end } of group) {
+        const lastEnd = lastEntry
+          ? wrappedMappingPosition(lastEntry.end)
+          : null;
+
+        // If this entry comes immediately after the previous one, extend the
+        // range of the previous entry instead of adding a new one.
+        if (
+          lastEntry &&
+          lastEnd &&
+          lastEnd.line === start.line &&
+          lastEnd.column === start.column
+        ) {
+          lastEntry.end = end;
+        } else {
+          const newEntry = { start, end };
+          generatedMappingsForOriginal.push(newEntry);
+          lastEntry = newEntry;
+        }
+      }
+    }
+  }
+
+  generatedRangesMap.set(sourceId, generatedMappingsForOriginal);
+  return generatedMappingsForOriginal;
+}
+
+function wrappedMappingPosition(pos: {
+  line: number,
+  column: number
+}): {
+  line: number,
+  column: number
+} {
+  if (pos.column !== Infinity) {
+    return pos;
+  }
+
+  // If the end of the entry consumes the whole line, treat it as wrapping to
+  // the next line.
+  return {
+    line: pos.line + 1,
+    column: 0
   };
 }
 
@@ -393,7 +574,9 @@ module.exports = {
   getGeneratedLocation,
   getAllGeneratedLocations,
   getOriginalLocation,
+  getOriginalLocations,
   getOriginalSourceText,
+  getGeneratedRangesForOriginal,
   getFileGeneratedRange,
   applySourceMap,
   clearSourceMaps,

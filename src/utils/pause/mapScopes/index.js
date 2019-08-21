@@ -4,8 +4,9 @@
 
 // @flow
 
+import typeof SourceMaps from "devtools-source-map";
+
 import {
-  getScopes,
   type SourceScope,
   type BindingData,
   type BindingLocation
@@ -35,11 +36,14 @@ import {
 } from "./getApplicableBindingsForOriginalPosition";
 
 import { log } from "../../log";
+import type { ThunkArgs } from "../../../actions/types";
+
 import type {
   PartialPosition,
   Frame,
   Scope,
   Source,
+  SourceContent,
   BindingContents,
   ScopeBindings
 } from "../../../types";
@@ -48,18 +52,18 @@ export type OriginalScope = RenderableScope;
 
 export async function buildMappedScopes(
   source: Source,
+  content: SourceContent,
   frame: Frame,
   scopes: Scope,
-  sourceMaps: any,
-  client: any
+  { client, parser, sourceMaps }: ThunkArgs
 ): Promise<?{
   mappings: {
     [string]: string
   },
   scope: OriginalScope
 }> {
-  const originalAstScopes = await getScopes(frame.location);
-  const generatedAstScopes = await getScopes(frame.generatedLocation);
+  const originalAstScopes = await parser.getScopes(frame.location);
+  const generatedAstScopes = await parser.getScopes(frame.generatedLocation);
 
   if (!originalAstScopes || !generatedAstScopes) {
     return null;
@@ -87,6 +91,7 @@ export async function buildMappedScopes(
     expressionLookup
   } = await mapOriginalBindingsToGenerated(
     source,
+    content,
     originalRanges,
     originalAstScopes,
     generatedAstBindings,
@@ -106,6 +111,7 @@ export async function buildMappedScopes(
 
 async function mapOriginalBindingsToGenerated(
   source: Source,
+  content: SourceContent,
   originalRanges: Array<MappedOriginalRange>,
   originalAstScopes,
   generatedAstBindings,
@@ -131,6 +137,7 @@ async function mapOriginalBindingsToGenerated(
         cachedSourceMaps,
         client,
         source,
+        content,
         name,
         binding,
         originalRanges,
@@ -200,7 +207,7 @@ function hasLineMappings(ranges) {
 function batchScopeMappings(
   originalAstScopes: Array<SourceScope>,
   source: Source,
-  sourceMaps: any
+  sourceMaps: SourceMaps
 ) {
   const precalculatedRanges = new Map();
   const precalculatedLocations = new Map();
@@ -340,6 +347,7 @@ async function findGeneratedBinding(
   sourceMaps: any,
   client: any,
   source: Source,
+  content: SourceContent,
   name: string,
   originalBinding: BindingData,
   originalRanges: Array<MappedOriginalRange>,
@@ -407,8 +415,8 @@ async function findGeneratedBinding(
 
     if (
       (pos.type === "class-decl" || pos.type === "class-inner") &&
-      source.contentType &&
-      source.contentType.match(/\/typescript/)
+      content.contentType &&
+      content.contentType.match(/\/typescript/)
     ) {
       const declRange = findMatchingRange(originalRanges, pos.declaration);
       if (declRange && declRange.type !== "multiple") {

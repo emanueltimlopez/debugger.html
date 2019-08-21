@@ -4,19 +4,16 @@
 
 // @flow
 
-import { makeBreakpointActorId } from "../../../utils/breakpoint";
-
 import type {
-  SourceLocation,
   SourceActor,
   SourceActorLocation,
   BreakpointOptions
 } from "../../../types";
 
-function createSource(name) {
+export function createSource(name: string, code?: string) {
   name = name.replace(/\..*$/, "");
   return {
-    source: `function ${name}() {\n  return ${name} \n}`,
+    source: code || `function ${name}() {\n  return ${name} \n}`,
     contentType: "text/javascript"
   };
 }
@@ -52,7 +49,6 @@ export const simpleMockThreadClient = {
     _options: BreakpointOptions,
     _noSliding: boolean
   ) => Promise.resolve({ sourceId: "a", line: 5 }),
-  setPausePoints: () => Promise.resolve({}),
   sourceContents: ({
     source
   }: SourceActor): Promise<{| source: any, contentType: ?string |}> =>
@@ -64,39 +60,6 @@ export const simpleMockThreadClient = {
       reject(`unknown source: ${source}`);
     })
 };
-
-// Breakpoint Sliding
-function generateCorrectingThreadClient(offset = 0) {
-  return {
-    getBreakpointByLocation: (jest.fn(): any),
-    setBreakpoint: (location: SourceActorLocation, condition: string) => {
-      const actualLocation = { ...location, line: location.line + offset };
-
-      return Promise.resolve({
-        id: makeBreakpointActorId(location),
-        actualLocation,
-        condition
-      });
-    },
-    sourceContents: ({ source }: SourceActor) =>
-      Promise.resolve(createSource(source))
-  };
-}
-
-/* in some cases, a breakpoint may be added, but the source will respond
- * with a different breakpoint location. This is due to the breakpoint being
- * added between functions, or somewhere that doesnt make sense. This function
- * simulates that behavior.
- * */
-export function simulateCorrectThreadClient(
-  offset: number,
-  location: SourceLocation
-) {
-  const correctedThreadClient = generateCorrectingThreadClient(offset);
-  const offsetLine = { line: location.line + offset };
-  const correctedLocation = { ...location, ...offsetLine };
-  return { correctedThreadClient, correctedLocation };
-}
 
 // sources and tabs
 export const sourceThreadClient = {
@@ -111,8 +74,10 @@ export const sourceThreadClient = {
       reject(`unknown source: ${source}`);
     });
   },
+  setBreakpoint: async () => {},
   threadClient: async () => {},
   getFrameScopes: async () => {},
-  setPausePoints: async () => {},
-  evaluateExpressions: async () => {}
+  evaluateExpressions: async () => {},
+  getBreakpointPositions: async () => ({}),
+  getBreakableLines: async () => []
 };

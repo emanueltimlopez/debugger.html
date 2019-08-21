@@ -7,7 +7,7 @@
 import * as firefox from "./firefox";
 import * as chrome from "./chrome";
 
-import { prefs, asyncStore } from "../utils/prefs";
+import { asyncStore, verifyPrefSchema } from "../utils/prefs";
 import { setupHelper } from "../utils/dbg";
 
 import {
@@ -19,14 +19,14 @@ import { initialBreakpointsState } from "../reducers/breakpoints";
 
 import type { Panel } from "./firefox/types";
 
-function loadFromPrefs(actions: Object) {
-  const { pauseOnExceptions, pauseOnCaughtExceptions } = prefs;
-  if (pauseOnExceptions || pauseOnCaughtExceptions) {
-    return actions.pauseOnExceptions(
-      pauseOnExceptions,
-      pauseOnCaughtExceptions
-    );
-  }
+async function syncBreakpoints() {
+  const breakpoints = await asyncStore.pendingBreakpoints;
+  const breakpointValues = (Object.values(breakpoints): any);
+  breakpointValues.forEach(({ disabled, options, generatedLocation }) => {
+    if (!disabled) {
+      firefox.clientCommands.setBreakpoint(generatedLocation, options);
+    }
+  });
 }
 
 function syncXHRBreakpoints() {
@@ -59,7 +59,7 @@ function getClient(connection: any) {
 
 export async function onConnect(
   connection: Object,
-  sourceMaps: Object,
+  panelWorkers: Object,
   panel: Panel
 ) {
   // NOTE: the landing page does not connect to a JS process
@@ -67,28 +67,30 @@ export async function onConnect(
     return;
   }
 
+  verifyPrefSchema();
+
   const client = getClient(connection);
   const commands = client.clientCommands;
 
   const initialState = await loadInitialState();
+  const workers = bootstrapWorkers(panelWorkers);
 
   const { store, actions, selectors } = bootstrapStore(
     commands,
-    sourceMaps,
+    workers,
     panel,
     initialState
   );
 
-  const workers = bootstrapWorkers();
   await client.onConnect(connection, actions);
 
-  await loadFromPrefs(actions);
+  await syncBreakpoints();
   syncXHRBreakpoints();
   setupHelper({
     store,
     actions,
     selectors,
-    workers: { ...workers, sourceMaps },
+    workers,
     connection,
     client: client.clientCommands
   });

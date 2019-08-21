@@ -23,15 +23,18 @@ function ignoreFile(file) {
 }
 
 function getFiles() {
-  return glob.sync("./src/**/*", {}).filter(file => !ignoreFile(file));
+  return [...glob.sync("./src/**/*", {}), ...glob.sync("./packages/**/*", {})].filter(file => !ignoreFile(file));
 }
 
 function copyFiles() {
   getFiles().forEach(file => {
     try {
       if (ignoreFile(file)) {
+        console.log("IGNORING File: ", file);
         return;
       }
+
+      console.log("COPYING File: ", file);
 
       const filePath = path.join(__dirname, "..", file);
       const code = fs.readFileSync(filePath, "utf8");
@@ -54,7 +57,7 @@ DIRS += [
 __DIRS__
 ]
 
-DebuggerModules(
+CompiledModules(
 __FILES__
 )
 `;
@@ -80,7 +83,7 @@ function createMozBuildFiles() {
        return file.match(/workers\/(\w|-)*\/index.js/);
      }
 
-     return !file.match(/(test|types)/)
+     return !file.match(/(test|types|packages)/)
 
    })
     .forEach(file => {
@@ -149,7 +152,7 @@ function start() {
   copyFiles();
 
   console.log("[copy-modules] creating moz.build files");
-  createMozBuildFiles();
+  //createMozBuildFiles();
 
   console.log("[copy-modules] done");
   if (shouldWatch) {
@@ -164,12 +167,12 @@ const args = minimist(process.argv.slice(1), {
 
 const projectPath = path.resolve(__dirname, "..");
 let mcPath = args.mc || feature.getValue("firefox.mcPath");
-const mcDebuggerPath = path.join(mcPath, "devtools/client/debugger/new");
+const mcDebuggerPath = path.join(mcPath, "devtools/client/debugger");
 let shouldWatch = args.watch;
 
 function run({ watch, mc }) {
   shouldWatch = watch;
-  mcPath = path.join(mc, "devtools/client/debugger/new");
+  mcPath = path.join(mc, "devtools/client/debugger");
   start();
 }
 

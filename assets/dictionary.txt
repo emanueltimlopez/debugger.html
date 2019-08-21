@@ -175,7 +175,6 @@ ImmutableJS
 Fennec
 v59
 tabIndex
-react-inlinesvg
 findClosestScope
 findClosestFunction
 paren
@@ -207,3 +206,11 @@ eval
 asyncStore
 CPG
 TodoMVC
+pseudocode
+Amit
+Zur's
+TravisCI
+Homebrew
+30-60minutes
+myScriptFunction
+strict-ssl

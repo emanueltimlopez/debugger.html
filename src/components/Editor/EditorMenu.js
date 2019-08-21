@@ -9,22 +9,28 @@ import { connect } from "../../utils/connect";
 import { showMenu } from "devtools-contextmenu";
 
 import { getSourceLocationFromMouseEvent } from "../../utils/editor";
-import { getPrettySource, getIsPaused } from "../../selectors";
+import {
+  getPrettySource,
+  getIsPaused,
+  getCurrentThread,
+  getThreadContext
+} from "../../selectors";
 
 import { editorMenuItems, editorItemActions } from "./menus/editor";
 
-import type { Source } from "../../types";
+import type { SourceWithContent, ThreadContext } from "../../types";
 import type { EditorItemActions } from "./menus/editor";
 import type SourceEditor from "../../utils/editor/source-editor";
 
 type Props = {
+  cx: ThreadContext,
   contextMenu: ?MouseEvent,
   editorActions: EditorItemActions,
   clearContextMenu: () => void,
   editor: SourceEditor,
   hasPrettySource: boolean,
   isPaused: boolean,
-  selectedSource: Source
+  selectedSourceWithContent: SourceWithContent
 };
 
 class EditorMenu extends Component<Props> {
@@ -39,8 +45,9 @@ class EditorMenu extends Component<Props> {
 
   showMenu(props) {
     const {
+      cx,
       editor,
-      selectedSource,
+      selectedSourceWithContent,
       editorActions,
       hasPrettySource,
       isPaused,
@@ -49,7 +56,7 @@ class EditorMenu extends Component<Props> {
 
     const location = getSourceLocationFromMouseEvent(
       editor,
-      selectedSource,
+      selectedSourceWithContent.source,
       // Use a coercion, as contextMenu is optional
       (event: any)
     );
@@ -57,8 +64,9 @@ class EditorMenu extends Component<Props> {
     showMenu(
       event,
       editorMenuItems({
+        cx,
         editorActions,
-        selectedSource,
+        selectedSourceWithContent,
         hasPrettySource,
         location,
         isPaused,
@@ -74,8 +82,12 @@ class EditorMenu extends Component<Props> {
 }
 
 const mapStateToProps = (state, props) => ({
-  isPaused: getIsPaused(state),
-  hasPrettySource: !!getPrettySource(state, props.selectedSource.id)
+  cx: getThreadContext(state),
+  isPaused: getIsPaused(state, getCurrentThread(state)),
+  hasPrettySource: !!getPrettySource(
+    state,
+    props.selectedSourceWithContent.source.id
+  )
 });
 
 const mapDispatchToProps = dispatch => ({

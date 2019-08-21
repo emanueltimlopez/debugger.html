@@ -3,6 +3,7 @@
  * file, You can obtain one at <http://mozilla.org/MPL/2.0/>. */
 
 // @flow
+
 import { isConsole } from "../utils/preview";
 import { findBestMatchExpression } from "../utils/ast";
 import { PROMISE } from "./utils/middleware/promise";
@@ -15,13 +16,14 @@ import {
   isSelectedFrameVisible,
   getSelectedSource,
   getSelectedFrame,
-  getSymbols
+  getSymbols,
+  getCurrentThread
 } from "../selectors";
 
 import { getMappedExpression } from "./expressions";
 
 import type { Action, ThunkArgs } from "./types";
-import type { Position } from "../types";
+import type { Position, Context } from "../types";
 import type { AstLocation } from "../workers/parser";
 
 function findExpressionMatch(state, codeMirror, tokenPos) {
@@ -42,6 +44,7 @@ function findExpressionMatch(state, codeMirror, tokenPos) {
 }
 
 export function updatePreview(
+  cx: Context,
   target: HTMLElement,
   tokenPos: Object,
   codeMirror: any
@@ -67,11 +70,12 @@ export function updatePreview(
       return;
     }
 
-    dispatch(setPreview(expression, location, tokenPos, cursorPos));
+    dispatch(setPreview(cx, expression, location, tokenPos, cursorPos));
   };
 }
 
 export function setPreview(
+  cx: Context,
   expression: string,
   location: AstLocation,
   tokenPos: Position,
@@ -80,13 +84,15 @@ export function setPreview(
   return async ({ dispatch, getState, client, sourceMaps }: ThunkArgs) => {
     await dispatch({
       type: "SET_PREVIEW",
+      cx,
       [PROMISE]: (async function() {
         const source = getSelectedSource(getState());
         if (!source) {
           return;
         }
 
-        const selectedFrame = getSelectedFrame(getState());
+        const thread = getCurrentThread(getState());
+        const selectedFrame = getSelectedFrame(getState(), thread);
 
         if (location && isOriginal(source)) {
           const mapResult = await dispatch(getMappedExpression(expression));
@@ -101,16 +107,35 @@ export function setPreview(
 
         const { result } = await client.evaluateInFrame(expression, {
           frameId: selectedFrame.id,
-          thread: selectedFrame.thread
+          thread
         });
 
-        if (!result) {
+        // Error case occurs for a token that follows an errored evaluation
+        // https://github.com/firefox-devtools/debugger/pull/8056
+        // Accommodating for null allows us to show preview for falsy values
+        // line "", false, null, Nan, and more
+        if (result === null) {
           return;
         }
+
+        // Handle cases where the result is invisible to the debugger
+        // and not possible to preview. Bug 1548256
+        if (result.class && result.class.includes("InvisibleToDebugger")) {
+          return;
+        }
+
+        const root = {
+          name: expression,
+          path: expression,
+          contents: { value: result }
+        };
+        const properties = await client.loadObjectProperties(root);
 
         return {
           expression,
           result,
+          properties,
+          root,
           location,
           tokenPos,
           cursorPos
@@ -120,7 +145,7 @@ export function setPreview(
   };
 }
 
-export function clearPreview() {
+export function clearPreview(cx: Context) {
   return ({ dispatch, getState, client }: ThunkArgs) => {
     const currentSelection = getPreview(getState());
     if (!currentSelection) {
@@ -129,7 +154,8 @@ export function clearPreview() {
 
     return dispatch(
       ({
-        type: "CLEAR_SELECTION"
+        type: "CLEAR_SELECTION",
+        cx
       }: Action)
     );
   };

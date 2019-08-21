@@ -9,8 +9,10 @@ import { isDevelopment } from "devtools-environment";
 import Services from "devtools-services";
 import { asyncStoreHelper } from "./asyncStoreHelper";
 
-const prefsSchemaVersion = "1.0.6";
-
+// Schema version to bump when the async store format has changed incompatibly
+// and old stores should be cleared. This needs to match the prefs schema
+// version in devtools/client/preferences/debugger.js.
+const prefsSchemaVersion = "1.0.9";
 const pref = Services.pref;
 
 if (isDevelopment()) {
@@ -34,17 +36,17 @@ if (isDevelopment()) {
   pref("devtools.debugger.end-panel-collapsed", false);
   pref("devtools.debugger.start-panel-size", 300);
   pref("devtools.debugger.end-panel-size", 300);
-  pref("devtools.debugger.tabs", "[]");
   pref("devtools.debugger.tabsBlackBoxed", "[]");
+  pref("devtools.debugger.ui.editor-wrapping", false);
   pref("devtools.debugger.ui.framework-grouping-on", true);
   pref("devtools.debugger.pending-selected-location", "{}");
-  pref("devtools.debugger.pending-breakpoints", "{}");
   pref("devtools.debugger.expressions", "[]");
   pref("devtools.debugger.file-search-case-sensitive", false);
   pref("devtools.debugger.file-search-whole-word", false);
   pref("devtools.debugger.file-search-regex-match", false);
   pref("devtools.debugger.project-directory-root", "");
-  pref("devtools.debugger.prefs-schema-version", "1.0.1");
+  pref("devtools.debugger.map-scopes-enabled", false);
+  pref("devtools.debugger.prefs-schema-version", prefsSchemaVersion);
   pref("devtools.debugger.skip-pausing", false);
   pref("devtools.debugger.features.workers", true);
   pref("devtools.debugger.features.async-stepping", true);
@@ -55,8 +57,7 @@ if (isDevelopment()) {
   pref("devtools.debugger.features.remove-command-bar-options", true);
   pref("devtools.debugger.features.code-folding", false);
   pref("devtools.debugger.features.outline", true);
-  pref("devtools.debugger.features.column-breakpoints", false);
-  pref("devtools.debugger.features.pause-points", true);
+  pref("devtools.debugger.features.column-breakpoints", true);
   pref("devtools.debugger.features.skip-pausing", true);
   pref("devtools.debugger.features.component-pane", false);
   pref("devtools.debugger.features.autocomplete-expressions", false);
@@ -64,13 +65,15 @@ if (isDevelopment()) {
   pref("devtools.debugger.features.map-await-expression", true);
   pref("devtools.debugger.features.xhr-breakpoints", true);
   pref("devtools.debugger.features.original-blackbox", true);
-  pref("devtools.debugger.features.windowless-workers", false);
+  pref("devtools.debugger.features.windowless-workers", true);
   pref("devtools.debugger.features.event-listeners-breakpoints", true);
   pref("devtools.debugger.features.log-points", true);
+  pref("devtools.debugger.log-actions", true);
 }
 
 export const prefs = new PrefsHelper("devtools", {
   logging: ["Bool", "debugger.logging"],
+  editorWrapping: ["Bool", "debugger.ui.editor-wrapping"],
   alphabetizeOutline: ["Bool", "debugger.alphabetize-outline"],
   autoPrettyPrint: ["Bool", "debugger.auto-pretty-print"],
   clientSourceMapsEnabled: ["Bool", "source-map.client-service.enabled"],
@@ -91,17 +94,17 @@ export const prefs = new PrefsHelper("devtools", {
   startPanelSize: ["Int", "debugger.start-panel-size"],
   endPanelSize: ["Int", "debugger.end-panel-size"],
   frameworkGroupingOn: ["Bool", "debugger.ui.framework-grouping-on"],
-  tabs: ["Json", "debugger.tabs", []],
   tabsBlackBoxed: ["Json", "debugger.tabsBlackBoxed", []],
   pendingSelectedLocation: ["Json", "debugger.pending-selected-location", {}],
-  pendingBreakpoints: ["Json", "debugger.pending-breakpoints", {}],
   expressions: ["Json", "debugger.expressions", []],
   fileSearchCaseSensitive: ["Bool", "debugger.file-search-case-sensitive"],
   fileSearchWholeWord: ["Bool", "debugger.file-search-whole-word"],
   fileSearchRegexMatch: ["Bool", "debugger.file-search-regex-match"],
   debuggerPrefsSchemaVersion: ["Char", "debugger.prefs-schema-version"],
   projectDirectoryRoot: ["Char", "debugger.project-directory-root", ""],
-  skipPausing: ["Bool", "debugger.skip-pausing"]
+  skipPausing: ["Bool", "debugger.skip-pausing"],
+  mapScopes: ["Bool", "debugger.map-scopes-enabled"],
+  logActions: ["Bool", "debugger.log-actions"]
 });
 
 export const features = new PrefsHelper("devtools.debugger.features", {
@@ -116,7 +119,6 @@ export const features = new PrefsHelper("devtools.debugger.features", {
   windowlessWorkers: ["Bool", "windowless-workers"],
   outline: ["Bool", "outline"],
   codeFolding: ["Bool", "code-folding"],
-  pausePoints: ["Bool", "pause-points"],
   skipPausing: ["Bool", "skip-pausing"],
   autocompleteExpression: ["Bool", "autocomplete-expressions"],
   mapExpressionBindings: ["Bool", "map-expression-bindings"],
@@ -135,10 +137,12 @@ export const asyncStore = asyncStoreHelper("debugger", {
   eventListenerBreakpoints: ["event-listener-breakpoints", []]
 });
 
-if (prefs.debuggerPrefsSchemaVersion !== prefsSchemaVersion) {
-  // clear pending Breakpoints
-  prefs.pendingBreakpoints = {};
-  prefs.tabs = [];
-  prefs.xhrBreakpoints = [];
-  prefs.debuggerPrefsSchemaVersion = prefsSchemaVersion;
+export function verifyPrefSchema() {
+  if (prefs.debuggerPrefsSchemaVersion !== prefsSchemaVersion) {
+    // clear pending Breakpoints
+    asyncStore.pendingBreakpoints = {};
+    asyncStore.tabs = [];
+    asyncStore.xhrBreakpoints = [];
+    prefs.debuggerPrefsSchemaVersion = prefsSchemaVersion;
+  }
 }

@@ -6,7 +6,6 @@
 
 import {
   shouldShowPrettyPrint,
-  shouldShowFooter,
   traverseResults,
   toEditorLine,
   toEditorPosition,
@@ -23,40 +22,17 @@ import {
   getCursorLine
 } from "../index";
 
-import { makeMockSource } from "../../test-mockup";
-
-function makeSource() {
-  return makeMockSource(
-    "http://example.com/index.js",
-    "test-id-123/originalSource",
-    "text/javascript",
-    "some text here"
-  );
-}
+import { makeMockSource, makeMockSourceAndContent } from "../../test-mockup";
 
 describe("shouldShowPrettyPrint", () => {
   it("shows pretty print for a source", () => {
-    const source = makeMockSource(
+    const { source, content } = makeMockSourceAndContent(
       "http://example.com/index.js",
       "test-id-123",
       "text/javascript",
       "some text here"
     );
-    expect(shouldShowPrettyPrint(source)).toEqual(true);
-  });
-});
-
-describe("shouldShowFooter", () => {
-  it("shows footer when not horizontal", () => {
-    expect(shouldShowFooter(makeSource(), false)).toEqual(true);
-  });
-
-  it("does not show footer when no source is selected", () => {
-    expect(shouldShowFooter(null, true)).toEqual(false);
-  });
-
-  it("shows if pretty print should show", () => {
-    expect(shouldShowFooter(makeSource(), true)).toEqual(true);
+    expect(shouldShowPrettyPrint(source, content)).toEqual(true);
   });
 });
 

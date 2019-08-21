@@ -11,12 +11,12 @@ export function mockPendingBreakpoint(overrides: Object = {}) {
       sourceId: "",
       sourceUrl: sourceUrl || "http://localhost:8000/examples/bar.js",
       line: line || 5,
-      column: column || undefined
+      column: column || 1
     },
     generatedLocation: {
       sourceUrl: sourceUrl || "http://localhost:8000/examples/bar.js",
       line: line || 5,
-      column: column || undefined
+      column: column || 1
     },
     astLocation: {
       name: undefined,
@@ -25,9 +25,11 @@ export function mockPendingBreakpoint(overrides: Object = {}) {
       },
       index: 0
     },
-    condition: condition || null,
-    disabled: disabled || false,
-    hidden: hidden || false
+    options: {
+      condition: condition || null,
+      hidden: hidden || false
+    },
+    disabled: disabled || false
   };
 }
 
@@ -38,12 +40,11 @@ export function generateBreakpoint(
 ) {
   return {
     id: "breakpoint",
-    loading: false,
     originalText: "",
     text: "",
     location: {
       sourceUrl: `http://localhost:8000/examples/${filename}`,
-      sourceId: `${filename}/originalSource`,
+      sourceId: `${filename}`,
       line,
       column
     },
